@@ -120,14 +120,21 @@ Building: repo skeleton, synthetic data pipeline, benchmark scaffold
 ### Completed
 - Days 1-4: Paper reading phase complete. Notion Target Challenge
   Matrix populated for all 8 companies.
-
-### Today (Day 5)
-- Create repo skeleton with full folder structure
-- Initialize uv environment with Python 3.11
-- Install all dependencies
-- Write README pitch
-- Create CLAUDE.md (this file)
-- First commit + push
+- Day 5:
+  - Created repo skeleton with full folder structure
+  - Initialized uv environment (uv 0.6.6, Python 3.11 target)
+  - Authored pyproject.toml with all dependency groups:
+    agent frameworks, eval/annotation, data/ML core,
+    infrastructure, dev tooling
+  - Installed 270+ packages via uv sync; uv.lock generated (1.0MB)
+  - Validated all installs with smoke test (all imports OK)
+  - Key versions locked: langgraph 1.1.6, crewai 1.14.1,
+    ag2 0.11.5, anthropic 0.94.0, openai 2.31.0,
+    deepeval 3.9.6, ragas 0.4.3, cleanlab 2.9.0,
+    sentence-transformers 5.4.0, datasets 4.8.4
+  - Wrote CLAUDE.md
+  - Note: langgraph does not expose __version__ at module level;
+    use importlib.metadata.version("langgraph") instead
 
 ### Tomorrow (Day 6)
 - Implement src/data/wearable_generator.py
