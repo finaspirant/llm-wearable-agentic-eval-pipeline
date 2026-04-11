@@ -1,0 +1,48 @@
+# Default configuration for the eval pipeline
+project:
+  name: llm-wearable-agentic-eval-pipeline
+  version: 0.1.0
+  python: "3.11"
+
+data:
+  synthetic_count: 100
+  output_dir: data/raw
+  output_format: jsonl
+  privacy:
+    epsilon: 1.0
+    delta: 1.0e-5
+    mechanism: gaussian
+
+annotation:
+  schema_version: v1
+  irr_metrics:
+    - cohens_kappa
+    - fleiss_kappa
+    - krippendorffs_alpha
+    - bertscore
+  calibration:
+    target_kappa: 0.8
+    rounds: 3
+
+benchmark:
+  frameworks:
+    - langgraph
+    - crewai
+    - autogen
+    - openai_agents
+  output_dir: data/processed
+  output_format: jsonl
+
+eval:
+  trajectory_layers:
+    - intent
+    - planning
+    - tool_calls
+    - recovery
+    - outcome
+  facts:
+    dimensions:
+      - parametric
+      - search
+      - grounding
+      - multimodal

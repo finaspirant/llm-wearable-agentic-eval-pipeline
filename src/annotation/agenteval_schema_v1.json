@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AgentEval Schema v1 — 3-Layer Annotation",
+  "description": "Three-layer annotation schema for agentic AI trajectories. Session-level (outcome), Role-level (multi-agent attribution), Step-level (PRM feed with partial credit and HITL trigger flags).",
+  "version": "1.0.0",
+  "layers": {
+    "session": {
+      "description": "Overall trajectory outcome assessment",
+      "fields": ["goal_achieved", "session_quality", "total_steps", "total_tokens", "latency_ms", "error_count"]
+    },
+    "role": {
+      "description": "Per-agent attribution in multi-agent systems",
+      "fields": ["agent_id", "agent_role", "responsibility_score", "authority_level", "accountability_flag"]
+    },
+    "step": {
+      "description": "Step-level PRM annotation with partial credit",
+      "fields": ["step_id", "step_type", "correctness", "partial_credit_score", "tool_called", "error_flag", "recovery_quality", "hitl_trigger", "privacy_compliant"]
+    }
+  }
+}

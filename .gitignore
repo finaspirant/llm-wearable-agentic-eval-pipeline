@@ -205,3 +205,25 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# uv virtual environment
+.venv/
+
+# Data files (too large for git)
+data/raw/*.json
+data/raw/*.csv
+data/raw/*.jsonl
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# API keys (NEVER commit these)
+.env
+.env.local
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE settings
+.vscode/settings.json
+.idea/
