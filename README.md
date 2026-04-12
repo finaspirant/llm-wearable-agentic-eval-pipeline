@@ -133,19 +133,23 @@ cp .env.example .env
 
 ## Project Status
 
-**Phase 1 of 4** — Foundation (Days 5–8 of 45)
+**Phase 1 complete — entering Phase 2**
 
-- [x] Repository skeleton + folder structure
-- [x] uv environment with all dependencies locked
-- [x] README with project pitch + TBD results table
-- [ ] Synthetic wearable data generator (Day 6)
-- [ ] Multi-framework benchmark scaffold (Day 7)
-- [ ] LinkedIn Post #1 — "5 open problems" (Day 8)
+### What's built
 
-**Upcoming phases:**
-- Phase 2 (Days 9–18): Data curation mastery — IRR calculator, HH-RLHF analysis, annotation schema, IAA calibration, poisoning detection
-- Phase 3 (Days 19–28): Agentic eval mastery — full benchmark, trajectory scorer, FACTS integration, framework comparison
-- Phase 4 (Days 29–45): Publish + amplify — 3 white papers, 6 LinkedIn posts, open-source release
+| File | Description |
+|------|-------------|
+| `wearable_generator.py` | 100 synthetic logs, 5 scenario types, differential privacy layer ✅ |
+| `privacy_gate.py` | Gaussian mechanism, per-sensor sensitivity, consent model ✅ |
+| `benchmark_runner.py` | 4 frameworks (LangGraph, CrewAI, AutoGen, OpenAI SDK), 2 tasks ✅ |
+| `irr_calculator.py` | Cohen's κ, Fleiss κ, Krippendorff's α scaffold ✅ |
+
+### Coming in Phase 2
+
+- `poisoning_detector.py` — perplexity differential, count-based detection
+- Full IAA pipeline targeting κ > 0.8
+- FACTS grounding extension to ambient/wearable context
+- A/B experiment: curated vs raw trajectories
 
 ---
 

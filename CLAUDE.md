@@ -114,8 +114,8 @@ configs/        → YAML task configs + default settings
   Target: OpenAI, DeepMind. Publish Day 42.
 
 ## Current Phase
-Phase 1 — Foundation (Days 5-8 of 45)
-Building: repo skeleton, synthetic data pipeline, benchmark scaffold
+Phase 2 — Data Curation Mastery (Days 9-20)
+Building: annotation pipeline, IRR calculator, IAA calibration
 
 ### Completed
 - Days 1-4: Paper reading phase complete. Notion Target Challenge
@@ -203,17 +203,18 @@ Building: repo skeleton, synthetic data pipeline, benchmark scaffold
     framework's native execution model — reviewers see exactly where
     Phase 3 API calls slot in
 
-### Tomorrow (Day 8)
-- Finalize Target Challenge Matrix in Notion
-  - Confirm all 8 company entries are complete with paper citations
-    and open-problem mappings
-- Write LinkedIn post #1: "5 open problems in agentic AI" + repo link
-  - Hook: DeepMind FACTS 70% ceiling + Kore.ai 52% eval gap stat
-  - Body: map each open problem to a repo file / white paper section
-  - CTA: link to repo, tag target companies where appropriate
-- Push all Week 1 code with clean commit history
-  - Commit order: Day 5 skeleton → Day 6 data pipeline →
-    Day 7 benchmark harness
-  - Squash any fixup commits; ensure each commit message references
-    the day and the paper motivating the design
-- Update README results table if any real numbers are available
+- Day 8:
+  - Code cleanup: ruff check + ruff format across all src/ files,
+    type hints and docstrings verified on all public APIs,
+    moved inline `import math` to module level in wearable_generator.py
+  - pytest 23/23 ✓ after cleanup (no regressions)
+  - README updated: Project Status → Phase 1 complete, entering Phase 2;
+    What's built table + Coming in Phase 2 section added
+  - LinkedIn Post #1 drafted: "5 open problems in agentic AI" + repo link
+  - Target Challenge Matrix finalized for all 7 companies in Notion
+
+### Tomorrow (Day 9)
+- Implement src/annotation/irr_calculator.py fully
+  (Cohen's κ, Fleiss κ, Krippendorff's α)
+- Run on HH-RLHF open dataset as first real test
+- Target: κ > 0.6 baseline before calibration

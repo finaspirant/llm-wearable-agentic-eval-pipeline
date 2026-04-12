@@ -7,6 +7,7 @@ Key finding from FACTS: no model cracks 70% on factuality. This
 module extends FACTS to wearable/ambient context where sensor
 noise and ambient audio add additional factuality challenges.
 """
+
 import logging
 
 logger = logging.getLogger(__name__)

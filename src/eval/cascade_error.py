@@ -7,6 +7,7 @@ failures are self-containing vs which cascade catastrophically?
 Supports WP2's argument that trajectory-level eval must account
 for error propagation patterns, not just per-step accuracy.
 """
+
 import logging
 
 logger = logging.getLogger(__name__)

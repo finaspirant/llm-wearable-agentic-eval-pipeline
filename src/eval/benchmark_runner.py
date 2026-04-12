@@ -270,15 +270,21 @@ class LangGraphBenchmark(AgentBenchmark):
         "it_helpdesk": [
             ("sense", "ingest_vpn_error_report", ["query_vpn_logs"]),
             ("plan", "determine_diagnostic_path", []),
-            ("act", "run_network_diagnostic",
-             ["run_diagnostic", "check_network_status"]),
+            (
+                "act",
+                "run_network_diagnostic",
+                ["run_diagnostic", "check_network_status"],
+            ),
             ("act", "propose_fix_or_escalate", ["send_ticket"]),
             ("end", "log_resolution", ["log_event"]),
         ],
         "wearable_privacy": [
             ("sense", "read_biometric_sensors", ["get_sensor_reading"]),
-            ("plan", "evaluate_risk_and_privacy_context",
-             ["assess_health_risk", "check_privacy_context"]),
+            (
+                "plan",
+                "evaluate_risk_and_privacy_context",
+                ["assess_health_risk", "check_privacy_context"],
+            ),
             ("act", "apply_privacy_policy_decision", []),
             ("end", "log_decision_rationale", ["log_event"]),
         ],
@@ -370,18 +376,27 @@ class CrewAIBenchmark(AgentBenchmark):
 
     _PLANS: dict[str, list[tuple[str, str, list[str]]]] = {
         "it_helpdesk": [
-            ("IT Diagnostician", "analyse_vpn_failure",
-             ["query_vpn_logs", "check_network_status"]),
+            (
+                "IT Diagnostician",
+                "analyse_vpn_failure",
+                ["query_vpn_logs", "check_network_status"],
+            ),
             ("Solution Specialist", "identify_root_cause", ["run_diagnostic"]),
             ("Solution Specialist", "draft_fix_recommendation", []),
             ("Escalation Manager", "assess_escalation_need", ["send_ticket"]),
             ("IT Diagnostician", "compile_closure_report", ["log_event"]),
         ],
         "wearable_privacy": [
-            ("Health Monitor Agent", "assess_biometric_risk",
-             ["get_sensor_reading", "assess_health_risk"]),
-            ("Privacy Guardian Agent", "evaluate_consent_boundary",
-             ["check_privacy_context"]),
+            (
+                "Health Monitor Agent",
+                "assess_biometric_risk",
+                ["get_sensor_reading", "assess_health_risk"],
+            ),
+            (
+                "Privacy Guardian Agent",
+                "evaluate_consent_boundary",
+                ["check_privacy_context"],
+            ),
             ("Decision Coordinator", "weigh_risk_vs_privacy", []),
             ("Decision Coordinator", "execute_policy_action", ["log_event"]),
         ],
@@ -427,9 +442,12 @@ class CrewAIBenchmark(AgentBenchmark):
         task_config: TaskConfig,
         rng: random.Random,
     ) -> tuple[list[dict[str, Any]], int, list[str], bool]:
-        plan = self._PLANS.get(task_config.task_id, [
-            ("GeneralistAgent", "process_task", []),
-        ])
+        plan = self._PLANS.get(
+            task_config.task_id,
+            [
+                ("GeneralistAgent", "process_task", []),
+            ],
+        )
         task_outputs = self._OUTPUTS.get(task_config.task_id, {})
         trajectory: list[dict[str, Any]] = []
         offset_ms = 0.0
@@ -470,38 +488,67 @@ class AutoGenBenchmark(AgentBenchmark):
 
     _CONVERSATIONS: dict[str, list[tuple[str, str, list[str], str]]] = {
         "it_helpdesk": [
-            ("UserProxy", "user", [],
-             "VPN connection failing with error 619. Laptop: MacBook Pro, "
-             "FortiClient 7.2. Started this morning after OS update."),
-            ("AssistantAgent", "assistant", ["query_vpn_logs"],
-             "Checking VPN logs. Error 619 indicates tunnel endpoint unreachable. "
-             "Running network diagnostic now."),
-            ("AssistantAgent", "assistant", ["run_diagnostic", "check_network_status"],
-             "Diagnostic complete: UDP 4500 is blocked by firewall FW-CORP-04. "
-             "This is the root cause."),
-            ("UserProxy", "user", [],
-             "Can you fix it or do we need Tier 2?"),
-            ("AssistantAgent", "assistant", ["send_ticket"],
-             "Fix is within Level 1 scope. Adding UDP 4500 exception to FW-CORP-04. "
-             "Ticket IT-20251114-0042 filed. Please retry VPN in 5 minutes."),
-            ("UserProxy", "user", ["log_event"],
-             "TERMINATE"),
+            (
+                "UserProxy",
+                "user",
+                [],
+                "VPN connection failing with error 619. Laptop: MacBook Pro, "
+                "FortiClient 7.2. Started this morning after OS update.",
+            ),
+            (
+                "AssistantAgent",
+                "assistant",
+                ["query_vpn_logs"],
+                "Checking VPN logs. Error 619 indicates tunnel endpoint unreachable. "
+                "Running network diagnostic now.",
+            ),
+            (
+                "AssistantAgent",
+                "assistant",
+                ["run_diagnostic", "check_network_status"],
+                "Diagnostic complete: UDP 4500 is blocked by firewall FW-CORP-04. "
+                "This is the root cause.",
+            ),
+            ("UserProxy", "user", [], "Can you fix it or do we need Tier 2?"),
+            (
+                "AssistantAgent",
+                "assistant",
+                ["send_ticket"],
+                "Fix is within Level 1 scope. Adding UDP 4500 exception to FW-CORP-04. "
+                "Ticket IT-20251114-0042 filed. Please retry VPN in 5 minutes.",
+            ),
+            ("UserProxy", "user", ["log_event"], "TERMINATE"),
         ],
         "wearable_privacy": [
-            ("UserProxy", "user", ["get_sensor_reading"],
-             "Heart rate spiked to 112 bpm. User is in a private conversation. "
-             "Should we send a health alert?"),
-            ("AssistantAgent", "assistant", ["assess_health_risk"],
-             "HR 112 bpm: elevated but below critical threshold (140 bpm). "
-             "No cardiac emergency markers."),
-            ("AssistantAgent", "assistant", ["check_privacy_context"],
-             "Privacy context: AMBIENT consent, private_conversation flag active. "
-             "Policy prohibits biometric transmission in this state."),
-            ("UserProxy", "user", [],
-             "What is the final decision?"),
-            ("AssistantAgent", "assistant", ["log_event"],
-             "Decision: suppress alert, log locally. HR threshold not exceeded; "
-             "privacy boundary respected. TERMINATE"),
+            (
+                "UserProxy",
+                "user",
+                ["get_sensor_reading"],
+                "Heart rate spiked to 112 bpm. User is in a private conversation. "
+                "Should we send a health alert?",
+            ),
+            (
+                "AssistantAgent",
+                "assistant",
+                ["assess_health_risk"],
+                "HR 112 bpm: elevated but below critical threshold (140 bpm). "
+                "No cardiac emergency markers.",
+            ),
+            (
+                "AssistantAgent",
+                "assistant",
+                ["check_privacy_context"],
+                "Privacy context: AMBIENT consent, private_conversation flag active. "
+                "Policy prohibits biometric transmission in this state.",
+            ),
+            ("UserProxy", "user", [], "What is the final decision?"),
+            (
+                "AssistantAgent",
+                "assistant",
+                ["log_event"],
+                "Decision: suppress alert, log locally. HR threshold not exceeded; "
+                "privacy boundary respected. TERMINATE",
+            ),
         ],
     }
 
@@ -514,10 +561,13 @@ class AutoGenBenchmark(AgentBenchmark):
         task_config: TaskConfig,
         rng: random.Random,
     ) -> tuple[list[dict[str, Any]], int, list[str], bool]:
-        conversation = self._CONVERSATIONS.get(task_config.task_id, [
-            ("UserProxy", "user", [], task_config.description),
-            ("AssistantAgent", "assistant", [], "Task completed."),
-        ])
+        conversation = self._CONVERSATIONS.get(
+            task_config.task_id,
+            [
+                ("UserProxy", "user", [], task_config.description),
+                ("AssistantAgent", "assistant", [], "Task completed."),
+            ],
+        )
         trajectory: list[dict[str, Any]] = []
         offset_ms = 0.0
 
@@ -557,37 +607,79 @@ class OpenAIAgentsBenchmark(AgentBenchmark):
 
     _PLANS: dict[str, list[tuple[str, str, str, str, str]]] = {
         "it_helpdesk": [
-            ("TriageAgent", "tool_call", "query_vpn_logs",
-             '{"user": "user_001", "since": "2025-11-14T00:00:00Z"}',
-             "Error 619: tunnel endpoint unreachable. UDP 4500 blocked."),
-            ("TriageAgent", "handoff", "DiagnosticAgent",
-             "Network-layer issue requiring deeper analysis", ""),
-            ("DiagnosticAgent", "tool_call", "run_diagnostic",
-             '{"host": "vpn.corp.internal", "protocol": "udp", "port": 4500}',
-             "UDP 4500 blocked at FW-CORP-04."),
-            ("DiagnosticAgent", "tool_call", "send_ticket",
-             '{"priority": "medium", "fix": "add UDP 4500 exception FW-CORP-04"}',
-             "Ticket IT-20251114-0042 created."),
-            ("DiagnosticAgent", "tool_call", "log_event",
-             '{"resolution": "firewall_fix", "escalated": false}',
-             "Event logged."),
+            (
+                "TriageAgent",
+                "tool_call",
+                "query_vpn_logs",
+                '{"user": "user_001", "since": "2025-11-14T00:00:00Z"}',
+                "Error 619: tunnel endpoint unreachable. UDP 4500 blocked.",
+            ),
+            (
+                "TriageAgent",
+                "handoff",
+                "DiagnosticAgent",
+                "Network-layer issue requiring deeper analysis",
+                "",
+            ),
+            (
+                "DiagnosticAgent",
+                "tool_call",
+                "run_diagnostic",
+                '{"host": "vpn.corp.internal", "protocol": "udp", "port": 4500}',
+                "UDP 4500 blocked at FW-CORP-04.",
+            ),
+            (
+                "DiagnosticAgent",
+                "tool_call",
+                "send_ticket",
+                '{"priority": "medium", "fix": "add UDP 4500 exception FW-CORP-04"}',
+                "Ticket IT-20251114-0042 created.",
+            ),
+            (
+                "DiagnosticAgent",
+                "tool_call",
+                "log_event",
+                '{"resolution": "firewall_fix", "escalated": false}',
+                "Event logged.",
+            ),
         ],
         "wearable_privacy": [
-            ("SensorAgent", "tool_call", "get_sensor_reading",
-             '{"sensors": ["heart_rate", "spo2"]}',
-             '{"heart_rate": 112, "spo2": 97}'),
-            ("HealthAgent", "tool_call", "assess_health_risk",
-             '{"heart_rate": 112, "spo2": 97}',
-             '{"risk_level": "moderate", "emergency": false}'),
-            ("HealthAgent", "handoff", "PrivacyAgent",
-             "Risk assessed; privacy check required", ""),
-            ("PrivacyAgent", "tool_call", "check_privacy_context",
-             '{}',
-             '{"consent": "AMBIENT", "private_context": true, '
-             '"override_threshold_bpm": 140}'),
-            ("PrivacyAgent", "tool_call", "log_event",
-             '{"decision": "suppress_alert", "reason": "hr_below_threshold"}',
-             "Decision logged."),
+            (
+                "SensorAgent",
+                "tool_call",
+                "get_sensor_reading",
+                '{"sensors": ["heart_rate", "spo2"]}',
+                '{"heart_rate": 112, "spo2": 97}',
+            ),
+            (
+                "HealthAgent",
+                "tool_call",
+                "assess_health_risk",
+                '{"heart_rate": 112, "spo2": 97}',
+                '{"risk_level": "moderate", "emergency": false}',
+            ),
+            (
+                "HealthAgent",
+                "handoff",
+                "PrivacyAgent",
+                "Risk assessed; privacy check required",
+                "",
+            ),
+            (
+                "PrivacyAgent",
+                "tool_call",
+                "check_privacy_context",
+                "{}",
+                '{"consent": "AMBIENT", "private_context": true, '
+                '"override_threshold_bpm": 140}',
+            ),
+            (
+                "PrivacyAgent",
+                "tool_call",
+                "log_event",
+                '{"decision": "suppress_alert", "reason": "hr_below_threshold"}',
+                "Decision logged.",
+            ),
         ],
     }
 
@@ -600,9 +692,12 @@ class OpenAIAgentsBenchmark(AgentBenchmark):
         task_config: TaskConfig,
         rng: random.Random,
     ) -> tuple[list[dict[str, Any]], int, list[str], bool]:
-        plan = self._PLANS.get(task_config.task_id, [
-            ("Agent", "tool_call", "process", "{}", "Done."),
-        ])
+        plan = self._PLANS.get(
+            task_config.task_id,
+            [
+                ("Agent", "tool_call", "process", "{}", "Done."),
+            ],
+        )
         trajectory: list[dict[str, Any]] = []
         offset_ms = 0.0
 
@@ -695,9 +790,7 @@ class BenchmarkRunner:
             KeyError: If required YAML fields are missing.
         """
         if not self._config_path.exists():
-            raise FileNotFoundError(
-                f"Benchmark config not found: {self._config_path}"
-            )
+            raise FileNotFoundError(f"Benchmark config not found: {self._config_path}")
         raw = yaml.safe_load(self._config_path.read_text(encoding="utf-8"))
         all_tasks = [TaskConfig.from_dict(t) for t in raw["tasks"]]
 
@@ -711,9 +804,7 @@ class BenchmarkRunner:
             logger.warning("Task IDs not found in config: %s", sorted(missing))
         return filtered
 
-    def run_all(
-        self, task_ids: list[str] | None = None
-    ) -> list[BenchmarkResult]:
+    def run_all(self, task_ids: list[str] | None = None) -> list[BenchmarkResult]:
         """Run every (task, framework) combination and log results.
 
         Args:
@@ -795,9 +886,7 @@ class BenchmarkRunner:
             task_results = [r for r in results if r.task_id == task_id]
             for i, r in enumerate(task_results):
                 goal_cell = "[green]✓[/green]" if r.goal_achieved else "[red]✗[/red]"
-                errors_cell = (
-                    f"[red]{len(r.errors)}[/red]" if r.errors else "0"
-                )
+                errors_cell = f"[red]{len(r.errors)}[/red]" if r.errors else "0"
                 # Show task_id only on the first row of each group.
                 table.add_row(
                     r.task_id if i == 0 else "",
@@ -810,9 +899,7 @@ class BenchmarkRunner:
                 )
 
         console.print(table)
-        console.print(
-            f"\n[dim]Results appended to: {self._output_path}[/dim]"
-        )
+        console.print(f"\n[dim]Results appended to: {self._output_path}[/dim]")
 
 
 # ---------------------------------------------------------------------------
@@ -862,11 +949,13 @@ def main(
     )
 
     task_ids: list[str] | None = (
-        None if tasks.strip().lower() == "all"
+        None
+        if tasks.strip().lower() == "all"
         else [t.strip() for t in tasks.split(",") if t.strip()]
     )
     framework_names: list[str] | None = (
-        None if frameworks.strip().lower() == "all"
+        None
+        if frameworks.strip().lower() == "all"
         else [f.strip() for f in frameworks.split(",") if f.strip()]
     )
 

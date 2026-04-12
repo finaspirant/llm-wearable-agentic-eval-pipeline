@@ -7,6 +7,7 @@ and executes actions respecting privacy boundaries.
 This is the reference implementation that other framework versions
 (CrewAI, AutoGen, OpenAI SDK) will be benchmarked against.
 """
+
 import logging
 
 logger = logging.getLogger(__name__)

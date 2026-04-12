@@ -17,6 +17,7 @@ CLI: python -m src.data.wearable_generator --count 100
 
 import json
 import logging
+import math
 import uuid
 from dataclasses import asdict, dataclass
 from datetime import UTC, datetime
@@ -204,8 +205,8 @@ class WearableLog:
 # Distribution tag: "uniform" | "normal(mean, std)"
 _SCENARIO_DISTRIBUTIONS: dict[ScenarioType, dict[str, Any]] = {
     ScenarioType.HEALTH_ALERT: {
-        "heart_rate": ("normal", 145.0, 20.0),   # elevated
-        "spo2": ("normal", 91.0, 3.0),            # hypoxic range
+        "heart_rate": ("normal", 145.0, 20.0),  # elevated
+        "spo2": ("normal", 91.0, 3.0),  # hypoxic range
         "steps": ("uniform", 0.0, 150.0),
         "noise_db": ("uniform", 50.0, 75.0),
         "skin_temp_c": ("normal", 37.5, 0.5),
@@ -228,7 +229,7 @@ _SCENARIO_DISTRIBUTIONS: dict[ScenarioType, dict[str, Any]] = {
         "heart_rate": ("normal", 72.0, 8.0),
         "spo2": ("normal", 97.5, 1.0),
         "steps": ("uniform", 0.0, 200.0),
-        "noise_db": ("uniform", 70.0, 105.0),    # loud environment
+        "noise_db": ("uniform", 70.0, 105.0),  # loud environment
         "skin_temp_c": ("normal", 36.7, 0.3),
     },
     ScenarioType.CALENDAR_REMINDER: {
@@ -424,8 +425,7 @@ _SCENARIO_TRAJECTORY: dict[ScenarioType, list[dict[str, str]]] = {
     ScenarioType.AMBIENT_NOISE: [
         {
             "observation": (
-                "Ambient noise: {noise_db:.0f} dB SPL;"
-                " noise class: '{noise_class}'."
+                "Ambient noise: {noise_db:.0f} dB SPL; noise class: '{noise_class}'."
             ),
             "reasoning": (
                 "Sound level exceeds conversational threshold;"
@@ -435,8 +435,7 @@ _SCENARIO_TRAJECTORY: dict[ScenarioType, list[dict[str, str]]] = {
         },
         {
             "observation": (
-                "Prolonged exposure at {noise_db:.0f} dB SPL"
-                " above WHO 70 dB guideline."
+                "Prolonged exposure at {noise_db:.0f} dB SPL above WHO 70 dB guideline."
             ),
             "reasoning": (
                 "Hearing protection heuristic: >85 dB sustained"
@@ -475,8 +474,7 @@ _SCENARIO_TRAJECTORY: dict[ScenarioType, list[dict[str, str]]] = {
         },
         {
             "observation": (
-                "Reminder threshold reached;"
-                " {minutes_until} min to '{meeting_type}'."
+                "Reminder threshold reached; {minutes_until} min to '{meeting_type}'."
             ),
             "reasoning": (
                 "Surface contextual reminder with meeting details;"
@@ -497,10 +495,10 @@ _SCENARIO_GROUND_TRUTH: dict[ScenarioType, str] = {
 
 # GPS bounding boxes per scenario (lat_min, lat_max, lon_min, lon_max)
 _GPS_BOXES: dict[ScenarioType, tuple[float, float, float, float]] = {
-    ScenarioType.HEALTH_ALERT: (37.77, 37.79, -122.42, -122.40),   # SF residential
+    ScenarioType.HEALTH_ALERT: (37.77, 37.79, -122.42, -122.40),  # SF residential
     ScenarioType.PRIVACY_SENSITIVE: (37.78, 37.80, -122.43, -122.41),
     ScenarioType.LOCATION_TRIGGER: (37.33, 37.34, -122.03, -122.02),  # Cupertino
-    ScenarioType.AMBIENT_NOISE: (40.75, 40.76, -73.99, -73.98),    # Midtown NYC
+    ScenarioType.AMBIENT_NOISE: (40.75, 40.76, -73.99, -73.98),  # Midtown NYC
     ScenarioType.CALENDAR_REMINDER: (37.38, 37.40, -122.08, -122.07),  # Mountain View
 }
 
@@ -620,14 +618,12 @@ class WearableLogGenerator:
         Returns:
             The original pair if valid, else ``(fallback_lat, fallback_lon)``.
         """
-        import math as _math
-
         null_island = lat == 0.0 and lon == 0.0
         invalid = (
-            _math.isnan(lat)
-            or _math.isnan(lon)
-            or _math.isinf(lat)
-            or _math.isinf(lon)
+            math.isnan(lat)
+            or math.isnan(lon)
+            or math.isinf(lat)
+            or math.isinf(lon)
             or not (-90.0 <= lat <= 90.0)
             or not (-180.0 <= lon <= 180.0)
             or null_island
@@ -653,9 +649,7 @@ class WearableLogGenerator:
         raw_lon = float(self._rng.uniform(lon_min, lon_max))
         centre_lat = (lat_min + lat_max) / 2.0
         centre_lon = (lon_min + lon_max) / 2.0
-        gps_lat, gps_lon = self._validate_gps(
-            raw_lat, raw_lon, centre_lat, centre_lon
-        )
+        gps_lat, gps_lon = self._validate_gps(raw_lat, raw_lon, centre_lat, centre_lon)
 
         raw = SensorData(
             heart_rate=max(30.0, min(220.0, self._sample(dist["heart_rate"]))),

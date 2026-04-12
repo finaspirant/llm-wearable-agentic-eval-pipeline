@@ -8,6 +8,7 @@ Orchestrator delegates to specialized agents:
 Implements DeepMind's authority/responsibility/accountability
 framework as measurable eval dimensions (not just architecture).
 """
+
 import logging
 
 logger = logging.getLogger(__name__)

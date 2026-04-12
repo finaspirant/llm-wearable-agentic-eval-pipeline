@@ -5,6 +5,7 @@ Provides a common set of tools that all framework implementations
 benchmark comparison measures framework differences, not tool
 availability differences.
 """
+
 import logging
 
 logger = logging.getLogger(__name__)

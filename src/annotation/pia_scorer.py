@@ -9,6 +9,7 @@ than path-specific choices.
 No existing paper addresses this problem by name. This is a publishable
 contribution targeting WP2.
 """
+
 import logging
 
 logger = logging.getLogger(__name__)

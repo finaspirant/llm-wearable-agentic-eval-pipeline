@@ -24,14 +24,14 @@ logger = logging.getLogger(__name__)
 
 # Sensitivities calibrated per sensor type (max plausible change in one step)
 _DEFAULT_SENSITIVITIES: dict[str, float] = {
-    "heart_rate": 10.0,   # bpm — one inter-beat interval outlier
-    "spo2": 2.0,          # % — SpO2 clamped 0-100
-    "steps": 50.0,        # steps per epoch
-    "gps_lat": 0.001,     # ~111 m per 0.001 degree
+    "heart_rate": 10.0,  # bpm — one inter-beat interval outlier
+    "spo2": 2.0,  # % — SpO2 clamped 0-100
+    "steps": 50.0,  # steps per epoch
+    "gps_lat": 0.001,  # ~111 m per 0.001 degree
     "gps_lon": 0.001,
-    "noise_db": 5.0,      # dB SPL
-    "temperature": 0.5,   # °C skin-surface
-    "confidence": 0.05,   # transcript confidence fraction
+    "noise_db": 5.0,  # dB SPL
+    "temperature": 0.5,  # °C skin-surface
+    "confidence": 0.05,  # transcript confidence fraction
 }
 
 
@@ -43,10 +43,10 @@ class ConsentModel(Enum):
     and downstream annotation accordingly.
     """
 
-    EXPLICIT = "explicit"    # User actively opted in, full pipeline allowed
-    IMPLIED = "implied"      # Inferred from product ToS; limited annotation
-    AMBIENT = "ambient"      # Background capture; strict privacy budget
-    REVOKED = "revoked"      # User opted out; no capture or annotation
+    EXPLICIT = "explicit"  # User actively opted in, full pipeline allowed
+    IMPLIED = "implied"  # Inferred from product ToS; limited annotation
+    AMBIENT = "ambient"  # Background capture; strict privacy budget
+    REVOKED = "revoked"  # User opted out; no capture or annotation
 
 
 class PrivacyGate:
