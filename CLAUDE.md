@@ -136,10 +136,41 @@ Building: repo skeleton, synthetic data pipeline, benchmark scaffold
   - Note: langgraph does not expose __version__ at module level;
     use importlib.metadata.version("langgraph") instead
 
-### Tomorrow (Day 6)
-- Implement src/data/wearable_generator.py
-- Generate 100 synthetic wearable sensor/audio logs
-- 5 scenario types: health_alert, privacy_sensitive,
-  location_trigger, ambient_noise, calendar_reminder
-- Apply differential privacy (Gaussian noise, ε=1.0)
-- Generate 3-step agent trajectories: sense → plan → act
+- Day 6:
+  - Implemented src/data/privacy_gate.py:
+    - PrivacyGate class — Gaussian mechanism (σ = Δf·√(2·ln(1.25/δ))/ε)
+    - Per-sensor L2 sensitivity table (heart_rate, spo2, steps, GPS, noise_db)
+    - apply_gaussian_noise, apply_noise_to_sensor, validate_epsilon_budget,
+      sanitize_record (REVOKED consent passthrough)
+    - ConsentModel enum: EXPLICIT, IMPLIED, AMBIENT, REVOKED
+  - Implemented src/data/wearable_generator.py:
+    - ScenarioType (StrEnum): health_alert, privacy_sensitive,
+      location_trigger, ambient_noise, calendar_reminder
+    - AgentAction (StrEnum): 8 discrete actions
+    - SensorData, AudioTranscript, TrajectoryStep, WearableLog dataclasses
+    - WearableLogGenerator — per-scenario realistic distributions,
+      DP noise applied to all 6 numeric sensor fields including GPS
+    - 3-step trajectory templates per scenario (sense → plan → act)
+      with live sensor/context interpolation; noised coords in trajectory
+    - Input validation: count <= 0, empty scenario_filter, empty/None
+      audio transcript, invalid GPS (NaN/inf/Null Island → bbox fallback)
+    - CLI via typer: --count, --output, --seed, --scenario, --epsilon,
+      --verbose
+  - Generated data/raw/synthetic_wearable_logs.jsonl (100 logs, seed=42)
+    — all 5 scenario types, schema verified consistent
+  - Wrote tests/test_wearable_generator.py (23 tests, all passing):
+    - Schema test: all required fields with correct Python types
+    - Distribution test: all 5 scenario types in 100 logs (exactly 20 each)
+    - Privacy gate test: all 6 noised fields differ from raw across 50 logs
+    - Validation edge cases: count=0/-5, empty filter, empty transcript
+  - ruff check ✓  mypy strict ✓  pytest 23/23 ✓
+  - Note: noised sensor values must not be bounded to physiological
+    ranges — at ε=1.0, σ≈48 bpm; check math.isfinite instead
+
+### Tomorrow (Day 7)
+- Implement src/agent/wearable_agent_langgraph.py
+  - Single-agent: sensor → plan → action using LangGraph StateGraph
+  - Wire to WearableLog.trajectory for replay/evaluation
+  - Tools: get_sensor_reading, classify_scenario, decide_action
+  - Use Claude (anthropic SDK) as the LLM backbone
+- Run the agent against synthetic logs and log trajectories
