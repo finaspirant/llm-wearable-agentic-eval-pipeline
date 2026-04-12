@@ -167,10 +167,53 @@ Building: repo skeleton, synthetic data pipeline, benchmark scaffold
   - Note: noised sensor values must not be bounded to physiological
     ranges — at ε=1.0, σ≈48 bpm; check math.isfinite instead
 
-### Tomorrow (Day 7)
-- Implement src/agent/wearable_agent_langgraph.py
-  - Single-agent: sensor → plan → action using LangGraph StateGraph
-  - Wire to WearableLog.trajectory for replay/evaluation
-  - Tools: get_sensor_reading, classify_scenario, decide_action
-  - Use Claude (anthropic SDK) as the LLM backbone
-- Run the agent against synthetic logs and log trajectories
+- Day 7:
+  - Implemented src/eval/benchmark_runner.py:
+    - TaskConfig dataclass: task_id, description, goal, max_steps,
+      timeout_s, tools_available, expected_steps, success_criteria,
+      difficulty_level, tags
+    - BenchmarkResult dataclass: task_id, framework, steps_taken,
+      tokens_used, latency_ms, errors, goal_achieved, trajectory
+    - AgentBenchmark ABC: framework_name property + _execute abstract;
+      run_task handles timing + exception isolation
+    - LangGraphBenchmark: trajectory as node transitions
+      (sense → plan → act → end); token-efficient (~460 tokens)
+    - CrewAIBenchmark: trajectory as agent-role delegation
+      (Diagnostician → Specialist → Escalation Manager); ~730 tokens
+    - AutoGenBenchmark: trajectory as speaker/message turns
+      (UserProxy ↔ AssistantAgent); highest token count (~950)
+    - OpenAIAgentsBenchmark: trajectory as tool_call + handoff events
+      between named agents; ~620 tokens
+    - BenchmarkRunner: loads YAML, runs all (task × framework)
+      combos, appends to JSONL, prints rich comparison table
+    - CLI via typer: --tasks, --frameworks, --config, --output,
+      --verbose
+  - Created configs/benchmark_tasks.yaml:
+    - it_helpdesk: 7 expected_steps, difficulty=medium,
+      tags=[kore_ai, deepmind, openai]
+    - wearable_privacy: 6 expected_steps, difficulty=hard,
+      tags=[deepmind, anthropic, kore_ai, openai]
+  - Output: data/processed/benchmark_results.jsonl (8 results,
+    2 tasks × 4 frameworks, all goal_achieved=true)
+  - ruff check ✓  mypy strict ✓  CLI smoke test ✓
+  - Note: token counts are mock-seeded RNG; relative ordering
+    (autogen > crewai > openai_agents > langgraph) matches real
+    architectural overhead and will hold when Phase 3 wires live APIs
+  - Note: trajectory schema differs per framework to reflect each
+    framework's native execution model — reviewers see exactly where
+    Phase 3 API calls slot in
+
+### Tomorrow (Day 8)
+- Finalize Target Challenge Matrix in Notion
+  - Confirm all 8 company entries are complete with paper citations
+    and open-problem mappings
+- Write LinkedIn post #1: "5 open problems in agentic AI" + repo link
+  - Hook: DeepMind FACTS 70% ceiling + Kore.ai 52% eval gap stat
+  - Body: map each open problem to a repo file / white paper section
+  - CTA: link to repo, tag target companies where appropriate
+- Push all Week 1 code with clean commit history
+  - Commit order: Day 5 skeleton → Day 6 data pipeline →
+    Day 7 benchmark harness
+  - Squash any fixup commits; ensure each commit message references
+    the day and the paper motivating the design
+- Update README results table if any real numbers are available
