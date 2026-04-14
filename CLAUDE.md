@@ -289,6 +289,54 @@ Building: annotation pipeline, IRR calculator, IAA calibration
       all 5 scenario types covered
   - pytest 39/39 ✓ (130 total across all test files)
 
+- Day 12: Implemented src/annotation/annotator_simulator.py
+  - AnnotatorSimulator class: 5 LLM annotator personas with systematic
+    scoring biases that produce measurable inter-rater disagreement:
+    - PrivacyMaximalist: strict consent enforcement; biases privacy_compliance low
+    - OutcomeOptimist: goal-achievement focus; biases goal_alignment high
+    - ProcessPurist: chain-of-thought quality; biases step_quality strict
+    - ClinicalSafetyFirst: patient safety priority; health_alert goal_alignment
+      high (3–4), non-health goal_alignment low (1–2)
+    - RecoverySkeptic: resilience focus; biases error_recovery low
+  - 4-dimension rubric (1–4 integer scale, uniform across all dimensions):
+    step_quality, privacy_compliance, goal_alignment, error_recovery
+  - annotate_trajectory(log, persona_name) → annotation record dict
+  - annotate_all(logs) → flat list of n_logs × 5 records, written
+    incrementally to data/annotations/day12_annotations.jsonl
+  - Anthropic SDK with cache_control=ephemeral on persona system prompts;
+    30 calls per persona share cached prompt (~80% token cost reduction)
+  - compute_irr(records) → Fleiss' κ per dimension (0-indexed labels,
+    n_categories=4) via IRRCalculator; overall = mean across dimensions
+  - find_disagreement_hotspots(records, irr, top_n=3) → ranked by
+    ascending κ; per-log variance identifies specific hotspot log_ids
+  - Dry-run mode (--dry-run): deterministic scores from _DRY_RUN_BIAS
+    seeded by SHA-256(log_id:persona_name) — reproducible without API calls
+  - CLI: --input, --output, --n-trajectories, --dry-run; auto-computes
+    IRR and prints rich summary table + top-3 disagreement hotspots
+  - Pre-calibration κ validation: dry-run overall κ ≈ -0.03 (poor) —
+    confirms persona biases produce genuine disagreement; target for
+    post-calibration is 0.55–0.65, directly addressing Kore.ai's known
+    annotation quality gap (only 52% of enterprises have real evaluation)
+  - Top 3 disagreement hotspots (dry-run): step_quality (#1),
+    goal_alignment (#2), privacy_compliance (#3) → feeds Day 13
+    calibration protocol
+  - Created tests/annotation/test_annotator_simulator.py — 43 tests,
+    all passing, no API calls (dry_run=True throughout):
+    - TestOutputShape (4): record count, all 4 dims, all 5 personas
+    - TestScoreRange (5): 1–4 int per dim, non-uniform across personas
+    - TestAnnotationRecord (4): to_dict keys, JSON serialisable,
+      rationale ≥40 chars, unique annotation_ids
+    - TestDryRunReproducibility (2): deterministic seeding verified
+    - TestFleissKappaComputed (6): κ in [-1,1], overall = mean,
+      interpretation labels, <2 logs raises ValueError, overall κ < 0.4
+    - TestOutputSavedToJSONL (5): file created, line count, valid JSON,
+      required keys, nested parent directories auto-created
+    - TestDisagreementHotspots (8): ascending κ ordering, required keys,
+      known-variance synthetic pattern test
+    - TestPersonaBiasDirection (6): each persona's score bounds verified,
+      unknown persona raises ValueError
+  - ruff check ✓  mypy strict ✓  pytest 43/43 ✓ (173 total)
+
 ### Tomorrow (Day 10)
 - Download HH-RLHF dataset from HuggingFace (Anthropic's open RLHF dataset)
 - Run IRR calculator on HH-RLHF — compute κ per category
