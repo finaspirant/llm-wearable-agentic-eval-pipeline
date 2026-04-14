@@ -1,0 +1,114 @@
+# Argilla v2 + Elasticsearch 8 — local annotation stack
+#
+# Usage:
+#   docker compose -f configs/argilla/docker-compose.yml up -d
+#   docker compose -f configs/argilla/docker-compose.yml down       # stop
+#   docker compose -f configs/argilla/docker-compose.yml down -v    # stop + wipe volumes
+#
+# UI: http://localhost:6900
+# Default credentials: username=argilla  password=12345678  api_key=argilla.apikey
+#
+# Elasticsearch health: curl http://localhost:9200/_cluster/health
+# Argilla health:       curl http://localhost:6900/api/v1/status
+#
+# Version compatibility:
+#   argilla-server:  v2.8.0   (matches argilla Python SDK ==2.8.0)
+#   elasticsearch:   8.12.2   (Argilla v2 requires ES 8.x)
+#
+# Memory: Elasticsearch JVM is capped at 512 MB (-Xms512m -Xmx512m).
+# Increase ES_JAVA_OPTS if indexing large trajectory batches (>10k records).
+
+services:
+
+  # --------------------------------------------------------------------------
+  # Argilla Server
+  # --------------------------------------------------------------------------
+  argilla:
+    image: argilla/argilla-server:v2.8.0
+    platform: linux/amd64
+    container_name: argilla-server
+    restart: unless-stopped
+    ports:
+      - "6900:6900"
+    environment:
+      # Storage
+      ARGILLA_HOME_PATH: /var/lib/argilla
+
+      # Elasticsearch backend
+      ARGILLA_ELASTICSEARCH: http://elasticsearch:9200
+
+      # Default owner credentials — change before exposing beyond localhost
+      USERNAME: argilla
+      PASSWORD: "12345678"
+      API_KEY: argilla.apikey
+    volumes:
+      - argilla_data:/var/lib/argilla
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    networks:
+      - argilla-net
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:6900/api/v1/status || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 8
+      start_period: 30s
+
+  # --------------------------------------------------------------------------
+  # Elasticsearch 8 — document store backend for Argilla
+  # --------------------------------------------------------------------------
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.12.2
+    container_name: argilla-elasticsearch
+    restart: unless-stopped
+    environment:
+      # Single-node cluster — not for production use
+      node.name: argilla-es-node
+      cluster.name: argilla-cluster
+      discovery.type: single-node
+
+      # Disable TLS/auth for local development (Argilla manages auth)
+      xpack.security.enabled: "false"
+      xpack.security.http.ssl.enabled: "false"
+
+      # JVM heap — 512 MB is sufficient for annotation workloads up to ~50k records
+      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+
+      # Avoid bootstrap check failures in Docker
+      bootstrap.memory_lock: "false"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    networks:
+      - argilla-net
+    healthcheck:
+      test:
+        - "CMD-SHELL"
+        - "curl -sf http://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=5s || exit 1"
+      interval: 10s
+      timeout: 10s
+      retries: 12
+      start_period: 40s
+
+# ------------------------------------------------------------------------------
+# Named volumes — persist data across container restarts
+# ------------------------------------------------------------------------------
+volumes:
+  argilla_data:
+    driver: local
+    labels:
+      project: llm-wearable-agentic-eval-pipeline
+      component: argilla-server
+  elasticsearch_data:
+    driver: local
+    labels:
+      project: llm-wearable-agentic-eval-pipeline
+      component: argilla-elasticsearch
+
+# ------------------------------------------------------------------------------
+# Network
+# ------------------------------------------------------------------------------
+networks:
+  argilla-net:
+    driver: bridge
+    name: argilla-net

@@ -226,6 +226,69 @@ Building: annotation pipeline, IRR calculator, IAA calibration
     paper-sourced expected values (Landis & Koch, Fleiss, Krippendorff, BERTScore)
   - ruff check ✓  mypy strict ✓  pytest 91/91 ✓
 
+- Day 11: Annotation schema, Argilla infrastructure, and integration tests
+  - Created data/annotations/agenteval-schema-v1.json — 3-layer annotation schema:
+    - Layer 1: session-level outcome (overall_goal_achieved, session_outcome,
+      privacy_compliance_overall, user_trust_maintained, latency_acceptable)
+    - Layer 2: role-level multi-agent attribution with if/then/else requiring
+      handoff_quality for orchestrator role only; non-orchestrators explicitly
+      disallowed from that field
+    - Layer 3: step-level PRM feed — process_reward_score [-1.0, +1.0],
+      partial_credit [0.0, 1.0], annotator_rationale (minLength=20 for
+      BERTScore quality gate), tool_called enum (8 actions + empty string)
+    - rubric_anchors block: good/bad scored examples per Layer 3 field,
+      grounded in wearable scenario types and AgentAction enum
+    - schema_metadata block: version, IRR integration note, PRM integration
+      note, prs_range, latency_threshold_ms
+    - Note: RecordSuggestions in argilla v2.8.0 is keyed by question_name,
+      not integer index — access as rec.suggestions["tool_call_privacy_compliant"]
+  - Created data/annotations/wearable_annotation_rubric.md — human-readable
+    annotator rubric (~4,900 words):
+    - 5 annotation dimensions (A–E): tool_call_privacy_compliant,
+      action_correct_for_context, ambiguity_handled_well,
+      error_recovery_quality, process_reward_score + partial_credit
+    - 8×4 ConsentModel decision matrix (Dimension A)
+    - Sensor ambiguity table and dual-modality rule (Dimension B)
+    - Gradient conflict explanation and PRS encode/decode table (Dimension E)
+    - 3 calibration anchor trajectories (clearly good / borderline / clearly bad)
+  - Set up local Argilla annotation stack:
+    - configs/argilla/docker-compose.yml — argilla-server:v2.8.0 +
+      elasticsearch:8.12.2, ES JVM capped at 512 MB, healthcheck gating
+    - configs/argilla/argilla_setup.py — version guard (v2.x required),
+      rg.Dataset + rg.Settings with all Layer 3 fields and questions,
+      PRS RatingQuestion values [0..8] (Argilla v2 requires integers in [0,10]),
+      idempotent create (409 → skip, not error)
+    - Note: argilla v1.x used FeedbackDataset; v2.x uses rg.Dataset.
+      RatingQuestion requires integer values in [0, 10] — cannot use negatives.
+  - Created src/annotation/argilla_loader.py — ArgillaTrajectoryLoader class:
+    - trajectory_to_records(): converts each TrajectoryStep to rg.Record with
+      sensor context header embedded in step_observation field; pre-fill
+      suggestion for tool_call_privacy_compliant via action × ConsentModel
+      heuristic (REVOKED + non-allowed → non_compliant/0.95;
+      AMBIENT + blocked → non_compliant/0.80; else → compliant/0.70)
+    - load_batch(): per-log try/except (RecordErrorHandling is private in
+      v2.8.0, not in public namespace); returns {loaded, skipped, errors}
+    - export_annotations(): iterates dataset.records(with_responses=True),
+      decodes PRS via PRS_DECODE = {v: (v-4)*0.25 for v in range(9)},
+      saves parquet; one row per (record, annotator)
+    - Lazy connection: _connect() not called until load_batch/export_annotations,
+      so trajectory_to_records() works in tests with no server running
+    - CLI: --mode load --n-logs N | --mode export --output path.parquet
+  - Created tests/annotation/test_schema_irr_integration.py — 39 tests,
+    all passing:
+    - TestSchemaLoadsAndValidates (12): all 3 layers, PRS range, minLength=20,
+      if/then/else orchestrator rule, rubric_anchors, schema_metadata
+    - TestNominalFieldsWithCohensKappa (6): action_correct_for_context and
+      tool_call_privacy_compliant label vectors → Cohen's κ
+    - TestOrdinalFieldsWithKrippendorff (6): error_recovery_quality (4-level
+      ordinal) → Krippendorff's α, including 3-rater and missing-value cases
+    - TestRationaleFieldWithBERTScore (6): policy-grounded rationale pairs
+      score F1 ≥ 0.70 (moderate+); specific F1 ≥ vague F1 (Cohere gap test)
+    - TestFullPipelineSmoke (9): generator → records (no server), step_id
+      format, PRS_DECODE completeness, compute_all quality_gate key,
+      all 5 scenario types covered
+  - pytest 39/39 ✓ (130 total across all test files)
+
 ### Tomorrow (Day 10)
 - Download HH-RLHF dataset from HuggingFace (Anthropic's open RLHF dataset)
 - Run IRR calculator on HH-RLHF — compute κ per category
