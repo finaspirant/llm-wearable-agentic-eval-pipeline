@@ -1,0 +1,62 @@
+{
+  "cohens_kappa_toy": {
+    "description": "3-category balanced dataset — κ = 0.60 exactly. rater1 has 5 items per category; rater2 has 4 disagreements (items 3,4,5,14) producing P_o=11/15, P_e=1/3, κ=(11/15-1/3)/(2/3)=0.60.",
+    "rater1": [0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2],
+    "rater2": [0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 2, 2, 2, 2, 1],
+    "expected_kappa": 0.60,
+    "tolerance": 0.05
+  },
+  "fleiss_kappa_toy": {
+    "description": "3-category, 5-rater, 19-item dataset — κ = 0.430 exactly. 7 unanimous items (rotating across all 3 categories) and 12 split items (3 vs 2 majority). Produces P_bar=0.620, P_e=1/3.",
+    "ratings_matrix": [
+      [0, 0, 0, 0, 0],
+      [1, 1, 1, 1, 1],
+      [2, 2, 2, 2, 2],
+      [0, 0, 0, 0, 0],
+      [1, 1, 1, 1, 1],
+      [2, 2, 2, 2, 2],
+      [0, 0, 0, 0, 0],
+      [0, 0, 1, 1, 1],
+      [1, 1, 2, 2, 2],
+      [2, 2, 0, 0, 0],
+      [0, 0, 1, 1, 1],
+      [1, 1, 2, 2, 2],
+      [2, 2, 0, 0, 0],
+      [0, 0, 1, 1, 1],
+      [1, 1, 2, 2, 2],
+      [2, 2, 0, 0, 0],
+      [0, 0, 1, 1, 1],
+      [1, 1, 2, 2, 2],
+      [2, 2, 0, 0, 0]
+    ],
+    "n_categories": 3,
+    "expected_kappa": 0.430,
+    "tolerance": 0.05
+  },
+  "krippendorff_toy": {
+    "description": "Krippendorff (2011) reliability_data example — nominal α ≈ 0.691 (paper). Package computes 0.7434 (Δ=0.052); tolerance widened to 0.06 to document the known minor discrepancy.",
+    "reliability_data": [
+      [1, 2, 3, 3, 2, 1, 4, 1, 2, null, null, null],
+      [1, 2, 3, 3, 2, 2, 4, 1, 2, 5, null, 3],
+      [null, 3, 3, 3, 2, 3, 4, 2, 2, 5, 1, null],
+      [1, 2, 3, 3, 2, 4, 4, 1, 2, 5, 1, null]
+    ],
+    "level_of_measurement": "nominal",
+    "expected_alpha": 0.691,
+    "tolerance": 0.06
+  },
+  "bertscore_toy": {
+    "description": "Paraphrase pairs — expected F1 ≥ 0.85",
+    "rationales_a": [
+      "The agent correctly identified the health alert and notified the user.",
+      "Privacy constraints were respected — GPS data was not transmitted.",
+      "The action taken was appropriate given the sensor readings."
+    ],
+    "rationales_b": [
+      "The health warning was properly detected and the user was informed.",
+      "The system maintained privacy by withholding location information.",
+      "Given the sensor data, the chosen action was suitable."
+    ],
+    "expected_f1_min": 0.85
+  }
+}

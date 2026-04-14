@@ -1,0 +1,39 @@
+{
+  "cohens_kappa": {
+    "kappa": 0.6,
+    "interpretation": "moderate",
+    "n_items": 15
+  },
+  "fleiss_kappa": {
+    "kappa": 0.5959595959595959,
+    "interpretation": "moderate",
+    "n_items": 15,
+    "n_raters": 2
+  },
+  "krippendorffs_alpha": {
+    "alpha": 0.7851851851851852,
+    "interpretation": "substantial",
+    "n_raters": 2,
+    "n_items": 15,
+    "missing_values": 0,
+    "level_of_measurement": "ordinal"
+  },
+  "bertscore_agreement": {
+    "precision_mean": 0.8834579586982727,
+    "recall_mean": 0.8811461925506592,
+    "f1_mean": 0.8822999000549316,
+    "f1_per_pair": [
+      0.9091477990150452,
+      0.8254294991493225,
+      0.9123223423957825
+    ],
+    "model": "distilbert-base-uncased",
+    "n_pairs": 3,
+    "interpretation": "high semantic agreement"
+  },
+  "summary": {
+    "recommended_metric": "krippendorff",
+    "min_kappa": 0.5959595959595959,
+    "quality_gate_passed": false
+  }
+}

@@ -35,7 +35,8 @@ Run identical tasks across LangGraph, CrewAI, AutoGen (AG2), and OpenAI Agents S
 
 | Metric | Value | Source |
 |--------|-------|--------|
-| IAA before calibration (κ) | TBD | IRR calculator on HH-RLHF |
+| IRR Calculator | Implemented | Cohen's κ, Fleiss' κ, Krippendorff's α, BERTScore |
+| IAA before calibration (κ) | TBD — Day 10 | IRR calculator on HH-RLHF |
 | IAA after calibration (κ) | TBD | Calibration pipeline |
 | Framework benchmark winner | TBD | benchmark_runner.py |
 | Poisoning detection recall | TBD | poisoning_detector.py |
@@ -105,8 +106,8 @@ uv sync
 # Generate synthetic data
 python -m src.data.wearable_generator --count 100
 
-# Run IRR calculator
-python -m src.annotation.irr_calculator --help
+# Validate IRR reference values
+python -m src.annotation.irr_calculator --dataset toy --metric all
 
 # Run benchmark
 python -m src.eval.benchmark_runner --tasks all
@@ -133,7 +134,7 @@ cp .env.example .env
 
 ## Project Status
 
-**Phase 1 complete — entering Phase 2**
+**Phase 2 active — Day 9/45. IRR calculator shipped.**
 
 ### What's built
 
@@ -142,7 +143,7 @@ cp .env.example .env
 | `wearable_generator.py` | 100 synthetic logs, 5 scenario types, differential privacy layer ✅ |
 | `privacy_gate.py` | Gaussian mechanism, per-sensor sensitivity, consent model ✅ |
 | `benchmark_runner.py` | 4 frameworks (LangGraph, CrewAI, AutoGen, OpenAI SDK), 2 tasks ✅ |
-| `irr_calculator.py` | Cohen's κ, Fleiss κ, Krippendorff's α scaffold ✅ |
+| `irr_calculator.py` | Cohen's κ, Fleiss' κ, Krippendorff's α, BERTScore, compute_all — 91 tests ✅ |
 
 ### Coming in Phase 2
 

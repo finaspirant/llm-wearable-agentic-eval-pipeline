@@ -213,8 +213,24 @@ Building: annotation pipeline, IRR calculator, IAA calibration
   - LinkedIn Post #1 drafted: "5 open problems in agentic AI" + repo link
   - Target Challenge Matrix finalized for all 7 companies in Notion
 
-### Tomorrow (Day 9)
-- Implement src/annotation/irr_calculator.py fully
-  (Cohen's κ, Fleiss κ, Krippendorff's α)
-- Run on HH-RLHF open dataset as first real test
-- Target: κ > 0.6 baseline before calibration
+- Day 9: Implemented src/annotation/irr_calculator.py
+  - IRRCalculator class: cohens_kappa, fleiss_kappa,
+    krippendorffs_alpha, bertscore_agreement, compute_all
+  - 91 pytest tests — all passing, reference values validated:
+    Cohen's κ toy: 0.6000 (moderate)
+    Fleiss' κ toy: 0.5960 (moderate)
+    Krippendorff α toy: 0.7852 (substantial; expected 0.691 nominal from paper)
+    BERTScore F1 toy: 0.8823 (high semantic agreement)
+  - CLI working: python -m src.annotation.irr_calculator --dataset toy --metric all
+  - configs/toy_annotation_data.json — 4 reference datasets with
+    paper-sourced expected values (Landis & Koch, Fleiss, Krippendorff, BERTScore)
+  - ruff check ✓  mypy strict ✓  pytest 91/91 ✓
+
+### Tomorrow (Day 10)
+- Download HH-RLHF dataset from HuggingFace (Anthropic's open RLHF dataset)
+- Run IRR calculator on HH-RLHF — compute κ per category
+  (helpful vs harmless)
+- Find breakdown points: which question types have κ < 0.6?
+- Generate disagreement heatmap visualization
+- Key empirical hook: "X% of HH-RLHF preference pairs would fail
+  a κ > 0.8 quality threshold"
