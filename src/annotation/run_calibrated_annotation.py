@@ -431,9 +431,7 @@ def compute_full_irr(
 
     # Overall: mean across all 4 dimensions.
     def _mean_dim(key: str) -> float:
-        return float(
-            sum(result[d][key] for d in _DIMENSIONS) / len(_DIMENSIONS)
-        )
+        return float(sum(result[d][key] for d in _DIMENSIONS) / len(_DIMENSIONS))
 
     overall_fleiss = _mean_dim("fleiss_kappa")
     overall_cohens = _mean_dim("cohens_kappa_mean")
@@ -551,6 +549,8 @@ def save_post_calibration_annotations(
     records: list[dict[str, Any]],
     cal_config: CalibrationConfig,
     output_path: Path,
+    pre_irr: dict[str, dict[str, Any]] | None = None,
+    post_irr: dict[str, dict[str, Any]] | None = None,
 ) -> None:
     """Save post-calibration annotation records as a JSON object.
 
@@ -558,13 +558,41 @@ def save_post_calibration_annotations(
     Written as a single JSON file (not JSONL) to distinguish from the
     pre-calibration JSONL format.
 
+    The ``irr_results`` block persists the before/after agreement numbers so
+    downstream consumers (HuggingFace dataset card, white papers) can cite
+    them without re-running the pipeline.
+
     Args:
         records: Flat list of post-calibration annotation record dicts.
         cal_config: The calibration config used to produce these records.
         output_path: Destination path.  Parent directories are created if
             they do not exist.
+        pre_irr: Full IRR dict from :func:`compute_full_irr` on
+            pre-calibration records.  Stored under
+            ``irr_results.pre_calibration``.
+        post_irr: Full IRR dict from :func:`compute_full_irr` on
+            post-calibration records.  Stored under
+            ``irr_results.post_calibration``.
     """
     output_path.parent.mkdir(parents=True, exist_ok=True)
+
+    irr_block: dict[str, Any] = {}
+    if pre_irr is not None:
+        irr_block["pre_calibration"] = pre_irr
+    if post_irr is not None:
+        irr_block["post_calibration"] = post_irr
+        overall = post_irr.get("overall", {})
+        irr_block["headline"] = {
+            "pre_fleiss_kappa_overall": (
+                pre_irr["overall"]["fleiss_kappa"] if pre_irr else None
+            ),
+            "post_fleiss_kappa_overall": overall.get("fleiss_kappa"),
+            "post_krippendorffs_alpha_overall": overall.get("krippendorffs_alpha"),
+            "post_alpha_interpretation": overall.get("alpha_interpretation"),
+            "n_trajectories": overall.get("n_items"),
+            "n_personas": len(_PERSONAS),
+        }
+
     payload: dict[str, Any] = {
         "metadata": {
             "round": 2,
@@ -573,9 +601,11 @@ def save_post_calibration_annotations(
             "n_logs": len({r["log_id"] for r in records}),
             "n_records": len(records),
             "calibration_weight": _CALIBRATION_WEIGHT,
+            "target_alpha": _TARGET_ALPHA,
             "target_kappa": cal_config.target_kappa,
             "anchor_example_ids": cal_config.anchor_example_ids,
         },
+        "irr_results": irr_block,
         "records": records,
     }
     output_path.write_text(
@@ -586,6 +616,16 @@ def save_post_calibration_annotations(
         len(records),
         output_path,
     )
+    if irr_block.get("headline"):
+        h = irr_block["headline"]
+        logger.info(
+            "IRR headline: pre Fleiss κ=%.3f → post Fleiss κ=%.3f  "
+            "post Krippendorff α=%.3f (%s)",
+            h["pre_fleiss_kappa_overall"] or 0.0,
+            h["post_fleiss_kappa_overall"] or 0.0,
+            h["post_krippendorffs_alpha_overall"] or 0.0,
+            h["post_alpha_interpretation"] or "unknown",
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -806,7 +846,9 @@ def main(
     # ------------------------------------------------------------------ #
     # 9. Save post-calibration annotations as JSON                        #
     # ------------------------------------------------------------------ #
-    save_post_calibration_annotations(post_records, cal_config, output)
+    save_post_calibration_annotations(
+        post_records, cal_config, output, pre_irr=pre_irr, post_irr=post_irr
+    )
 
     # ------------------------------------------------------------------ #
     # 10. Assert calibration target met                                   #
