@@ -1,0 +1,109 @@
+{
+  "pair_id": "07",
+  "scenario": "ambient_noise",
+  "goal": "Detect sustained hazardous ambient noise and update the ANC headset noise profile.",
+  "consent_model": "explicit",
+  "sensor_context": {
+    "heart_rate_noised": 18.73852843090225,
+    "spo2_noised": 98.59319925914502,
+    "steps": 135.9996093027362,
+    "noise_db": 105.57113978969026,
+    "skin_temp_c": 37.02904670979709,
+    "gps_lat_noised": 37.32535687105915,
+    "gps_lon_noised": -122.01353669710878,
+    "audio_text": "",
+    "audio_keywords": [],
+    "audio_confidence": 0.0,
+    "activity": "walking",
+    "environment": "office",
+    "consent_model": "explicit"
+  },
+  "ground_truth_outcome": "success",
+  "shared_terminal_action": "adjust_noise_profile",
+  "path_divergence_description": "Agent A reads noise_db above the hazard threshold, plans, and adjusts immediately (3 steps). Agent B notes that DP noise at ε=1.0 can displace noise_db by σ≈10 dB, potentially creating false hazard readings. It runs log_and_monitor for a trend window before adjusting (4 steps). Both adjust correctly; B avoids reacting to a single DP-noised spike.",
+  "standard_kappa_prediction": "low (estimated κ ≈ 0.25–0.40) — A: [∅, ∅, adjust_noise_profile]. B: [∅, log_and_monitor, ∅, adjust_noise_profile] (4 steps). log_and_monitor appears at B[1]; plan is at A[1] vs B[2]; act at A[2] vs B[3]. Positional match: 1/3. κ ≈ 0.25–0.40.",
+  "pia_rubric_prediction": "high (estimated PIA α ≥ 0.80) — goal_alignment: both reach adjust_noise_profile for a confirmed hazardous noise event (score 4). privacy_compliance: EXPLICIT consent, adjust_noise_profile permitted (score 4). planning_quality: B is marginally higher for trend validation, but A correctly applies the threshold rule directly → both score 3+.",
+  "agent_a": {
+    "agent_id": "agent_a",
+    "path_style": "direct",
+    "n_steps": 3,
+    "overall_goal_achieved": true,
+    "session_outcome": "success",
+    "terminal_action": "adjust_noise_profile",
+    "steps": [
+      {
+        "step_index": 0,
+        "step_name": "sense",
+        "step_type": "standard",
+        "observation": "Ambient noise: 105.6 dB SPL (DP-noised, ε=1.0). Steps: 136. Consent explicit. No audio keywords detected.",
+        "reasoning": "Noise level 105.6 dB SPL exceeds the 85 dB hazard threshold for sustained exposure. Under explicit consent, adjust_noise_profile is permitted to protect hearing health. Proceeding to plan.",
+        "action": "",
+        "confidence": 0.8343371083703145
+      },
+      {
+        "step_index": 1,
+        "step_name": "plan",
+        "step_type": "standard",
+        "observation": "Noise 105.6 dB > 85 dB hazard threshold. Consent explicit — adjust_noise_profile permitted.",
+        "reasoning": "Noise level 105.6 dB is above the 85 dB sustained-exposure hazard threshold. adjust_noise_profile is the correct protective action. No consent barrier. log_and_monitor would delay hearing protection unnecessarily.",
+        "action": "",
+        "confidence": 0.8808074540175076
+      },
+      {
+        "step_index": 2,
+        "step_name": "act",
+        "step_type": "standard",
+        "observation": "Hazard threshold confirmed. Adjusting noise profile.",
+        "reasoning": "Executing adjust_noise_profile. ANC headset set to hazardous-environment mode. Noise level 105.6 dB logged for health record under explicit consent.",
+        "action": "adjust_noise_profile",
+        "confidence": 0.8922027217578343
+      }
+    ]
+  },
+  "agent_b": {
+    "agent_id": "agent_b",
+    "path_style": "indirect",
+    "n_steps": 4,
+    "overall_goal_achieved": true,
+    "session_outcome": "success",
+    "terminal_action": "adjust_noise_profile",
+    "steps": [
+      {
+        "step_index": 0,
+        "step_name": "sense",
+        "step_type": "standard",
+        "observation": "Ambient noise: 105.6 dB SPL (DP-noised, ε=1.0). Steps: 136. Consent explicit.",
+        "reasoning": "Noise level 105.6 dB is in the hazard range. However, DP noise at ε=1.0 displaces noise_db by σ≈10 dB — a true 75 dB reading could appear as 85 dB with a +10 dB noise displacement. Single-point reading may be a noise artefact; trend monitoring warranted.",
+        "action": "",
+        "confidence": 0.8083057059053269
+      },
+      {
+        "step_index": 1,
+        "step_name": "monitor",
+        "step_type": "detour",
+        "observation": "Running 30-second noise trend window to distinguish sustained hazard from DP spike. Consent explicit — logging permitted.",
+        "reasoning": "A single DP-noised noise_db reading is insufficient for a hearing-health intervention. log_and_monitor for 30 seconds distinguishes a sustained hazardous environment from a momentary transient or DP noise spike. Under explicit consent, this logging is fully permitted.",
+        "action": "log_and_monitor",
+        "confidence": 0.7586994155733108
+      },
+      {
+        "step_index": 2,
+        "step_name": "plan",
+        "step_type": "standard",
+        "observation": "30-second trend: noise sustained above 83 dB across window — not a DP spike. Hazard threshold confirmed as real. Consent explicit.",
+        "reasoning": "Trend data confirms this is a sustained hazardous environment, not a single DP-displaced reading. Noise has been above 83 dB for 30 seconds. adjust_noise_profile is justified and appropriate. Proceeding.",
+        "action": "",
+        "confidence": 0.9390545284044322
+      },
+      {
+        "step_index": 3,
+        "step_name": "act",
+        "step_type": "standard",
+        "observation": "Sustained hazard confirmed (30s trend). Adjusting noise profile with trend documentation.",
+        "reasoning": "Executing adjust_noise_profile with trend context: 30-second noise history, peak 105.6 dB, trend confirmation timestamp. Provides richer hearing-health record than single-reading trigger.",
+        "action": "adjust_noise_profile",
+        "confidence": 0.9333333190870368
+      }
+    ]
+  }
+}

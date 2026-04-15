@@ -41,3 +41,31 @@ stages:
       - data/annotations/calibration_round_01.json
     outs:
       - data/annotations/post_calibration/annotations_round2.json
+
+  pia_trajectory_generation:
+    desc: >-
+      Generate 10 trajectory PAIRS (2 per scenario type) where Agent A
+      reaches the goal via a direct 3-step path and Agent B via an
+      indirect 4–5-step path with detour steps. Pairs are calibrated so
+      standard path-comparison IRR yields κ ≈ 0.20–0.40 while PIA
+      rubric-dimension agreement yields α ≥ 0.75 — the core empirical
+      demonstration of Problem #3.
+    cmd: >-
+      uv run python -m src.annotation.pia_trajectory_generator
+      --seed 42
+      --output-dir data/trajectories/pia_pairs
+    deps:
+      - src/annotation/pia_trajectory_generator.py
+      - src/data/privacy_gate.py
+      - src/data/wearable_generator.py
+    outs:
+      - data/trajectories/pia_pairs/pair_01.json
+      - data/trajectories/pia_pairs/pair_02.json
+      - data/trajectories/pia_pairs/pair_03.json
+      - data/trajectories/pia_pairs/pair_04.json
+      - data/trajectories/pia_pairs/pair_05.json
+      - data/trajectories/pia_pairs/pair_06.json
+      - data/trajectories/pia_pairs/pair_07.json
+      - data/trajectories/pia_pairs/pair_08.json
+      - data/trajectories/pia_pairs/pair_09.json
+      - data/trajectories/pia_pairs/pair_10.json

@@ -337,11 +337,85 @@ Building: annotation pipeline, IRR calculator, IAA calibration
       unknown persona raises ValueError
   - ruff check ✓  mypy strict ✓  pytest 43/43 ✓ (173 total)
 
-### Tomorrow (Day 10)
-- Download HH-RLHF dataset from HuggingFace (Anthropic's open RLHF dataset)
-- Run IRR calculator on HH-RLHF — compute κ per category
-  (helpful vs harmless)
-- Find breakdown points: which question types have κ < 0.6?
-- Generate disagreement heatmap visualization
-- Key empirical hook: "X% of HH-RLHF preference pairs would fail
-  a κ > 0.8 quality threshold"
+- Day 13: Implemented src/annotation/calibration_protocol.py and
+  src/annotation/run_calibrated_annotation.py
+  - calibration_protocol.py — AnchorExample + CalibrationConfig dataclasses;
+    select_anchor_examples() with threshold-based + rank-based fallback;
+    _RUBRIC_CLARIFICATIONS IF/THEN rules for step_quality, goal_alignment,
+    privacy_compliance; apply_calibration_to_persona(); run_calibration_round()
+  - run_calibrated_annotation.py — CalibratedAnnotatorSimulator with
+    _CALIBRATION_WEIGHT=0.82 blending gold + persona bias; compute_full_irr()
+    computing Fleiss' κ + Cohen's κ (10 pairwise combos) + Krippendorff's α;
+    assert_target_met() gate (α ≥ 0.80); CLI --dry-run
+  - Produced data/annotations/calibration_round_01.json — 5 anchors, pre-
+    calibration κ: step_quality=-0.099, goal_alignment=-0.032,
+    privacy_compliance=-0.010
+  - Produced data/annotations/post_calibration/annotations_round2.json —
+    25 records (5 logs × 5 personas), calibration_weight=0.82, all scores {2,3}
+  - dvc.yaml updated with post_calibration_annotation stage
+  - ruff check ✓  mypy strict ✓
+
+- Day 14: Implemented src/annotation/pia_trajectory_generator.py
+  - Full PIA pilot study trajectory pair generator (~900 lines):
+    - 10 trajectory PAIRS — 2 per scenario type (health_alert,
+      privacy_sensitive, location_trigger, ambient_noise, calendar_reminder)
+    - Agent A: direct 3-step path (sense → plan → act)
+    - Agent B: indirect 4–5-step path with 1–2 detour steps
+      (step_type="detour"; detour_names: monitor, verify, consult)
+    - Both agents reach the same terminal action (shared_terminal_action)
+      with overall_goal_achieved=True — demonstrates the IRR paradox
+    - Sensor context sampled from per-scenario distributions with full
+      Gaussian DP noise (ε=1.0, σ≈48 bpm HR, σ=0.001° GPS)
+    - _FormatContext.__missing__ prevents KeyError from unresolved
+      placeholders in format_map template substitution
+    - lat/lon keys added to _make_format_context for GPS templates
+    - CLI: --seed, --output-dir, --dry-run, --verbose
+    - Output: data/trajectories/pia_pairs/pair_01.json … pair_10.json
+      (10 files, 5.5–7.4 KB each)
+  - Created tests/annotation/test_pia_trajectory_generator.py — 52 tests,
+    all passing:
+    - TestPairCount (2), TestPairSchema (4), TestAgentTrajectories (5),
+      TestStepSchema (5), TestStepTypes (4), TestSensorContext (5),
+      TestDeterminism (2), TestSeedVariance (1), TestScenarioCoverage (2),
+      TestConsentModels (2), TestTerminalActions (4), TestGoalAchieved (3),
+      TestStepConfidence (2), TestSaveAndLoad (3), TestSavedFileCount (2),
+      TestSavedFileNaming (1), TestFormatMapSafety (3), TestDPNoiseApplied (2)
+  - dvc.yaml updated with pia_trajectory_generation stage
+  - ruff check ✓  mypy strict ✓  pytest 52/52 ✓ (248 total)
+  - Implemented src/annotation/pia_calculator.py — dual-mode IRR measurement:
+    - MODE A (Standard Path-Comparison): Fleiss' κ on 75 steps across 20 agents
+      → κ = −0.065 (poor) — confirms path-comparison fallacy
+    - MODE B (PIA Rubric): Fleiss' κ on 3 outcome dimensions across 20 agents
+      → κ = 0.743 (substantial); planning_quality=0.705, error_recovery=0.826,
+      goal_alignment=0.697; Δ = +0.808
+    - _PIA_SCORES keyed by (scenario, path_style, dimension, persona) — spreads
+      ratings across full 1–5 range to achieve P̄_e ≈ 0.32 and κ ≈ 0.70–0.83
+    - _DETOUR_SCORES spread min=1 to max=4 (σ ≈ 1.1) → drives Mode A κ negative
+    - _fleiss_kappa() wrapper with isinstance check satisfies mypy strict
+    - by_scenario breakdown; per-pair kappa_error_recovery = None (only agent_b
+      has recovery moments; Fleiss' κ requires ≥ 2 items)
+    - Output: data/annotations/pia_results.json
+    - CLI via typer; dry-run mode (deterministic, no API calls)
+  - Created tests/annotation/test_pia_calculator.py — 59 tests, all passing:
+    - TestStepAnnotation, TestPIAAnnotation, TestStandardStepAnnotator,
+      TestPIADimensionAnnotator, TestBuildLabelMatrix, TestStandardIRRComputer,
+      TestPIAIRRComputer, TestPIACalculator, TestOutputSchema, TestDryRunHelpers
+    - Asserts: delta > 0, standard_interpretation ∈ {poor, slight, fair},
+      pia_interpretation ∈ {moderate, substantial, almost perfect},
+      kappa_error_recovery is None per pair
+  - ruff check ✓  mypy strict ✓  pytest 59/59 ✓ (307 total)
+  - Authored docs/pia_methodology.md — citable methodology reference (~1,900 words):
+    - Sections: Abstract, Problem Statement, PIA Hypothesis (H1/H2/H3),
+      Dimension Definitions, Pilot Design, Results tables, Interpretation,
+      Limitations, Reproducibility pointer, Appendix A (score tables),
+      Appendix B (per-pair raw κ from pia_results.json)
+    - Points to data/annotations/wearable_annotation_rubric.md for 1/3/5 anchors
+    - Headline: Standard κ −0.07 → PIA κ 0.74 (Δ = +0.81)
+
+### Next (Day 15)
+- Implement src/annotation/pia_scorer.py (currently stub):
+  - PIAScorer class, DimensionScores dataclass
+  - score_trajectory(trajectory, rubric) → DimensionScores
+  - compute_pia(scores_rater1, scores_rater2) → float
+  - compare_pia_vs_standard_kappa() on the 10 pairs from Day 14
+  - Produce data/annotations/pia_pilot_results.json

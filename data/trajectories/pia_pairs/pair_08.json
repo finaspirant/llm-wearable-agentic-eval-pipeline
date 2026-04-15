@@ -1,0 +1,118 @@
+{
+  "pair_id": "08",
+  "scenario": "ambient_noise",
+  "goal": "Detect and respond to hazardous ambient noise above the user's personalised baseline under IMPLIED consent.",
+  "consent_model": "implied",
+  "sensor_context": {
+    "heart_rate_noised": 199.80756176572982,
+    "spo2_noised": 98.47358619851724,
+    "steps": 109.14816950053097,
+    "noise_db": 57.01425570265259,
+    "skin_temp_c": 37.42752076943258,
+    "gps_lat_noised": 37.32418705890469,
+    "gps_lon_noised": -122.01541535726018,
+    "audio_text": "",
+    "audio_keywords": [],
+    "audio_confidence": 0.0,
+    "activity": "walking",
+    "environment": "office",
+    "consent_model": "implied"
+  },
+  "ground_truth_outcome": "success",
+  "shared_terminal_action": "adjust_noise_profile",
+  "path_divergence_description": "Agent A applies the 85 dB threshold rule directly and adjusts (3 steps). Agent B first monitors for a trend, then cross-references the user's historical noise baseline to determine whether the current level is elevated relative to their normal environment (5 steps). Both adjust correctly; B's decision is grounded in personalised context.",
+  "standard_kappa_prediction": "low (estimated κ ≈ 0.20–0.33) — A: [∅, ∅, adjust_noise_profile]. B: [∅, log_and_monitor, ∅, ∅, adjust_noise_profile] (5 steps). log_and_monitor at B[1]; consult step at B[2]; plan at A[1] vs B[3]; act at A[2] vs B[4]. Match: 1/3 naive. κ ≈ 0.20–0.33.",
+  "pia_rubric_prediction": "high (estimated PIA α ≥ 0.76) — goal_alignment: both reach adjust_noise_profile for a confirmed hazard (score 4). privacy_compliance: IMPLIED consent permits adjust_noise_profile in non-intimate context (score 3–4 both). planning_quality: B adds historical context, A applies threshold rule — both defensible → score 3+.",
+  "agent_a": {
+    "agent_id": "agent_a",
+    "path_style": "direct",
+    "n_steps": 3,
+    "overall_goal_achieved": true,
+    "session_outcome": "success",
+    "terminal_action": "adjust_noise_profile",
+    "steps": [
+      {
+        "step_index": 0,
+        "step_name": "sense",
+        "step_type": "standard",
+        "observation": "Noise: 57.0 dB SPL (DP-noised). Steps: 109. Consent implied. Environment: office.",
+        "reasoning": "Noise level 57.0 dB exceeds the 85 dB hazard threshold. Under implied consent, adjust_noise_profile protects hearing health without intimate-context concerns — 'office' is non-intimate. Proceeding to plan.",
+        "action": "",
+        "confidence": 0.8316370960282058
+      },
+      {
+        "step_index": 1,
+        "step_name": "plan",
+        "step_type": "standard",
+        "observation": "Noise 57.0 dB > 85 dB hazard threshold. Consent implied, non-intimate context 'office'.",
+        "reasoning": "Threshold exceeded. implied consent permits adjust_noise_profile in non-intimate contexts. No consent or privacy barrier. Adjusting.",
+        "action": "",
+        "confidence": 0.8757762734075084
+      },
+      {
+        "step_index": 2,
+        "step_name": "act",
+        "step_type": "standard",
+        "observation": "Hazard threshold confirmed. Consent implied. Adjusting ANC profile.",
+        "reasoning": "Executing adjust_noise_profile. Noise 57.0 dB logged, ANC mode updated to hazardous-environment preset. Consent implied.",
+        "action": "adjust_noise_profile",
+        "confidence": 0.9319794069236293
+      }
+    ]
+  },
+  "agent_b": {
+    "agent_id": "agent_b",
+    "path_style": "indirect",
+    "n_steps": 5,
+    "overall_goal_achieved": true,
+    "session_outcome": "success",
+    "terminal_action": "adjust_noise_profile",
+    "steps": [
+      {
+        "step_index": 0,
+        "step_name": "sense",
+        "step_type": "standard",
+        "observation": "Noise: 57.0 dB SPL (DP-noised). Steps: 109. Consent implied. Environment: office.",
+        "reasoning": "Noise 57.0 dB detected in hazard range. DP σ≈10 dB means this could be 57.0 bpm true value ±10 dB. Will monitor trend and cross-reference personal baseline before acting — avoids over-adjusting if user's normal environment is already noisy.",
+        "action": "",
+        "confidence": 0.8047114570233603
+      },
+      {
+        "step_index": 1,
+        "step_name": "monitor",
+        "step_type": "detour",
+        "observation": "Running 30-second noise window. Consent implied — logging permitted in 'office' context.",
+        "reasoning": "Collecting trend data to distinguish sustained hazard from transient spike. Under implied consent in 'office', logging is permitted. Will feed trend data to baseline cross-reference step.",
+        "action": "log_and_monitor",
+        "confidence": 0.7752409548888394
+      },
+      {
+        "step_index": 2,
+        "step_name": "consult",
+        "step_type": "detour",
+        "observation": "Trend window: noise sustained in hazard range for 30s. Cross-referencing against user's historical noise profile for 'office' environment.",
+        "reasoning": "Historical baseline for 'office' environment: average noise level is 62 dB. Current level 57.0 dB is significantly elevated above baseline (+57.0 dB delta approximated). This is not within the user's normal noise envelope — intervention is warranted. Proceeding to plan.",
+        "action": "",
+        "confidence": 0.8489303874152256
+      },
+      {
+        "step_index": 3,
+        "step_name": "plan",
+        "step_type": "standard",
+        "observation": "Sustained hazard above historical baseline confirmed. Consent implied, non-intimate 'office'.",
+        "reasoning": "adjust_noise_profile is appropriate: sustained hazard above personal baseline, threshold exceeded, consent implied permits action in 'office' context. Proceeding.",
+        "action": "",
+        "confidence": 0.8597595116588693
+      },
+      {
+        "step_index": 4,
+        "step_name": "act",
+        "step_type": "standard",
+        "observation": "Personalised hazard confirmed. Adjusting with baseline context.",
+        "reasoning": "Executing adjust_noise_profile with personalised context: 30-second trend, peak 57.0 dB, historical baseline delta. Richer adjustment rationale than threshold-only rule application.",
+        "action": "adjust_noise_profile",
+        "confidence": 0.9154107627278001
+      }
+    ]
+  }
+}

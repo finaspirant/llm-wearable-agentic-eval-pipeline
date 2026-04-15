@@ -1,0 +1,227 @@
+{
+  "generated_at": "2026-04-15T14:40:37.037371+00:00",
+  "seed": 42,
+  "n_pairs": 10,
+  "n_annotators": 5,
+  "personas": [
+    "PrivacyMaximalist",
+    "OutcomeOptimist",
+    "ProcessPurist",
+    "ClinicalSafetyFirst",
+    "RecoverySkeptic"
+  ],
+  "standard_total_steps": 75,
+  "standard_overall_kappa": -0.0654,
+  "standard_interpretation": "poor",
+  "standard_per_pair": {
+    "01": {
+      "pair_id": "01",
+      "scenario": "health_alert",
+      "kappa": 0.05660377358490575,
+      "n_steps_a": 3,
+      "n_steps_b": 5,
+      "total_steps": 8
+    },
+    "02": {
+      "pair_id": "02",
+      "scenario": "health_alert",
+      "kappa": -0.01744186046511631,
+      "n_steps_a": 3,
+      "n_steps_b": 4,
+      "total_steps": 7
+    },
+    "03": {
+      "pair_id": "03",
+      "scenario": "privacy_sensitive",
+      "kappa": -0.16525423728813565,
+      "n_steps_a": 3,
+      "n_steps_b": 4,
+      "total_steps": 7
+    },
+    "04": {
+      "pair_id": "04",
+      "scenario": "privacy_sensitive",
+      "kappa": -0.08481262327416167,
+      "n_steps_a": 3,
+      "n_steps_b": 5,
+      "total_steps": 8
+    },
+    "05": {
+      "pair_id": "05",
+      "scenario": "location_trigger",
+      "kappa": -0.06598984771573597,
+      "n_steps_a": 3,
+      "n_steps_b": 4,
+      "total_steps": 7
+    },
+    "06": {
+      "pair_id": "06",
+      "scenario": "location_trigger",
+      "kappa": -0.08655616942909757,
+      "n_steps_a": 3,
+      "n_steps_b": 5,
+      "total_steps": 8
+    },
+    "07": {
+      "pair_id": "07",
+      "scenario": "ambient_noise",
+      "kappa": -0.05366492146596843,
+      "n_steps_a": 3,
+      "n_steps_b": 4,
+      "total_steps": 7
+    },
+    "08": {
+      "pair_id": "08",
+      "scenario": "ambient_noise",
+      "kappa": -0.033138401559454175,
+      "n_steps_a": 3,
+      "n_steps_b": 5,
+      "total_steps": 8
+    },
+    "09": {
+      "pair_id": "09",
+      "scenario": "calendar_reminder",
+      "kappa": -0.15360696517412922,
+      "n_steps_a": 3,
+      "n_steps_b": 4,
+      "total_steps": 7
+    },
+    "10": {
+      "pair_id": "10",
+      "scenario": "calendar_reminder",
+      "kappa": -0.06666666666666668,
+      "n_steps_a": 3,
+      "n_steps_b": 5,
+      "total_steps": 8
+    }
+  },
+  "pia_total_agents": 20,
+  "pia_per_dimension_kappa": {
+    "planning_quality": 0.7048,
+    "error_recovery": 0.8264,
+    "goal_alignment": 0.6966
+  },
+  "pia_overall_kappa": 0.7426,
+  "pia_interpretation": "substantial",
+  "pia_per_pair": {
+    "01": {
+      "pair_id": "01",
+      "scenario": "health_alert",
+      "kappa_planning_quality": 0.3103448275862068,
+      "kappa_error_recovery": null,
+      "kappa_goal_alignment": 0.19999999999999996,
+      "kappa_overall": 0.4455779054916986
+    },
+    "02": {
+      "pair_id": "02",
+      "scenario": "health_alert",
+      "kappa_planning_quality": 0.3103448275862068,
+      "kappa_error_recovery": null,
+      "kappa_goal_alignment": 0.19999999999999996,
+      "kappa_overall": 0.4455779054916986
+    },
+    "03": {
+      "pair_id": "03",
+      "scenario": "privacy_sensitive",
+      "kappa_planning_quality": 1.0,
+      "kappa_error_recovery": null,
+      "kappa_goal_alignment": 1.0,
+      "kappa_overall": 0.9421296296296298
+    },
+    "04": {
+      "pair_id": "04",
+      "scenario": "privacy_sensitive",
+      "kappa_planning_quality": 1.0,
+      "kappa_error_recovery": null,
+      "kappa_goal_alignment": 1.0,
+      "kappa_overall": 0.9421296296296298
+    },
+    "05": {
+      "pair_id": "05",
+      "scenario": "location_trigger",
+      "kappa_planning_quality": 0.5833333333333334,
+      "kappa_error_recovery": null,
+      "kappa_goal_alignment": 0.5833333333333334,
+      "kappa_overall": 0.664351851851852
+    },
+    "06": {
+      "pair_id": "06",
+      "scenario": "location_trigger",
+      "kappa_planning_quality": 0.5833333333333334,
+      "kappa_error_recovery": null,
+      "kappa_goal_alignment": 0.5833333333333334,
+      "kappa_overall": 0.664351851851852
+    },
+    "07": {
+      "pair_id": "07",
+      "scenario": "ambient_noise",
+      "kappa_planning_quality": 0.5833333333333334,
+      "kappa_error_recovery": null,
+      "kappa_goal_alignment": 0.5833333333333334,
+      "kappa_overall": 0.664351851851852
+    },
+    "08": {
+      "pair_id": "08",
+      "scenario": "ambient_noise",
+      "kappa_planning_quality": 0.5833333333333334,
+      "kappa_error_recovery": null,
+      "kappa_goal_alignment": 0.5833333333333334,
+      "kappa_overall": 0.664351851851852
+    },
+    "09": {
+      "pair_id": "09",
+      "scenario": "calendar_reminder",
+      "kappa_planning_quality": 0.5833333333333334,
+      "kappa_error_recovery": null,
+      "kappa_goal_alignment": 0.6551724137931035,
+      "kappa_overall": 0.6882982120051087
+    },
+    "10": {
+      "pair_id": "10",
+      "scenario": "calendar_reminder",
+      "kappa_planning_quality": 0.5833333333333334,
+      "kappa_error_recovery": null,
+      "kappa_goal_alignment": 0.6551724137931035,
+      "kappa_overall": 0.6882982120051087
+    }
+  },
+  "delta": 0.8081,
+  "delta_headline": "PIA raises IRR by +0.81 \u03ba points (poor \u2192 substantial)",
+  "by_scenario": {
+    "health_alert": {
+      "scenario": "health_alert",
+      "n_pairs": 2,
+      "standard_kappa": 0.0196,
+      "pia_kappa": 0.4456,
+      "delta": 0.426
+    },
+    "privacy_sensitive": {
+      "scenario": "privacy_sensitive",
+      "n_pairs": 2,
+      "standard_kappa": -0.125,
+      "pia_kappa": 0.9421,
+      "delta": 1.0672
+    },
+    "location_trigger": {
+      "scenario": "location_trigger",
+      "n_pairs": 2,
+      "standard_kappa": -0.0763,
+      "pia_kappa": 0.6644,
+      "delta": 0.7406
+    },
+    "ambient_noise": {
+      "scenario": "ambient_noise",
+      "n_pairs": 2,
+      "standard_kappa": -0.0434,
+      "pia_kappa": 0.6644,
+      "delta": 0.7078
+    },
+    "calendar_reminder": {
+      "scenario": "calendar_reminder",
+      "n_pairs": 2,
+      "standard_kappa": -0.1101,
+      "pia_kappa": 0.6883,
+      "delta": 0.7984
+    }
+  }
+}

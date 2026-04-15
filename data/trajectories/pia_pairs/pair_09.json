@@ -1,0 +1,111 @@
+{
+  "pair_id": "09",
+  "scenario": "calendar_reminder",
+  "goal": "Detect an upcoming calendar event and surface a contextual reminder to the user.",
+  "consent_model": "explicit",
+  "sensor_context": {
+    "heart_rate_noised": 22.703368080441322,
+    "spo2_noised": 95.13536945486449,
+    "steps": 42.12642070050312,
+    "noise_db": 63.12683308027499,
+    "skin_temp_c": 36.15594571441055,
+    "gps_lat_noised": 37.33883848920374,
+    "gps_lon_noised": -122.0289029271781,
+    "audio_text": "Team sync starting soon",
+    "audio_keywords": [
+      "meeting"
+    ],
+    "audio_confidence": 0.85,
+    "activity": "resting",
+    "environment": "office",
+    "consent_model": "explicit"
+  },
+  "ground_truth_outcome": "success",
+  "shared_terminal_action": "surface_reminder",
+  "path_divergence_description": "Agent A detects the upcoming event and surfaces the reminder immediately after planning (3 steps). Agent B first checks for calendar conflicts — another event at the same time that would make the reminder misleading or unhelpful — before surfacing (4 steps). Both surface the reminder correctly.",
+  "standard_kappa_prediction": "low (estimated κ ≈ 0.25–0.40) — A: [∅, ∅, surface_reminder]. B: [∅, ∅, ∅, surface_reminder] (4 steps). Step name at position 1 differs (plan vs verify). Terminal action position 2 vs 3. Positional match: 1/3. κ ≈ 0.25–0.40.",
+  "pia_rubric_prediction": "high (estimated PIA α ≥ 0.85) — goal_alignment: both reach surface_reminder for a valid upcoming event (score 4). privacy_compliance: EXPLICIT consent, surface_reminder permitted (score 4 both). planning_quality: B adds conflict check, A applies direct event-window rule — both correct and score 3+.",
+  "agent_a": {
+    "agent_id": "agent_a",
+    "path_style": "direct",
+    "n_steps": 3,
+    "overall_goal_achieved": true,
+    "session_outcome": "success",
+    "terminal_action": "surface_reminder",
+    "steps": [
+      {
+        "step_index": 0,
+        "step_name": "sense",
+        "step_type": "standard",
+        "observation": "Calendar event: 'standup' in 10 minutes. HR 22.7 bpm (normal). Audio: 'Team sync starting soon'. Keywords: [meeting]. Consent explicit.",
+        "reasoning": "Upcoming meeting detected within the 10-minute reminder window. HR 22.7 bpm and SpO₂ 95.1% are both normal — no health signal to escalate. Under explicit consent, surface_reminder is the correct action.",
+        "action": "",
+        "confidence": 0.9279471903862273
+      },
+      {
+        "step_index": 1,
+        "step_name": "plan",
+        "step_type": "standard",
+        "observation": "Meeting in 10 minutes, no health signals. Consent explicit — surface_reminder permitted.",
+        "reasoning": "Event 'standup' is within the reminder window. All sensor readings normal. explicit consent permits surface_reminder. No competing signals. Surfacing the reminder now.",
+        "action": "",
+        "confidence": 0.931548528983176
+      },
+      {
+        "step_index": 2,
+        "step_name": "act",
+        "step_type": "standard",
+        "observation": "Event in reminder window. Consent explicit. Surfacing reminder.",
+        "reasoning": "Executing surface_reminder. Payload: event name, start time, location. Consent explicit. No health or privacy override.",
+        "action": "surface_reminder",
+        "confidence": 0.9353008630702573
+      }
+    ]
+  },
+  "agent_b": {
+    "agent_id": "agent_b",
+    "path_style": "indirect",
+    "n_steps": 4,
+    "overall_goal_achieved": true,
+    "session_outcome": "success",
+    "terminal_action": "surface_reminder",
+    "steps": [
+      {
+        "step_index": 0,
+        "step_name": "sense",
+        "step_type": "standard",
+        "observation": "Calendar event: 'standup' in 10 minutes. HR 22.7 bpm (normal). Audio: 'Team sync starting soon'. Consent explicit.",
+        "reasoning": "Upcoming meeting detected. Sensors normal. Before surfacing the reminder, will check the calendar for conflicts — a simultaneous competing event would make the reminder misleading.",
+        "action": "",
+        "confidence": 0.878777124215937
+      },
+      {
+        "step_index": 1,
+        "step_name": "verify",
+        "step_type": "detour",
+        "observation": "Checking calendar for conflicts at meeting time. Scanning for overlapping events in the next 15 minutes.",
+        "reasoning": "Conflict check: no other events scheduled within the 10-minute window. The 'standup' event is unambiguous — no alternative event the reminder might be confused with. Calendar check passed. Proceeding to plan.",
+        "action": "",
+        "confidence": 0.8903563691371184
+      },
+      {
+        "step_index": 2,
+        "step_name": "plan",
+        "step_type": "standard",
+        "observation": "No calendar conflicts. Meeting in 10 minutes, no health signals. Consent explicit.",
+        "reasoning": "Calendar conflict check passed — 'standup' is the unambiguous next event. surface_reminder is appropriate. Consent explicit permits the action.",
+        "action": "",
+        "confidence": 0.9433821660444625
+      },
+      {
+        "step_index": 3,
+        "step_name": "act",
+        "step_type": "standard",
+        "observation": "Conflict-free event confirmed. Surfacing reminder with calendar context.",
+        "reasoning": "Executing surface_reminder with calendar context: event 'standup', no conflicts detected, start time, conflict-check timestamp. More informative reminder than a raw event notification.",
+        "action": "surface_reminder",
+        "confidence": 0.9363504955897766
+      }
+    ]
+  }
+}

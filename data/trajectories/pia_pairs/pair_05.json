@@ -1,0 +1,111 @@
+{
+  "pair_id": "05",
+  "scenario": "location_trigger",
+  "goal": "Detect a geofence boundary crossing and fire the location-based automation.",
+  "consent_model": "explicit",
+  "sensor_context": {
+    "heart_rate_noised": 48.166715666868996,
+    "spo2_noised": 95.91588122756437,
+    "steps": 207.8637337495053,
+    "noise_db": 53.67961093834698,
+    "skin_temp_c": 37.216456885800035,
+    "gps_lat_noised": 37.3295305976598,
+    "gps_lon_noised": -122.01998750588128,
+    "audio_text": "Team sync starting soon",
+    "audio_keywords": [
+      "meeting"
+    ],
+    "audio_confidence": 0.81,
+    "activity": "walking",
+    "environment": "office",
+    "consent_model": "explicit"
+  },
+  "ground_truth_outcome": "success",
+  "shared_terminal_action": "trigger_geofence",
+  "path_divergence_description": "Agent A reads GPS as inside the geofence, plans, and triggers immediately (3 steps). Agent B notes that DP noise at ε=1.0 can displace GPS by σ≈111 m per axis — potentially pushing a true in-boundary location outside the registered fence. It inserts a coordinate validation step before triggering (4 steps). Both fire the geofence correctly.",
+  "standard_kappa_prediction": "low (estimated κ ≈ 0.25–0.40) — A: [∅, ∅, trigger_geofence]. B: [∅, ∅, ∅, trigger_geofence]. Step name at position 1 differs (plan vs verify). Terminal action position differs (2 vs 3). Positional match: 1/3. Levenshtein: 2/4. κ ≈ 0.25–0.40.",
+  "pia_rubric_prediction": "high (estimated PIA α ≥ 0.83) — goal_alignment: both reach trigger_geofence for a confirmed crossing (score 4). privacy_compliance: EXPLICIT consent, trigger_geofence permitted (score 4 both). planning_quality: A trusts GPS directly; B validates for DP displacement — B is slightly higher quality but both score 3+. error_recovery: no failure → not_applicable → perfect agreement.",
+  "agent_a": {
+    "agent_id": "agent_a",
+    "path_style": "direct",
+    "n_steps": 3,
+    "overall_goal_achieved": true,
+    "session_outcome": "success",
+    "terminal_action": "trigger_geofence",
+    "steps": [
+      {
+        "step_index": 0,
+        "step_name": "sense",
+        "step_type": "standard",
+        "observation": "GPS (DP-noised): (37.3295, -122.0200) — within registered geofence boundary. Steps: 208 (walking). Consent explicit.",
+        "reasoning": "GPS coordinates indicate the user has crossed into the registered geofence zone. Step count 208 confirms active movement — not a stationary GPS drift. Under explicit consent, trigger_geofence is permitted.",
+        "action": "",
+        "confidence": 0.8844223997671773
+      },
+      {
+        "step_index": 1,
+        "step_name": "plan",
+        "step_type": "standard",
+        "observation": "Geofence boundary confirmed crossed. Steps: 208. Consent explicit — trigger permitted.",
+        "reasoning": "GPS reading places the user inside the geofence boundary. Active movement (steps: 208) corroborates the location change. Consent explicit explicitly permits location-triggered automations. trigger_geofence is the correct action.",
+        "action": "",
+        "confidence": 0.9033959352808983
+      },
+      {
+        "step_index": 2,
+        "step_name": "act",
+        "step_type": "standard",
+        "observation": "Geofence crossing confirmed. Firing automation.",
+        "reasoning": "Executing trigger_geofence. Payload includes GPS coordinates (DP-noised), step count 208, timestamp, and geofence ID. Consent explicit.",
+        "action": "trigger_geofence",
+        "confidence": 0.9299615532691836
+      }
+    ]
+  },
+  "agent_b": {
+    "agent_id": "agent_b",
+    "path_style": "indirect",
+    "n_steps": 4,
+    "overall_goal_achieved": true,
+    "session_outcome": "success",
+    "terminal_action": "trigger_geofence",
+    "steps": [
+      {
+        "step_index": 0,
+        "step_name": "sense",
+        "step_type": "standard",
+        "observation": "GPS (DP-noised): in vicinity of geofence boundary. Steps: 208 (walking). Consent explicit. DP noise σ≈111 m per axis at ε=1.0.",
+        "reasoning": "GPS indicates potential geofence crossing. Note: DP noise at ε=1.0 displaces coordinates by σ≈111 m per axis — a true inside-boundary position could appear as 200 m outside, or vice versa. Coordinate validation required before triggering.",
+        "action": "",
+        "confidence": 0.8170454354647172
+      },
+      {
+        "step_index": 1,
+        "step_name": "verify",
+        "step_type": "detour",
+        "observation": "Validating GPS against geofence boundary with DP noise margin. Applying bbox-centre fallback check: does the scenario bounding-box centre confirm the crossing?",
+        "reasoning": "DP noise at ε=1.0 can displace GPS by up to 2σ≈222 m. Verification: the noised coordinate is within the geofence boundary plus a 250 m noise-margin buffer. Step count 208 confirms active movement, not stationary drift. Validation passed: crossing is real.",
+        "action": "",
+        "confidence": 0.8673010506386754
+      },
+      {
+        "step_index": 2,
+        "step_name": "plan",
+        "step_type": "standard",
+        "observation": "GPS crossing validated (noise margin accounted for). Steps 208 confirm movement. Consent explicit.",
+        "reasoning": "Validated geofence crossing — not a DP noise artefact. Consent explicit permits trigger_geofence. Proceeding with geofence automation.",
+        "action": "",
+        "confidence": 0.9176084536728081
+      },
+      {
+        "step_index": 3,
+        "step_name": "act",
+        "step_type": "standard",
+        "observation": "Validated crossing. Firing automation with noise-margin documentation.",
+        "reasoning": "Executing trigger_geofence with validation metadata: GPS coordinates, noise margin applied, step count 208, validation timestamp. Consent explicit. Richer audit trail than unvalidated trigger.",
+        "action": "trigger_geofence",
+        "confidence": 0.8893799669812591
+      }
+    ]
+  }
+}
