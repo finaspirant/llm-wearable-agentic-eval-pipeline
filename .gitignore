@@ -217,6 +217,15 @@ data/processed/*
 !data/raw/.gitkeep
 !data/processed/.gitkeep
 
+# DVC — local remote cache (never commit actual data blobs)
+data/dvc_remote/
+
+# DVC pipeline stage outputs (tracked via .dvc files and dvc.yaml, not git)
+# DVC auto-creates per-directory .gitignore entries on dvc repro; these
+# top-level rules act as a safety net before the first pipeline run.
+data/annotations/pre_calibration/
+data/annotations/post_calibration/
+
 # API keys (NEVER commit these)
 .env
 .env.local

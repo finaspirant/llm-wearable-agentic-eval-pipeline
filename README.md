@@ -93,6 +93,49 @@ configs/            # YAML task configs + default settings
 
 ---
 
+## Local Annotation Setup
+
+Human and LLM-persona annotation for wearable agent trajectories runs on a local [Argilla](https://argilla.io) instance backed by Elasticsearch. The dataset schema mirrors [`agenteval-schema-v1.json`](data/annotations/agenteval-schema-v1.json) Layer 3 (step-level PRM annotation).
+
+**Requirements:** Docker with Compose plugin, and `argilla` in the uv environment.
+
+```bash
+# 1. Add argilla SDK to the project environment
+uv add argilla==2.8.0
+
+# 2. Start Argilla server + Elasticsearch (background)
+docker compose -f configs/argilla/docker-compose.yml up -d
+
+# 3. Wait ~30 s for Elasticsearch to become healthy, then create the dataset
+python configs/argilla/argilla_setup.py
+
+# 4. Open the annotation UI
+open http://localhost:6900   # username: argilla  password: 12345678
+```
+
+> **SDK version note:** This project uses **argilla v2.x** (`rg.Dataset` + `rg.Settings`).
+> The v1.x `FeedbackDataset` API is not compatible. The setup script exits with a clear
+> error if a v1.x SDK is detected.
+
+**Annotation fields created:**
+
+| Field / Question | Type | Schema field |
+|---|---|---|
+| `step_observation` | TextField | `TrajectoryStep.observation` |
+| `step_reasoning` | TextField | `TrajectoryStep.reasoning` |
+| `step_action` | TextField | `TrajectoryStep.action` |
+| `tool_call_privacy_compliant` | LabelQuestion | compliant / non_compliant |
+| `action_correct_for_context` | LabelQuestion | correct / acceptable / incorrect |
+| `ambiguity_handled_well` | LabelQuestion | yes / no / not_applicable |
+| `error_recovery_quality` | LabelQuestion | not_applicable / poor / adequate / excellent |
+| `process_reward_score` | RatingQuestion | 0–8 → PRS −1.0 to +1.0 |
+| `annotator_rationale` | TextQuestion | free text (feeds BERTScore IRR) |
+
+Stop the stack: `docker compose -f configs/argilla/docker-compose.yml down`  
+Wipe volumes (reset all annotation data): `docker compose -f configs/argilla/docker-compose.yml down -v`
+
+---
+
 ## Quick Start
 
 ```bash
@@ -134,7 +177,7 @@ cp .env.example .env
 
 ## Project Status
 
-**Phase 2 active — Day 9/45. IRR calculator shipped.**
+**Phase 2 active — Day 11/45. IRR calculator + annotation schema + Argilla setup shipped.**
 
 ### What's built
 

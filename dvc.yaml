@@ -1,0 +1,43 @@
+stages:
+  pre_calibration_annotation:
+    desc: >-
+      Run 5 LLM annotator personas (dry-run) on 30 wearable trajectories to
+      produce pre-calibration annotations. Computes Fleiss' κ per dimension
+      and identifies top-3 disagreement hotspots that feed the calibration
+      protocol.
+    cmd: >-
+      uv run python -m src.annotation.annotator_simulator
+      --input data/raw/synthetic_wearable_logs.jsonl
+      --output data/annotations/pre_calibration/day12_annotations.jsonl
+      --n-trajectories 30
+      --dry-run
+    deps:
+      - src/annotation/annotator_simulator.py
+      - src/annotation/irr_calculator.py
+      - data/raw/synthetic_wearable_logs.jsonl
+    outs:
+      - data/annotations/pre_calibration/day12_annotations.jsonl
+
+  post_calibration_annotation:
+    desc: >-
+      Re-run all 5 annotator personas with calibrated prompts (anchor
+      examples + rubric clarification rules injected into each system
+      prompt). Computes before/after κ comparison table and asserts
+      Krippendorff's α ≥ 0.80 per dimension.
+    cmd: >-
+      uv run python -m src.annotation.run_calibrated_annotation
+      --raw-input data/raw/synthetic_wearable_logs.jsonl
+      --pre-cal-annotations data/annotations/pre_calibration/day12_annotations.jsonl
+      --cal-config-path data/annotations/calibration_round_01.json
+      --output data/annotations/post_calibration/annotations_round2.json
+      --dry-run
+    deps:
+      - src/annotation/run_calibrated_annotation.py
+      - src/annotation/calibration_protocol.py
+      - src/annotation/annotator_simulator.py
+      - src/annotation/irr_calculator.py
+      - data/annotations/pre_calibration/day12_annotations.jsonl
+      - data/annotations/wearable_annotation_rubric.md
+      - data/annotations/calibration_round_01.json
+    outs:
+      - data/annotations/post_calibration/annotations_round2.json
