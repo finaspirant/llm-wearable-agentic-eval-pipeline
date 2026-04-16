@@ -216,6 +216,7 @@ data/raw/*.jsonl
 data/processed/*
 !data/raw/.gitkeep
 !data/processed/.gitkeep
+!data/processed/day19_smoke_test_results.jsonl
 
 # DVC — local remote cache (never commit actual data blobs)
 data/dvc_remote/
