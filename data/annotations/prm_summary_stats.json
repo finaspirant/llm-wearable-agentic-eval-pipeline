@@ -1,0 +1,9 @@
+{
+  "total_trajectories": 20,
+  "failed_trajectories": 20,
+  "gradient_conflict_count": 20,
+  "gradient_conflict_rate": 1.0,
+  "pct_failed_with_majority_correct_steps": 100.0,
+  "mean_process_reward_non_terminal": 0.175,
+  "mean_partial_credit_non_terminal": 0.175
+}
