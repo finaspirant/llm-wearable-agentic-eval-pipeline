@@ -6,7 +6,14 @@ This module provides trajectory-level scoring across six dimensions:
 trajectory success, tool invocation accuracy, groundedness, privacy leak
 detection, orchestrator correctness, and latency SLA compliance.
 
-CLI: python -m src.eval.agentic_eval --input <trajectory.jsonl>
+:class:`AgenticEvaluator` integrates the Kore.ai 6-metric harness with the
+5-layer :class:`~src.eval.trajectory_scorer.TrajectoryScorer` and the four
+PIA rubric dimensions, producing a single unified flat dict per trajectory.
+
+CLI::
+
+    python -m src.eval.agentic_eval --input <trajectory.jsonl>
+    python -m src.eval.agentic_eval --dry-run --verbose  # smoke test
 """
 
 from __future__ import annotations
@@ -22,6 +29,9 @@ from typing import Annotated, Any
 import typer
 from rich.console import Console
 from rich.table import Table
+
+from src.data.wearable_generator import WearableLog
+from src.eval.trajectory_scorer import _TERMINAL_ACTIONS, TrajectoryScorer
 
 logger = logging.getLogger(__name__)
 console = Console()
@@ -538,6 +548,199 @@ def evaluate_trajectory(
 
 
 # ---------------------------------------------------------------------------
+# WearableLog → Kore.ai dict adapter
+# ---------------------------------------------------------------------------
+
+
+def _wearable_steps_to_kore_dicts(log: WearableLog) -> list[dict[str, Any]]:
+    """Convert a WearableLog's trajectory to the dict format KoraiMetrics expects.
+
+    Maps TrajectoryStep fields onto the keys consumed by each KoraiMetrics
+    method, making reasonable approximations for fields that have no direct
+    equivalent in the wearable schema:
+
+    * ``tool_call`` ← ``step.action`` (the discrete action taken).
+    * ``expected_tools`` ← ``[log.ground_truth_action]`` for the final step,
+      empty list for intermediate steps (nothing to penalise).
+    * ``tool_output`` ← ``step.observation`` (scanned for PII patterns).
+    * ``goal_achieved`` ← ``True`` if the final step's action is terminal.
+    * ``agent_role`` / ``expected_role`` ← ``step.step_name`` for both
+      (wearable logs always have canonical step names, so correctness = 1.0).
+
+    Args:
+        log: Source WearableLog.
+
+    Returns:
+        List of dicts, one per trajectory step.
+    """
+    n = len(log.trajectory)
+    result: list[dict[str, Any]] = []
+    for i, step in enumerate(log.trajectory):
+        is_final = i == n - 1
+        result.append(
+            {
+                "step_index": step.step_index,
+                "step_name": step.step_name,
+                "tool_call": step.action if step.action else None,
+                "expected_tools": ([log.ground_truth_action] if is_final else []),
+                "tool_output": step.observation,
+                "goal_achieved": (
+                    step.action in _TERMINAL_ACTIONS if is_final else None
+                ),
+                "agent_role": step.step_name,
+                "expected_role": step.step_name,
+            }
+        )
+    return result
+
+
+# ---------------------------------------------------------------------------
+# AgenticEvaluator — unified harness
+# ---------------------------------------------------------------------------
+
+
+class AgenticEvaluator:
+    """Unified evaluation harness: 6 Kore.ai metrics + 5-layer TrajectoryScorer.
+
+    Combines :class:`KoraiMetrics` with
+    :class:`~src.eval.trajectory_scorer.TrajectoryScorer`
+    and the four PIA rubric dimensions into a single flat output dict per
+    trajectory, enabling side-by-side comparison of all evaluation signals.
+
+    Args:
+        dry_run: Passed to TrajectoryScorer. When True, all trajectory
+            scoring is heuristic (no LLM calls).
+    """
+
+    def __init__(self, dry_run: bool = True) -> None:
+        self._dry_run = dry_run
+        self._kore_metrics = KoraiMetrics()
+        self._trajectory_scorer = TrajectoryScorer(dry_run=dry_run)
+
+    def evaluate_with_trajectory_score(self, log: WearableLog) -> dict[str, Any]:
+        """Run Kore.ai metrics and TrajectoryScorer on a single WearableLog.
+
+        Merges all signals into a single flat dict.  Key prefixes:
+
+        * ``kore_*`` — the 6 Kore.ai metrics.
+        * ``layer_*`` — the 5 TrajectoryScorer layer scores.
+        * ``pia_*`` — the 4 PIA rubric dimensions.
+        * ``weighted_total`` — TrajectoryScorer composite score.
+
+        Args:
+            log: WearableLog to evaluate.
+
+        Returns:
+            Flat dict with all evaluation signals and ``trajectory_id``.
+        """
+        kore_steps = _wearable_steps_to_kore_dicts(log)
+
+        # 6 Kore.ai metrics
+        tsr = self._kore_metrics.score_trajectory_success(kore_steps)
+        tia = self._kore_metrics.score_tool_invocation(kore_steps)
+        privacy = self._kore_metrics.detect_privacy_leak(kore_steps)
+        orch = self._kore_metrics.score_orchestrator_correctness(kore_steps)
+        # Groundedness and latency require external context; use sensible defaults
+        # for wearable logs where those aren't available in the schema.
+        ground = 0.75  # RAGAS fallback — no free-text response in WearableLog
+        latency = 1.0  # no latency field in WearableLog; SLA assumed met
+
+        # 5-layer TrajectoryScorer
+        ts = self._trajectory_scorer.score_trajectory(log)
+
+        # 4 PIA dimensions
+        pia = self._trajectory_scorer.score_pia_dimensions(log)
+
+        return {
+            "trajectory_id": log.log_id,
+            # Kore.ai
+            "kore_trajectory_success": tsr,
+            "kore_tool_invocation_accuracy": tia,
+            "kore_groundedness": ground,
+            "kore_privacy_leak_detected": privacy,
+            "kore_orchestrator_correctness": orch,
+            "kore_latency_sla_compliance": latency,
+            # TrajectoryScorer layers
+            "layer_intent": ts.intent.score,
+            "layer_planning": ts.planning.score,
+            "layer_tool_calls": ts.tool_calls.score,
+            "layer_recovery": ts.recovery.score,
+            "layer_outcome": ts.outcome.score,
+            # PIA dimensions
+            "pia_planning_quality": pia["planning_quality"],
+            "pia_error_recovery": pia["error_recovery"],
+            "pia_goal_alignment": pia["goal_alignment"],
+            "pia_tool_precision": pia["tool_precision"],
+            # Composite
+            "weighted_total": ts.weighted_total,
+        }
+
+    def batch_evaluate_with_trajectory_score(
+        self, trajectories: list[WearableLog]
+    ) -> list[dict[str, Any]]:
+        """Evaluate a batch of WearableLogs, skipping failures.
+
+        Args:
+            trajectories: List of WearableLog instances to evaluate.
+
+        Returns:
+            List of flat evaluation dicts in the same order as input.
+            Trajectories that raise an exception are skipped with a warning.
+        """
+        results: list[dict[str, Any]] = []
+        for log in trajectories:
+            try:
+                results.append(self.evaluate_with_trajectory_score(log))
+            except Exception:
+                logger.exception(
+                    "evaluate_with_trajectory_score failed for %s — skipping.",
+                    log.log_id,
+                )
+        logger.info(
+            "batch_evaluate: scored %d/%d trajectories",
+            len(results),
+            len(trajectories),
+        )
+        return results
+
+    def compute_batch_nondeterminism(
+        self, task_groups: dict[str, list[WearableLog]]
+    ) -> dict[str, Any]:
+        """Compute nondeterminism variance for each task group.
+
+        Each key in ``task_groups`` is a task identifier; its value is a list
+        of WearableLog instances representing ≥ 2 independent runs of that task.
+        Tasks with fewer than 2 runs are skipped with a warning.
+
+        Args:
+            task_groups: Mapping from task_id to list of WearableLog runs.
+
+        Returns:
+            Mapping from task_id to the variance dict returned by
+            :meth:`~src.eval.trajectory_scorer.TrajectoryScorer.compute_nondeterminism_variance`.
+            Skipped tasks are absent from the result.
+        """
+        output: dict[str, Any] = {}
+        for task_id, logs in task_groups.items():
+            if len(logs) < 2:
+                logger.warning(
+                    "task '%s' has %d run(s) — need ≥ 2; skipping.", task_id, len(logs)
+                )
+                continue
+            try:
+                output[task_id] = (
+                    self._trajectory_scorer.compute_nondeterminism_variance(
+                        task_id, logs
+                    )
+                )
+            except Exception:
+                logger.exception(
+                    "compute_nondeterminism_variance failed for task '%s'.", task_id
+                )
+        return output
+
+
+# ---------------------------------------------------------------------------
 # CLI
 # ---------------------------------------------------------------------------
 
@@ -545,9 +748,9 @@ def evaluate_trajectory(
 @app.command()
 def main(
     input_path: Annotated[
-        Path,
+        Path | None,
         typer.Option("--input", "-i", help="JSONL file of trajectory records."),
-    ],
+    ] = None,
     output_path: Annotated[
         Path,
         typer.Option("--output", "-o", help="JSONL file for eval results."),
@@ -556,10 +759,32 @@ def main(
         float,
         typer.Option("--sla-ms", help="Latency SLA threshold in milliseconds."),
     ] = 5000.0,
+    dry_run: Annotated[
+        bool,
+        typer.Option(
+            "--dry-run/--no-dry-run",
+            help="Validate imports and instantiate AgenticEvaluator; skip file I/O.",
+        ),
+    ] = False,
     verbose: Annotated[bool, typer.Option("--verbose", "-v")] = False,
 ) -> None:
     """Score agent trajectories from a JSONL file and write results."""
     logging.basicConfig(level=logging.DEBUG if verbose else logging.INFO)
+
+    if dry_run:
+        evaluator = AgenticEvaluator(dry_run=True)
+        logger.info(
+            "Dry-run: AgenticEvaluator instantiated OK (trajectory_scorer=%r)",
+            evaluator._trajectory_scorer,
+        )
+        console.print(
+            "[green]✓[/green] Import smoke test passed — AgenticEvaluator ready."
+        )
+        return
+
+    if input_path is None:
+        logger.error("--input is required when not using --dry-run.")
+        raise typer.Exit(1)
 
     records = [
         json.loads(line) for line in input_path.read_text().splitlines() if line.strip()
