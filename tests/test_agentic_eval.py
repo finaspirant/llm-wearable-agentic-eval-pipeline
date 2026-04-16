@@ -346,3 +346,241 @@ def test_deepeval_judge_scores_clamped(judge: DeepEvalJudge) -> None:
 
     for key in ("trajectory_quality", "error_recovery", "goal_alignment"):
         assert result[key] <= 1.0
+
+
+# ---------------------------------------------------------------------------
+# AgenticEvaluator — integration with TrajectoryScorer
+# ---------------------------------------------------------------------------
+
+import math  # noqa: E402 — placed here to keep existing imports unmodified
+
+from src.data.privacy_gate import ConsentModel
+from src.data.wearable_generator import (
+    AgentAction,
+    AudioTranscript,
+    ScenarioType,
+    SensorData,
+    TrajectoryStep,
+    WearableLog,
+)
+from src.eval.agentic_eval import AgenticEvaluator, _wearable_steps_to_kore_dicts
+
+
+def _make_wearable_log(
+    final_action: str = AgentAction.SEND_ALERT,
+    log_id: str = "eval-log-001",
+) -> WearableLog:
+    sensor = SensorData(
+        heart_rate=90.0,
+        spo2=97.0,
+        steps=50.0,
+        gps_lat=37.77,
+        gps_lon=-122.41,
+        noise_db=55.0,
+        skin_temp_c=36.8,
+    )
+    audio = AudioTranscript(
+        text="",
+        language="en-US",
+        confidence=0.9,
+        duration_s=1.0,
+        keywords_detected=[],
+    )
+    steps = [
+        TrajectoryStep(0, "sense", "obs", "reason", "", 0.9),
+        TrajectoryStep(1, "plan", "obs", "reason", "", 0.9),
+        TrajectoryStep(2, "act", "obs", "reason", final_action, 0.9),
+    ]
+    return WearableLog(
+        log_id=log_id,
+        timestamp="2026-04-16T00:00:00Z",
+        scenario_type=ScenarioType.HEALTH_ALERT,
+        consent_model=ConsentModel.EXPLICIT,
+        sensor_data=sensor,
+        audio_transcript=audio,
+        context_metadata={},
+        trajectory=steps,
+        ground_truth_action=final_action,
+    )
+
+
+@pytest.fixture
+def evaluator() -> AgenticEvaluator:
+    return AgenticEvaluator(dry_run=True)
+
+
+class TestAgenticEvaluatorInit:
+    def test_trajectory_scorer_instantiated(self, evaluator: AgenticEvaluator) -> None:
+        from src.eval.trajectory_scorer import TrajectoryScorer
+
+        assert isinstance(evaluator._trajectory_scorer, TrajectoryScorer)
+
+    def test_kore_metrics_instantiated(self, evaluator: AgenticEvaluator) -> None:
+        assert isinstance(evaluator._kore_metrics, KoraiMetrics)
+
+    def test_dry_run_propagated(self) -> None:
+        ev = AgenticEvaluator(dry_run=False)
+        assert ev._trajectory_scorer._dry_run is False
+
+
+class TestWearableStepsToKoreDicts:
+    def test_length_matches_trajectory(self) -> None:
+        log = _make_wearable_log()
+        dicts = _wearable_steps_to_kore_dicts(log)
+        assert len(dicts) == len(log.trajectory)
+
+    def test_final_step_has_expected_tools(self) -> None:
+        log = _make_wearable_log(final_action=AgentAction.SEND_ALERT)
+        dicts = _wearable_steps_to_kore_dicts(log)
+        assert log.ground_truth_action in dicts[-1]["expected_tools"]
+
+    def test_intermediate_steps_have_empty_expected_tools(self) -> None:
+        log = _make_wearable_log()
+        dicts = _wearable_steps_to_kore_dicts(log)
+        for d in dicts[:-1]:
+            assert d["expected_tools"] == []
+
+    def test_tool_call_maps_to_action(self) -> None:
+        log = _make_wearable_log(final_action=AgentAction.SEND_ALERT)
+        dicts = _wearable_steps_to_kore_dicts(log)
+        assert dicts[-1]["tool_call"] == AgentAction.SEND_ALERT
+
+    def test_sense_step_tool_call_is_none(self) -> None:
+        log = _make_wearable_log()
+        dicts = _wearable_steps_to_kore_dicts(log)
+        assert dicts[0]["tool_call"] is None
+
+    def test_agent_role_equals_expected_role(self) -> None:
+        log = _make_wearable_log()
+        for d in _wearable_steps_to_kore_dicts(log):
+            assert d["agent_role"] == d["expected_role"]
+
+
+class TestEvaluateWithTrajectoryScore:
+    _EXPECTED_KEYS = {
+        "trajectory_id",
+        "kore_trajectory_success",
+        "kore_tool_invocation_accuracy",
+        "kore_groundedness",
+        "kore_privacy_leak_detected",
+        "kore_orchestrator_correctness",
+        "kore_latency_sla_compliance",
+        "layer_intent",
+        "layer_planning",
+        "layer_tool_calls",
+        "layer_recovery",
+        "layer_outcome",
+        "pia_planning_quality",
+        "pia_error_recovery",
+        "pia_goal_alignment",
+        "pia_tool_precision",
+        "weighted_total",
+    }
+
+    def test_returns_all_expected_keys(self, evaluator: AgenticEvaluator) -> None:
+        log = _make_wearable_log()
+        result = evaluator.evaluate_with_trajectory_score(log)
+        assert set(result.keys()) == self._EXPECTED_KEYS
+
+    def test_trajectory_id_matches_log(self, evaluator: AgenticEvaluator) -> None:
+        log = _make_wearable_log(log_id="specific-id-001")
+        result = evaluator.evaluate_with_trajectory_score(log)
+        assert result["trajectory_id"] == "specific-id-001"
+
+    def test_weighted_total_in_unit_interval(self, evaluator: AgenticEvaluator) -> None:
+        log = _make_wearable_log()
+        result = evaluator.evaluate_with_trajectory_score(log)
+        assert 0.0 <= result["weighted_total"] <= 1.0
+
+    def test_all_float_values_finite(self, evaluator: AgenticEvaluator) -> None:
+        log = _make_wearable_log()
+        result = evaluator.evaluate_with_trajectory_score(log)
+        for key, val in result.items():
+            if isinstance(val, float):
+                assert math.isfinite(val), f"{key}={val} is not finite"
+
+    def test_kore_groundedness_is_fallback(self, evaluator: AgenticEvaluator) -> None:
+        log = _make_wearable_log()
+        result = evaluator.evaluate_with_trajectory_score(log)
+        assert result["kore_groundedness"] == pytest.approx(0.75)
+
+    def test_kore_latency_sla_is_one(self, evaluator: AgenticEvaluator) -> None:
+        log = _make_wearable_log()
+        result = evaluator.evaluate_with_trajectory_score(log)
+        assert result["kore_latency_sla_compliance"] == pytest.approx(1.0)
+
+    def test_pia_keys_in_unit_interval(self, evaluator: AgenticEvaluator) -> None:
+        log = _make_wearable_log()
+        result = evaluator.evaluate_with_trajectory_score(log)
+        for key in ("pia_planning_quality", "pia_error_recovery", "pia_goal_alignment", "pia_tool_precision"):
+            assert 0.0 <= result[key] <= 1.0, f"{key} out of range"
+
+    def test_layer_recovery_none_for_non_escalation(self, evaluator: AgenticEvaluator) -> None:
+        log = _make_wearable_log(final_action=AgentAction.SEND_ALERT)
+        result = evaluator.evaluate_with_trajectory_score(log)
+        assert result["layer_recovery"] is None
+
+    def test_layer_recovery_float_for_escalation(self, evaluator: AgenticEvaluator) -> None:
+        log = _make_wearable_log(final_action=AgentAction.ESCALATE_TO_EMERGENCY)
+        result = evaluator.evaluate_with_trajectory_score(log)
+        assert result["layer_recovery"] == pytest.approx(0.70)
+
+
+class TestBatchEvaluateWithTrajectoryScore:
+    def test_length_matches_input(self, evaluator: AgenticEvaluator) -> None:
+        logs = [_make_wearable_log(log_id=f"log-{i}") for i in range(5)]
+        results = evaluator.batch_evaluate_with_trajectory_score(logs)
+        assert len(results) == 5
+
+    def test_empty_input_returns_empty(self, evaluator: AgenticEvaluator) -> None:
+        assert evaluator.batch_evaluate_with_trajectory_score([]) == []
+
+    def test_order_preserved(self, evaluator: AgenticEvaluator) -> None:
+        ids = [f"log-{i:03d}" for i in range(4)]
+        logs = [_make_wearable_log(log_id=lid) for lid in ids]
+        results = evaluator.batch_evaluate_with_trajectory_score(logs)
+        assert [r["trajectory_id"] for r in results] == ids
+
+    def test_all_results_have_weighted_total(self, evaluator: AgenticEvaluator) -> None:
+        logs = [_make_wearable_log(log_id=f"log-{i}") for i in range(3)]
+        for r in evaluator.batch_evaluate_with_trajectory_score(logs):
+            assert "weighted_total" in r
+            assert math.isfinite(r["weighted_total"])
+
+
+class TestComputeBatchNondeterminism:
+    def test_returns_key_per_task(self, evaluator: AgenticEvaluator) -> None:
+        groups = {
+            "task_a": [_make_wearable_log(log_id=f"a-{i}") for i in range(3)],
+            "task_b": [_make_wearable_log(log_id=f"b-{i}") for i in range(3)],
+        }
+        result = evaluator.compute_batch_nondeterminism(groups)
+        assert set(result.keys()) == {"task_a", "task_b"}
+
+    def test_variance_dict_has_required_keys(self, evaluator: AgenticEvaluator) -> None:
+        groups = {
+            "task_x": [_make_wearable_log(log_id=f"x-{i}") for i in range(3)],
+        }
+        result = evaluator.compute_batch_nondeterminism(groups)
+        assert set(result["task_x"].keys()) == {
+            "score_std",
+            "pia_planning_std",
+            "pia_recovery_std",
+            "pia_goal_std",
+            "pia_tool_std",
+            "max_variance_layer",
+        }
+
+    def test_single_run_task_skipped(self, evaluator: AgenticEvaluator) -> None:
+        groups = {"solo": [_make_wearable_log()]}
+        result = evaluator.compute_batch_nondeterminism(groups)
+        assert "solo" not in result
+
+    def test_empty_groups_returns_empty(self, evaluator: AgenticEvaluator) -> None:
+        assert evaluator.compute_batch_nondeterminism({}) == {}
+
+    def test_identical_runs_zero_score_std(self, evaluator: AgenticEvaluator) -> None:
+        log = _make_wearable_log()
+        groups = {"same": [_make_wearable_log(log_id=f"s-{i}") for i in range(3)]}
+        result = evaluator.compute_batch_nondeterminism(groups)
+        assert result["same"]["score_std"] == pytest.approx(0.0, abs=1e-9)
