@@ -1,0 +1,5 @@
+topic,helpfulness,harmlessness,coherence
+health_safety,1.0908,1.0043,0.8168
+general_task,1.0285,0.9786,0.7142
+creative,1.0827,1.1338,0.8175
+coding,1.1570,0.9770,0.6349

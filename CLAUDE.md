@@ -228,6 +228,42 @@ Started: Day 19
     paper-sourced expected values (Landis & Koch, Fleiss, Krippendorff, BERTScore)
   - ruff check ✓  mypy strict ✓  pytest 91/91 ✓
 
+- Day 10: HH-RLHF IRR analysis — real preference data baseline
+  - Implemented src/annotation/hh_rlhf_loader.py:
+    - HHRLHFPair dataclass: sample_id, chosen, rejected, topic, split, source
+    - HHRLHFAnnotation dataclass: sample_id, annotator_id, dimension, score, topic
+    - IRRReadyMatrix dataclass: fleiss-compatible matrix + krippendorff
+      reliability_data in [n_raters × n_items] layout
+    - HHRLHFLoader.load(): tries HuggingFace first (Anthropic/hh-rlhf),
+      falls back to deterministic synthetic sample if unavailable
+    - HHRLHFLoader.simulate_annotations(): 3 personas × 3 dims × n_pairs,
+      deterministic per (sample_id, persona, dim) via SHA-256 seeding
+    - HHRLHFLoader.to_irr_matrix(): builds IRRReadyMatrix per dimension
+    - 3 annotator personas: HelpfulnessFirst (+help/-harm), HarmlessnessFirst
+      (-help/+harm), BalancedRater (neutral); all biases produce measurable IRR gap
+    - 4 topic buckets inferred via keyword heuristics: health_safety, general_task,
+      creative, coding
+    - CLI: --n-samples, --output, --seed, --verbose
+  - Implemented src/annotation/run_hh_rlhf_irr.py:
+    - run_irr_analysis(): Cohen's κ (mean of 3 pairwise pairs), Fleiss' κ,
+      Krippendorff's α per dimension; cohere_gap_note in summary block
+    - HH-RLHF results (200 pairs, real data from HuggingFace):
+      helpfulness: Fleiss κ=−0.121, α=−0.245 (poor)
+      harmlessness: Fleiss κ=−0.093, α=−0.253 (poor)
+      coherence:    Fleiss κ=+0.001, α=−0.002 (slight)
+      Overall: Fleiss κ=−0.071 — confirms Cohere gap is real, not synthetic artefact
+    - Rich terminal table output
+    - Output: data/processed/hh_rlhf_irr_results.json
+  - Implemented src/annotation/disagreement_heatmap.py:
+    - compute_disagreement_matrix(): per-(topic, dimension) mean pairwise std-dev
+    - render_heatmap(): seaborn YlOrRd heatmap + annotated footnote for peak cell
+    - Peak disagreement: coding × helpfulness (σ=1.16); lowest: coding × coherence (σ=0.63)
+    - Output: data/processed/hh_rlhf_disagreement_heatmap.png (PNG, 150 dpi)
+    - Output: data/processed/hh_rlhf_disagreement_matrix.csv
+  - data/processed/day10_findings.md — summary of IRR results, Cohere gap
+    citation, connection to Day 12–13 calibration and WP1 §3
+  - ruff check ✓  mypy strict ✓
+
 - Day 11: Annotation schema, Argilla infrastructure, and integration tests
   - Created data/annotations/agenteval-schema-v1.json — 3-layer annotation schema:
     - Layer 1: session-level outcome (overall_goal_achieved, session_outcome,

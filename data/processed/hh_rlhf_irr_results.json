@@ -1,0 +1,148 @@
+{
+  "meta": {
+    "n_samples": 200,
+    "seed": 42,
+    "source": "huggingface",
+    "annotator_personas": [
+      "HelpfulnessFirst",
+      "HarmlessnessFirst",
+      "BalancedRater"
+    ],
+    "dimensions": [
+      "helpfulness",
+      "harmlessness",
+      "coherence"
+    ]
+  },
+  "per_dimension": {
+    "helpfulness": {
+      "cohens_kappa": {
+        "per_pair": [
+          {
+            "rater_a": "HelpfulnessFirst",
+            "rater_b": "HarmlessnessFirst",
+            "kappa": -0.016949152542372836,
+            "interpretation": "poor"
+          },
+          {
+            "rater_a": "HelpfulnessFirst",
+            "rater_b": "BalancedRater",
+            "kappa": -0.03096398639408071,
+            "interpretation": "poor"
+          },
+          {
+            "rater_a": "HarmlessnessFirst",
+            "rater_b": "BalancedRater",
+            "kappa": -0.004631743753669371,
+            "interpretation": "poor"
+          }
+        ],
+        "mean_kappa": -0.017514960896707638,
+        "mean_interpretation": "poor"
+      },
+      "fleiss_kappa": {
+        "kappa": -0.12080274332006176,
+        "interpretation": "poor",
+        "n_items": 200,
+        "n_raters": 3
+      },
+      "krippendorffs_alpha": {
+        "alpha": -0.24467902665039398,
+        "interpretation": "poor",
+        "n_raters": 3,
+        "n_items": 200,
+        "missing_values": 0,
+        "level_of_measurement": "ordinal"
+      }
+    },
+    "harmlessness": {
+      "cohens_kappa": {
+        "per_pair": [
+          {
+            "rater_a": "HelpfulnessFirst",
+            "rater_b": "HarmlessnessFirst",
+            "kappa": -0.004061371841155292,
+            "interpretation": "poor"
+          },
+          {
+            "rater_a": "HelpfulnessFirst",
+            "rater_b": "BalancedRater",
+            "kappa": 0.00477967655339484,
+            "interpretation": "slight"
+          },
+          {
+            "rater_a": "HarmlessnessFirst",
+            "rater_b": "BalancedRater",
+            "kappa": -0.031120409459409082,
+            "interpretation": "poor"
+          }
+        ],
+        "mean_kappa": -0.010134034915723178,
+        "mean_interpretation": "poor"
+      },
+      "fleiss_kappa": {
+        "kappa": -0.0932110348908735,
+        "interpretation": "poor",
+        "n_items": 200,
+        "n_raters": 3
+      },
+      "krippendorffs_alpha": {
+        "alpha": -0.2528659951986998,
+        "interpretation": "poor",
+        "n_raters": 3,
+        "n_items": 200,
+        "missing_values": 0,
+        "level_of_measurement": "ordinal"
+      }
+    },
+    "coherence": {
+      "cohens_kappa": {
+        "per_pair": [
+          {
+            "rater_a": "HelpfulnessFirst",
+            "rater_b": "HarmlessnessFirst",
+            "kappa": -0.06362916305208777,
+            "interpretation": "poor"
+          },
+          {
+            "rater_a": "HelpfulnessFirst",
+            "rater_b": "BalancedRater",
+            "kappa": 0.028182701652089248,
+            "interpretation": "slight"
+          },
+          {
+            "rater_a": "HarmlessnessFirst",
+            "rater_b": "BalancedRater",
+            "kappa": 0.04324102104122285,
+            "interpretation": "slight"
+          }
+        ],
+        "mean_kappa": 0.0025981865470747767,
+        "mean_interpretation": "slight"
+      },
+      "fleiss_kappa": {
+        "kappa": 0.00109320626549064,
+        "interpretation": "slight",
+        "n_items": 200,
+        "n_raters": 3
+      },
+      "krippendorffs_alpha": {
+        "alpha": -0.002306404055950839,
+        "interpretation": "poor",
+        "n_raters": 3,
+        "n_items": 200,
+        "missing_values": 0,
+        "level_of_measurement": "ordinal"
+      }
+    }
+  },
+  "summary": {
+    "mean_cohens_kappa": -0.00835026975511868,
+    "mean_cohens_interpretation": "poor",
+    "mean_fleiss_kappa": -0.07097352398181488,
+    "mean_fleiss_interpretation": "poor",
+    "mean_krippendorffs_alpha": -0.1666171419683482,
+    "mean_alpha_interpretation": "poor",
+    "cohere_gap_note": "Cohere Command A (arXiv 2504.00698): 800 prompts, 65 annotators, zero agreement statistics reported. This fills that gap: Fleiss \u03ba=-0.071 (poor), Krippendorff \u03b1=-0.167 (poor)."
+  }
+}

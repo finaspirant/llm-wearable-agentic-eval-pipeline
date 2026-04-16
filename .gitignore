@@ -217,6 +217,10 @@ data/processed/*
 !data/raw/.gitkeep
 !data/processed/.gitkeep
 !data/processed/day19_smoke_test_results.jsonl
+!data/processed/hh_rlhf_irr_results.json
+!data/processed/hh_rlhf_disagreement_heatmap.png
+!data/processed/hh_rlhf_disagreement_matrix.csv
+!data/processed/day10_findings.md
 
 # DVC — local remote cache (never commit actual data blobs)
 data/dvc_remote/
