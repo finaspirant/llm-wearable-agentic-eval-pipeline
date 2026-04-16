@@ -116,8 +116,8 @@ configs/        → YAML task configs + default settings
   Target: OpenAI, DeepMind. Publish Day 42.
 
 ## Current Phase
-Phase 2 — Data Curation Mastery (Days 9-20)
-Building: annotation pipeline, IRR calculator, IAA calibration
+**Phase 3 — Agentic Eval Mastery (Days 19–28)**
+Started: Day 19
 
 ### Completed
 - Days 1-4: Paper reading phase complete. Notion Target Challenge
@@ -535,13 +535,30 @@ Building: annotation pipeline, IRR calculator, IAA calibration
       reward model gradient, at the annotation layer itself
     - §3–§7 pending live-API annotation run and HH-RLHF analysis
 
-### Next (Day 19)
-- Phase 3 begins: Agentic Eval Mastery (Days 19–28)
-- Build src/eval/agentic_eval.py — 6 Kore.ai metrics + DeepEval ensemble:
-  - trajectory_success, tool_invocation_accuracy, error_handling,
-    groundedness, compliance, latency
-- Add RAGAS for groundedness scoring (integrate with existing
-  trajectory_scorer.py)
-- Wire DeepMind FACTS Grounding score to pipeline via facts_integration.py
-- Continue WP1: §3 (gradient conflict reframing with live numbers),
-  §4 (IAA calibration methodology)
+### Day 19 — COMPLETE ✅
+- [x] src/eval/agentic_eval.py — KoraiMetrics, DeepEvalJudge, FACTSGroundingScorer
+- [x] 6 Kore.ai metrics implemented and tested
+- [x] RAGAS groundedness wired (with fallback)
+- [x] DeepEval LLM-as-judge ensemble (FACTS paper pattern)
+- [x] FACTSGroundingScorer stub — Day 41 Kaggle target
+- [x] Smoke test: 5 trajectories scored, results in data/processed/
+- [x] All tests green, ruff clean, typed
+
+### Day 20 — NEXT
+- [ ] TrajectoryScorer class with full PIA rubric
+- [ ] nondeterminism_variance: run each task 3x, compute score std dev
+- [ ] Baseline: score 100 synthetic wearable trajectories
+- [ ] Run on FACTS Grounding public dataset sample
+
+### Phase 3 Deliverables Tracker
+| Deliverable | Status |
+|---|---|
+| Eval harness (agentic_eval.py) | ✅ Day 19 |
+| TrajectoryScorer + PIA rubric | 🔜 Day 20 |
+| A/B experiment results | 🔜 Day 21 |
+| Framework benchmark (4 frameworks) | 🔜 Day 22-23 |
+| Loom demo + Gradio UI | 🔜 Day 24 |
+| LinkedIn Post #3 + HuggingFace dataset | 🔜 Day 25 |
+| Multi-agent pipeline | 🔜 Day 26 |
+| Flywheel notebook | 🔜 Day 27 |
+| WP1 complete + submitted | 🔜 Day 28 |
