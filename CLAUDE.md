@@ -455,15 +455,33 @@ Building: annotation pipeline, IRR calculator, IAA calibration
   - Status: HuggingFace upload pending (need HF_TOKEN + final live-API numbers)
   - pytest 307/307 ✓ (no regressions)
 
-### Next (Day 16)
-- Implement step-level PRM annotation (src/annotation/prm_annotator.py):
-  - process_reward: float −1.0 to +1.0 per trajectory step
-  - outcome_reward: float applied to terminal step only
-  - partial_credit: float 0.0–1.0 for near-miss steps
-  - Run on 20 wearable trajectories from data/raw/synthetic_wearable_logs.jsonl
-  - Compute: % of "failed" trajectories (outcome_reward ≤ 0) that have
-    ≥50% of steps with process_reward > 0 → gradient conflict instances
-  - This stat is the core empirical hook for WP1 ("Beyond Preference Pairs"):
-    demonstrates that ORM penalizes correct-process trajectories, motivating
-    PRM + partial credit as the fix
-  - Output: data/annotations/prm_annotations_20.jsonl + summary stats JSON
+- Day 16:
+  - Implemented src/annotation/prm_annotator.py:
+    - StepReward dataclass: step_index, step_type, process_reward_score
+      (−1.0 to +1.0), partial_credit (0.0–1.0), outcome_reward (terminal
+      only ±1.0, 0.0 otherwise), is_terminal, annotator_rationale
+    - PRMScoringConfig dataclass: CORRECT_TERMINAL_REWARD, FAILED_TERMINAL_REWARD,
+      NEUTRAL_STEP_REWARD, GRADIENT_CONFLICT_THRESHOLD (injectable for tests)
+    - PRMAnnotator: annotate_step (3-heuristic cascade: tool-match →
+      step_quality passthrough → positional fallback), annotate_trajectory,
+      is_gradient_conflict, annotate_dataset
+    - CLI via typer: --input, --output, --limit, --summary-output, --verbose
+    - Rich summary table + WP1 Key Stat printed to stdout
+  - Ran on 20 wearable trajectories from data/raw/synthetic_wearable_logs.jsonl
+  - Output: data/annotations/prm_annotations_20.jsonl (20 records, 3 steps each)
+  - WP1 Key Stat: 100.0% of outcome-failed trajectories had ≥50% correct
+    intermediate steps (gradient conflict instances)
+  - data/annotations/prm_summary_stats.json: 7-key summary dict
+    (total_trajectories, failed_trajectories, gradient_conflict_count,
+    gradient_conflict_rate, pct_failed_with_majority_correct_steps,
+    mean_process_reward_non_terminal, mean_partial_credit_non_terminal)
+  - ruff check ✓  mypy strict ✓  pytest 307/307 ✓ (no regressions)
+
+### Next (Day 17)
+- Begin WP1 draft: "Beyond Preference Pairs"
+  - §1: The paradigm shift (ORM → PRM) — cite ReasonRAG 18× data efficiency
+  - §2: Why existing datasets fail step-level quality checks
+  - §3: Gradient conflict reframing — use Day 16 stat as empirical anchor
+    (100.0% of outcome-failed synthetic trajectories were gradient conflict
+    instances — motivates PRM + partial credit as the curation fix)
+  - Target: white_papers/wp1_data_curation.md
