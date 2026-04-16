@@ -477,11 +477,71 @@ Building: annotation pipeline, IRR calculator, IAA calibration
     mean_process_reward_non_terminal, mean_partial_credit_non_terminal)
   - ruff check ✓  mypy strict ✓  pytest 307/307 ✓ (no regressions)
 
-### Next (Day 17)
-- Begin WP1 draft: "Beyond Preference Pairs"
-  - §1: The paradigm shift (ORM → PRM) — cite ReasonRAG 18× data efficiency
-  - §2: Why existing datasets fail step-level quality checks
-  - §3: Gradient conflict reframing — use Day 16 stat as empirical anchor
-    (100.0% of outcome-failed synthetic trajectories were gradient conflict
-    instances — motivates PRM + partial credit as the curation fix)
-  - Target: white_papers/wp1_data_curation.md
+- Day 17:
+  - Implemented src/annotation/poisoning_detector.py (PoisoningDetector class)
+  - detect_outlier_annotators: MAD-based deviation-from-consensus suspicion
+    scoring (0.0–1.0, min-max normalised across annotator pool)
+  - inject_synthetic_poisoners: injects n_malicious fake annotators with
+    directional privacy bias (suppress privacy_compliance −1, inflate
+    step_quality +1 from panel consensus); is_injected_poisoner flag on all
+    synthetic records; does not mutate original list
+  - evaluate_detection: precision/recall/F1 at configurable threshold (default
+    0.6); threshold_zero_flags_everyone and threshold_one_flags_only_top_scorer
+    edge cases handled
+  - cleanlab_label_quality: Confident Learning label issue detection via
+    cleanlab find_label_issues + get_label_quality_scores; Laplace-smoothed
+    vote distributions as pred_probs; majority-vote as given label
+  - Module docstring references Anthropic 250-doc backdoor finding (Oct 2025):
+    count-based attack, not proportion-based — motivates the design
+  - WP1 empirical finding: 3 colluding identical poisoners score 0.0 (collapse
+    to consensus), exposing MAD detector blind spot — motivates cleanlab layer;
+    results in data/processed/day17_detection_results.json
+  - scripts/run_day17_detection.py: full 7-step pipeline with rich tables
+  - Created tests/annotation/test_poisoning_detector.py — 41 tests, 5 classes:
+    TestDetectOutlierAnnotators (6), TestInjectSyntheticPoisoners (10),
+    TestPoisonersDetectable (5), TestEvaluateDetection (11),
+    TestCleanlabLabelQuality (9)
+  - ruff check ✓  mypy strict ✓  pytest 348/348 ✓ (41 new, no regressions)
+
+- Day 18:
+  - notebooks/curation_pipeline_e2e.ipynb — end-to-end pipeline notebook,
+    fully executed (exit code 0, 0 error outputs, 0 empty code cell outputs):
+    - 7 sections: Overview, Synthetic Data, Annotation Pipeline, IAA/IRR,
+      PRM + Gradient Conflict, Poisoning Detection, Pipeline Summary
+    - 7 figures saved to notebooks/figures/ (fig1–fig7, 30–92 KB each):
+      fig1_scenario_distribution, fig2_persona_bias, fig3_iaa_before_after,
+      fig4_pia_vs_standard, fig5_prm_gradient_conflict,
+      fig6_poisoning_detection, fig7_headline_metrics
+    - Key stats confirmed in executed output:
+      - Pre-cal Fleiss' κ overall: −0.035 (poor)
+      - PIA lift: standard κ −0.065 → PIA κ +0.743 (Δ = +0.808)
+      - Gradient conflict rate: 100% (all 20 trajectories; synthetic caveat noted)
+      - Mean process reward (non-terminal): 0.175
+      - MAD detector ROC AUC: 0.000 (blind spot confirmed: 3 colluding
+        poisoners each score 0.0, F1 = 0.0 at any threshold)
+    - Post-calibration bars shown with hatch="//" and "dry-run artifact —
+      not citable" legend label; citability table in appendix cell
+    - Fixed: np.trapz → np.trapezoid (NumPy 2.0 incompatibility)
+    - Fixed: absolute --output path for nbconvert (path-doubling bug)
+  - white_papers/wp1_data_curation.md — §1 + §2 complete (~790 words):
+    - Abstract (140 words): core claim + headline numbers
+    - §1 (~420 words): three ways agentic tasks break RLHF assumptions;
+      cites ReasonRAG 18× efficiency, Anthropic 250-doc backdoor,
+      Cohere Command A named gap (no κ/α reported)
+    - §2 (~370 words): gradient conflict problem; ORM and PRM loss
+      formulas; empirical finding gradient_conflict_rate=1.0,
+      mean_process_reward_non_terminal=0.175; cites AgentPRM arXiv 2502.10325
+    - WP1 core claim: first annotation framework operating upstream of
+      reward model gradient, at the annotation layer itself
+    - §3–§7 pending live-API annotation run and HH-RLHF analysis
+
+### Next (Day 19)
+- Phase 3 begins: Agentic Eval Mastery (Days 19–28)
+- Build src/eval/agentic_eval.py — 6 Kore.ai metrics + DeepEval ensemble:
+  - trajectory_success, tool_invocation_accuracy, error_handling,
+    groundedness, compliance, latency
+- Add RAGAS for groundedness scoring (integrate with existing
+  trajectory_scorer.py)
+- Wire DeepMind FACTS Grounding score to pipeline via facts_integration.py
+- Continue WP1: §3 (gradient conflict reframing with live numbers),
+  §4 (IAA calibration methodology)
