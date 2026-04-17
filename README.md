@@ -187,6 +187,7 @@ cp .env.example .env
 | `privacy_gate.py` | Gaussian mechanism, per-sensor sensitivity, consent model ✅ |
 | `benchmark_runner.py` | 4 frameworks (LangGraph, CrewAI, AutoGen, OpenAI SDK), 2 tasks ✅ |
 | `irr_calculator.py` | Cohen's κ, Fleiss' κ, Krippendorff's α, BERTScore, compute_all — 91 tests ✅ |
+| Live Eval Dashboard | Streamlit demo: sensor log → agent → 5 live eval scores | `demo/app.py` ✅ |
 
 ### Coming in Phase 2
 
@@ -194,6 +195,22 @@ cp .env.example .env
 - Full IAA pipeline targeting κ > 0.8
 - FACTS grounding extension to ambient/wearable context
 - A/B experiment: curated vs raw trajectories
+
+---
+
+## Demo
+
+Run the live eval dashboard:
+
+```bash
+streamlit run demo/app.py
+```
+
+Select a scenario type, set the number of trajectories (1–10), toggle the privacy gate, and click **Run eval pipeline**. The dashboard shows trajectory quality, tool accuracy, FACTS grounding, privacy compliance, and HITL trigger counts — with a radar chart and per-trajectory bar chart for visual comparison.
+
+[Loom video walkthrough — link will be added after recording]
+
+See [demo/README.md](demo/README.md) for a full metric reference.
 
 ---
 
