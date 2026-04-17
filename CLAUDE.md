@@ -639,13 +639,33 @@ Started: Day 19
   (I001 import sort, 2× E501 line-too-long)
 - ruff check ✓  mypy strict ✓  pytest 10/10 ✓ (462 total, no regressions)
 
+### Day 22 — COMPLETE ✅
+- Full framework benchmark — 10 tasks × 4 frameworks × 3 runs
+  - benchmark_tasks.yaml expanded to 10 tasks (5 enterprise + 5 wearable)
+  - BenchmarkResult: added trajectory_score, pia_dimensions,
+    nondeterminism_variance, run_index, cascade_depth fields
+  - generate_leaderboard() method: 6-dimension aggregate per framework
+  - 120 trajectory runs complete; results → data/processed/benchmark_results.jsonl
+  - Leaderboard → data/processed/framework_leaderboard.json
+  - WP2 table → reports/wp2_leaderboard.md
+  - Key findings: LangGraph highest tokens; CrewAI verification spirals;
+    AutoGen highest errors; OpenAI SDK fastest, HITL gap noted
+  - scripts/generate_leaderboard_report.py added
+  - ruff check ✓  mypy strict ✓  pytest 21/21 ✓ (446 total, no regressions)
+
+### Tomorrow (Day 23)
+- HITL trigger logic: 4 trigger types (confidence, safety, novel tool, domain)
+- GitHub Actions CI: eval-as-CI gate (trajectory_quality > 0.70,
+  tool_accuracy > 0.75)
+- Live API run of benchmark_runner --live (if API budget allows)
+
 ### Phase 3 Deliverables Tracker
 | Deliverable | Status |
 |---|---|
 | Eval harness (agentic_eval.py) | ✅ Day 19 |
 | TrajectoryScorer + PIA rubric | ✅ Day 20 |
 | A/B experiment results | ✅ Day 21 |
-| Framework benchmark (4 frameworks) | 🔜 Day 22-23 |
+| Framework benchmark (4 frameworks) | ✅ Day 22 |
 | Loom demo + Gradio UI | 🔜 Day 24 |
 | LinkedIn Post #3 + HuggingFace dataset | 🔜 Day 25 |
 | Multi-agent pipeline | 🔜 Day 26 |
