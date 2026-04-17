@@ -1,0 +1,26 @@
+# Demo dependencies for demo/app.py
+# -----------------------------------
+# Preferred: use uv from the project root — `uv sync` installs everything.
+# This file is provided for pip-based installs only (e.g. isolated venvs).
+#
+# Full project deps live in ../pyproject.toml + ../uv.lock.
+
+# UI / visualisation
+streamlit>=1.40.0
+plotly>=5.24.0
+
+# Data
+pandas>=2.2.0
+numpy>=2.0.0
+
+# Pipeline — eval harness
+anthropic>=0.49.0
+openai>=1.70.0
+deepeval>=3.9.6
+ragas>=0.4.3
+
+# Pipeline — agent frameworks (benchmark runner)
+langgraph>=0.3.0
+
+# Radar PNG export (optional — falls back to HTML download if absent)
+# kaleido>=0.2.1
