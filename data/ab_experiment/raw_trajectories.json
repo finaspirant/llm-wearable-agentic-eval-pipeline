@@ -1,0 +1,1855 @@
+{
+  "n": 50,
+  "trajectories": [
+    {
+      "trajectory_id": "7aefae56-9709-4d67-afb9-e3eeebcf6ebe",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'calendar_reminder' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'surface_reminder' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "calendar_reminder",
+        "consent_model": "ambient",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.124947+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "7c750e34-c2e4-4fc7-b9b2-39fb6133f21b",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'ambient_noise' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'adjust_noise_profile' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "ambient_noise",
+        "consent_model": "implied",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.124579+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "7e8a84ae-76d0-4264-92c6-0f1cdae7f45f",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'location_trigger' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'trigger_geofence' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "location_trigger",
+        "consent_model": "implied",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.124744+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "7fbd371a-b315-4b46-9b23-1e91e35501bb",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'calendar_reminder' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'surface_reminder' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "calendar_reminder",
+        "consent_model": "ambient",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.124619+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "81209bf4-a6b3-4576-89e0-40130d619eb8",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'calendar_reminder' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'surface_reminder' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "calendar_reminder",
+        "consent_model": "implied",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.124922+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "8c34b2ea-2ede-49fd-bb1f-9943adeda90e",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'location_trigger' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'trigger_geofence' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "location_trigger",
+        "consent_model": "explicit",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.124912+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "8cf56669-a024-4f48-8b02-5f3c3e5319f3",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'location_trigger' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'trigger_geofence' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "location_trigger",
+        "consent_model": "explicit",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.125014+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "936abd96-2da6-4e10-ad86-7585bb155cdb",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'ambient_noise' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'adjust_noise_profile' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "ambient_noise",
+        "consent_model": "explicit",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.124698+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "94a86aa5-87ba-4114-9f2a-6b9c8eb14df4",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'ambient_noise' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'adjust_noise_profile' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "ambient_noise",
+        "consent_model": "ambient",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.124537+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "966f11a4-8e3f-4742-a4a6-c3f1004192cc",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'privacy_sensitive' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'suppress_capture' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "privacy_sensitive",
+        "consent_model": "implied",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.124881+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "99150404-b499-4c17-9e5b-ed9408797fea",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'privacy_sensitive' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'suppress_capture' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "privacy_sensitive",
+        "consent_model": "explicit",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.124982+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "9a52d29b-bf8b-4abe-93a0-231f944eb13b",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'ambient_noise' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'adjust_noise_profile' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "ambient_noise",
+        "consent_model": "explicit",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.124776+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "9db1951d-4d6b-49e9-a522-ccfa67027a4c",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'ambient_noise' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'adjust_noise_profile' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "ambient_noise",
+        "consent_model": "implied",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.124891+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "9e6bc752-8145-4bb7-b428-e798363cf8c4",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'privacy_sensitive' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'suppress_capture' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "privacy_sensitive",
+        "consent_model": "ambient",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.124687+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "a61fbdfd-12c5-4251-92f1-de4655367b84",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'location_trigger' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'trigger_geofence' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "location_trigger",
+        "consent_model": "explicit",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.124693+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "a70de1c7-6bbe-4b2d-addf-cb8f14350c00",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'calendar_reminder' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'surface_reminder' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "calendar_reminder",
+        "consent_model": "explicit",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.124674+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "a7300e58-5045-4660-a832-176f80f6530f",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'privacy_sensitive' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'suppress_capture' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "privacy_sensitive",
+        "consent_model": "ambient",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.125058+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "ac2725ed-e279-4ede-b9aa-be44d659eb33",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'calendar_reminder' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'surface_reminder' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "calendar_reminder",
+        "consent_model": "explicit",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.125102+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "ac4c2aeb-b9b4-45c7-9d8e-97dcf853ed81",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'privacy_sensitive' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'suppress_capture' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "privacy_sensitive",
+        "consent_model": "explicit",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.124932+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "ae184102-94eb-4879-b4a8-868f7ecc3e69",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'ambient_noise' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'adjust_noise_profile' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "ambient_noise",
+        "consent_model": "explicit",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.124992+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "b1c26195-6089-4ea4-abcd-a7af352e98ac",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'ambient_noise' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'adjust_noise_profile' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "ambient_noise",
+        "consent_model": "explicit",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.124614+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "b380e720-bd51-4ede-9e63-86a430e98b31",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'health_alert' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'send_alert' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "health_alert",
+        "consent_model": "explicit",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.124876+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "b866e7c9-d7fa-4077-bbe1-1c063fed3607",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'health_alert' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'send_alert' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "health_alert",
+        "consent_model": "implied",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.125079+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "bb6b356a-cd49-4643-82e7-07b0869f2a4f",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'privacy_sensitive' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'suppress_capture' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "privacy_sensitive",
+        "consent_model": "explicit",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.124714+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "bda3f584-566d-4485-8d57-33476ffb491c",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'health_alert' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'send_alert' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "health_alert",
+        "consent_model": "ambient",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.125053+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "beaf2829-34fa-44d5-b83b-15576692f36a",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'privacy_sensitive' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'suppress_capture' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "privacy_sensitive",
+        "consent_model": "explicit",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.124603+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "c180b846-1595-4555-8af1-4f9f746fe3f3",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'location_trigger' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'trigger_geofence' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "location_trigger",
+        "consent_model": "ambient",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.124961+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "c254f39f-3c55-4357-9133-60c7894a4f92",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'location_trigger' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'trigger_geofence' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "location_trigger",
+        "consent_model": "ambient",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.124662+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "c7ee4548-be3f-425f-baed-5ef8d6466dd8",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'calendar_reminder' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'surface_reminder' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "calendar_reminder",
+        "consent_model": "explicit",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.124896+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "c85cc5d5-c3ac-47a1-b043-c8f050c18d36",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'ambient_noise' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'adjust_noise_profile' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "ambient_noise",
+        "consent_model": "implied",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.124668+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "c8a89c83-d335-4715-b408-84a8be54db24",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'calendar_reminder' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'surface_reminder' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "calendar_reminder",
+        "consent_model": "implied",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.124755+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "c9007cc2-1aad-4b6e-aa1e-def923418d13",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'privacy_sensitive' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'suppress_capture' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "privacy_sensitive",
+        "consent_model": "explicit",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.125008+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "c956af74-4168-46a3-a65c-83360836c415",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'privacy_sensitive' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'suppress_capture' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "privacy_sensitive",
+        "consent_model": "ambient",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.125033+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "c97065f0-aea4-4ec8-86f4-fd3d0c4ed0ee",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'calendar_reminder' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'surface_reminder' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "calendar_reminder",
+        "consent_model": "implied",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.124585+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "cc78018d-b686-48c4-a0e2-7eefc86a169f",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'health_alert' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'send_alert' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "health_alert",
+        "consent_model": "implied",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.124761+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "d00ace41-c983-46cd-ad3a-891a3064b3fc",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'location_trigger' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'trigger_geofence' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "location_trigger",
+        "consent_model": "ambient",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.124719+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "d07e781a-b97e-4039-891f-af8cf820c47c",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'ambient_noise' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'adjust_noise_profile' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "ambient_noise",
+        "consent_model": "ambient",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.124966+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "d9dc4f68-6711-4007-be02-d4e58e5c3c46",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'health_alert' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'send_alert' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "health_alert",
+        "consent_model": "ambient",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.124849+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "daeca445-b44c-4927-8c24-5236edc78ba6",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'location_trigger' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'trigger_geofence' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "location_trigger",
+        "consent_model": "implied",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.124799+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "e16ddbcf-85b1-4a93-8ded-2f7de1b50c51",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'ambient_noise' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'adjust_noise_profile' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "ambient_noise",
+        "consent_model": "explicit",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.125095+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "e74ca5af-90e6-4fe1-a1e5-d37a6738ab10",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'health_alert' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'send_alert' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "health_alert",
+        "consent_model": "explicit",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.125028+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "eebd49cc-ac70-4e69-b480-98ea52fac509",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'privacy_sensitive' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'suppress_capture' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "privacy_sensitive",
+        "consent_model": "ambient",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.124906+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "ef66b0de-9799-4d24-8fde-c3cac87b267c",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'health_alert' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'send_alert' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "health_alert",
+        "consent_model": "explicit",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.124951+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "ef6c73b4-36f5-4d29-86f7-d9ec85b7b840",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'health_alert' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'send_alert' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "health_alert",
+        "consent_model": "implied",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.125002+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "f1461076-d9cc-4483-9736-56f37248f3c0",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'ambient_noise' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'adjust_noise_profile' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "ambient_noise",
+        "consent_model": "implied",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.124942+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "f2bebaac-b15c-4a25-bd89-2d8d244e2465",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'calendar_reminder' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'surface_reminder' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "calendar_reminder",
+        "consent_model": "implied",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.125074+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "f30c27e9-4108-4289-9a4c-059e6f2cb150",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'privacy_sensitive' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'suppress_capture' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "privacy_sensitive",
+        "consent_model": "ambient",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.125085+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "f664d0fd-096f-4268-a4c3-2b10a3916de1",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'location_trigger' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'trigger_geofence' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "location_trigger",
+        "consent_model": "ambient",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.124609+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "f791286c-9c92-46c7-af31-a7726bb11bf3",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'calendar_reminder' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'surface_reminder' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "calendar_reminder",
+        "consent_model": "explicit",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.124809+00:00",
+        "dry_run": true
+      }
+    },
+    {
+      "trajectory_id": "fb8f5c8a-091d-4954-bc9c-af4f13c59d19",
+      "weighted_total": 0.8970588235294117,
+      "intent": {
+        "score": 0.75,
+        "reasoning": "Scenario type 'calendar_reminder' is a recognised ScenarioType \u2014 agent intent parsing assumed correct.",
+        "matched_goal": true
+      },
+      "planning": {
+        "score": 0.8,
+        "reasoning": "3 steps taken; step_efficiency=1.000 (efficient plan).",
+        "step_efficiency": 1.0
+      },
+      "tool_calls": {
+        "score": 1.0,
+        "reasoning": "3/3 steps have valid actions; 0 false positive(s); precision=1.000.",
+        "precision": 1.0,
+        "false_positives": 0
+      },
+      "recovery": {
+        "score": null,
+        "reasoning": "No escalation detected \u2014 recovery layer not applicable.",
+        "had_error": false
+      },
+      "outcome": {
+        "score": 1.0,
+        "reasoning": "Final action 'surface_reminder' is a terminal action.",
+        "goal_achieved": true
+      },
+      "metadata": {
+        "scenario_type": "calendar_reminder",
+        "consent_model": "implied",
+        "n_steps": 3,
+        "scored_at": "2026-04-16T17:53:54.124544+00:00",
+        "dry_run": true
+      }
+    }
+  ]
+}
