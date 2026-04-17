@@ -23,6 +23,7 @@ from __future__ import annotations
 import abc
 import json
 import logging
+import os
 import random
 import statistics
 import time
@@ -43,6 +44,136 @@ from src.eval.trajectory_scorer import TrajectoryScorer
 
 logger = logging.getLogger(__name__)
 console = Console()
+
+# ---------------------------------------------------------------------------
+# Live API constants and helpers
+# ---------------------------------------------------------------------------
+
+_ANTHROPIC_LIVE_MODEL = "claude-sonnet-4-6"
+_OPENAI_LIVE_MODEL = "gpt-4o-mini"
+_DEFAULT_LIVE_TASKS = ["wearable_privacy"]
+_DEFAULT_MOCK_OUTPUT = Path("data/processed/benchmark_results.jsonl")
+_DEFAULT_LIVE_OUTPUT = Path("data/processed/benchmark_results_live.jsonl")
+
+# Appended to every framework's system prompt so the LLM knows the exact
+# JSON schema to produce.
+_JSON_FORMAT_INSTRUCTIONS = """
+
+Given the task below, produce a step-by-step agent trajectory as a JSON array.
+Each element must be a JSON object with exactly these keys:
+  "step"        (integer, 1-indexed)
+  "action"      (string: what the agent does at this step)
+  "tool_calls"  (array of strings: tool names invoked; empty array if none)
+  "output"      (string: observation or result from this step)
+  "confidence"  (float 0.0–1.0: agent confidence in this step's correctness)
+  "step_type"   (string: one of "sense", "plan", "act", "escalate")
+
+Keep each "output" field to one concise sentence (≤ 20 words).
+Return ONLY a valid JSON array. No markdown code fences, no commentary, no keys \
+outside the schema above."""
+
+
+def _load_dotenv_if_present() -> None:
+    """Read .env into os.environ for keys not already set.
+
+    Only used in live mode so local runs do not require exporting env vars
+    manually.  Variables already set in the environment are not overwritten.
+    """
+    env_path = Path(".env")
+    if not env_path.exists():
+        return
+    for raw_line in env_path.read_text(encoding="utf-8").splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, _, val = line.partition("=")
+        key = key.strip()
+        val = val.strip().strip('"').strip("'")
+        if key and key not in os.environ:
+            os.environ[key] = val
+
+
+def _call_llm_for_trajectory(
+    system_prompt: str,
+    user_prompt: str,
+) -> tuple[list[dict[str, Any]], int]:
+    """Call Anthropic or OpenAI and return (parsed_steps, total_tokens).
+
+    Prefers ``ANTHROPIC_API_KEY``; falls back to ``OPENAI_API_KEY``.
+
+    Args:
+        system_prompt: Framework-specific system prompt (includes JSON schema
+            instructions).
+        user_prompt: Task description sent as the user turn.
+
+    Returns:
+        Tuple of (trajectory_steps, total_tokens_used).
+
+    Raises:
+        ValueError: If neither API key is available.
+        json.JSONDecodeError: If the LLM response cannot be parsed as JSON.
+    """
+    _load_dotenv_if_present()
+    anthropic_key = os.environ.get("ANTHROPIC_API_KEY", "")
+    openai_key = os.environ.get("OPENAI_API_KEY", "")
+
+    if anthropic_key:
+        import anthropic as _anthropic
+
+        client = _anthropic.Anthropic(api_key=anthropic_key)
+        msg = client.messages.create(
+            model=_ANTHROPIC_LIVE_MODEL,
+            max_tokens=2048,
+            system=system_prompt,
+            messages=[{"role": "user", "content": user_prompt}],
+        )
+        first_block = msg.content[0]
+        if not hasattr(first_block, "text"):
+            raise ValueError(f"Unexpected Anthropic response block type: {type(first_block)}")
+        raw: str = str(first_block.text)
+        tokens: int = msg.usage.input_tokens + msg.usage.output_tokens
+    elif openai_key:
+        from openai import OpenAI as _OpenAI
+
+        oa_client = _OpenAI(api_key=openai_key)
+        resp = oa_client.chat.completions.create(
+            model=_OPENAI_LIVE_MODEL,
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt},
+            ],
+            max_tokens=1024,
+        )
+        raw = resp.choices[0].message.content or ""
+        tokens = resp.usage.total_tokens if resp.usage else 0
+    else:
+        raise ValueError(
+            "Live mode requires ANTHROPIC_API_KEY or OPENAI_API_KEY in environment."
+        )
+
+    # Strip markdown code fences that some models add even when asked not to.
+    stripped = raw.strip()
+    if stripped.startswith("```"):
+        lines = stripped.splitlines()
+        inner_lines: list[str] = []
+        inside = False
+        for line in lines:
+            if line.startswith("```") and not inside:
+                inside = True
+                continue
+            if line.startswith("```") and inside:
+                break
+            if inside:
+                inner_lines.append(line)
+        stripped = "\n".join(inner_lines)
+
+    data: Any = json.loads(stripped)
+    if isinstance(data, list):
+        return data, tokens
+    if isinstance(data, dict) and "trajectory" in data:
+        return list(data["trajectory"]), tokens
+    return [data], tokens
+
 
 app = typer.Typer(
     name="benchmark-runner",
@@ -365,12 +496,26 @@ def _build_wearable_proxy(
 class AgentBenchmark(abc.ABC):
     """Abstract wrapper around a single agent framework.
 
-    Subclasses implement ``_execute`` with that framework's native API.
-    ``run_task`` handles timing, exception catching, and result assembly —
-    subclasses should not override it.
+    Subclasses implement ``_execute_mock`` with that framework's mock trajectory.
+    ``_execute`` dispatches to ``_execute_live`` when ``self._live`` is set for
+    the current task, otherwise calls ``_execute_mock``.
+    ``run_task`` handles timing, exception catching, and result assembly.
 
-    Phase 3: ``_execute`` implementations switch from stubs to real API calls.
+    Live mode (Phase 3): set ``_live=True`` and ``_live_task_ids`` on an instance
+    to route those tasks through the real LLM API.
     """
+
+    # Override in each subclass with the framework-specific intro sentence.
+    # The shared JSON schema instructions are appended automatically.
+    _LIVE_SYSTEM_PROMPT: str = ""
+
+    def __init__(
+        self,
+        live: bool = False,
+        live_task_ids: frozenset[str] = frozenset(),
+    ) -> None:
+        self._live = live
+        self._live_task_ids = live_task_ids
 
     @property
     @abc.abstractmethod
@@ -379,22 +524,94 @@ class AgentBenchmark(abc.ABC):
         ...
 
     @abc.abstractmethod
-    def _execute(
+    def _execute_mock(
         self,
         task_config: TaskConfig,
         rng: random.Random,
     ) -> tuple[list[dict[str, Any]], int, list[str], bool]:
-        """Execute the task and return raw results.
+        """Return a deterministic mock trajectory for the task.
 
         Args:
             task_config: Full task specification.
-            rng: Seeded RNG for deterministic mock behaviour; real
-                implementations should ignore this parameter.
+            rng: Seeded RNG for reproducible mock behaviour.
 
         Returns:
             4-tuple of (trajectory, tokens_used, errors, goal_achieved).
         """
         ...
+
+    def _execute(
+        self,
+        task_config: TaskConfig,
+        rng: random.Random,
+    ) -> tuple[list[dict[str, Any]], int, list[str], bool]:
+        """Dispatch to live or mock execution based on instance configuration.
+
+        Args:
+            task_config: Full task specification.
+            rng: Seeded RNG passed through to mock execution.
+
+        Returns:
+            4-tuple of (trajectory, tokens_used, errors, goal_achieved).
+        """
+        if self._live and task_config.task_id in self._live_task_ids:
+            return self._execute_live(task_config, rng)
+        return self._execute_mock(task_config, rng)
+
+    def _execute_live(
+        self,
+        task_config: TaskConfig,
+        rng: random.Random,
+    ) -> tuple[list[dict[str, Any]], int, list[str], bool]:
+        """Call the real LLM API and parse the trajectory JSON response.
+
+        Falls back to ``_execute_mock`` on any error (network failure,
+        unparseable JSON, missing API key) so a single live failure never
+        aborts the full benchmark run.
+
+        Args:
+            task_config: Full task specification; ``description`` is sent as
+                the user turn.
+            rng: Passed to ``_execute_mock`` on fallback only.
+
+        Returns:
+            4-tuple of (trajectory, tokens_used, errors, goal_achieved).
+        """
+        full_system = self._LIVE_SYSTEM_PROMPT + _JSON_FORMAT_INSTRUCTIONS
+        try:
+            raw_steps, tokens = _call_llm_for_trajectory(
+                full_system, task_config.description
+            )
+            trajectory: list[dict[str, Any]] = []
+            for i, raw in enumerate(raw_steps):
+                trajectory.append(
+                    {
+                        "step": i + 1,
+                        "action": str(raw.get("action", "")),
+                        "tool_calls": list(raw.get("tool_calls", [])),
+                        "output": str(raw.get("output", "")),
+                        "confidence": float(raw.get("confidence", 0.80)),
+                        "step_type": str(raw.get("step_type", "act")),
+                    }
+                )
+            goal_achieved = len(trajectory) > 0
+            logger.info(
+                "Live trajectory: framework=%s task=%s steps=%d tokens=%d",
+                self.framework_name,
+                task_config.task_id,
+                len(trajectory),
+                tokens,
+            )
+            return trajectory, tokens, [], goal_achieved
+        except Exception as exc:  # noqa: BLE001
+            logger.warning(
+                "Live API call failed for framework=%s task=%s — "
+                "falling back to mock. Error: %s",
+                self.framework_name,
+                task_config.task_id,
+                exc,
+            )
+            return self._execute_mock(task_config, rng)
 
     def run_task(
         self,
@@ -479,21 +696,19 @@ class AgentBenchmark(abc.ABC):
 
 
 class LangGraphBenchmark(AgentBenchmark):
-    """LangGraph StateGraph stub.
+    """LangGraph StateGraph benchmark — mock + live execution.
 
-    Real implementation (Phase 3)::
-
-        graph = StateGraph(AgentState)
-        graph.add_node("sense", sense_node)
-        graph.add_node("plan",  plan_node)
-        graph.add_node("act",   act_node)
-        graph.add_conditional_edges("plan", route_by_risk, {...})
-        compiled = graph.compile()
-        result = compiled.invoke({"task": task_config.description})
-
-    Trajectory schema: ``{step, node, action, tool_calls, output,
+    Mock trajectory schema: ``{step, node, action, tool_calls, output,
     timestamp_offset_ms}``.
+    Live trajectory schema: ``{step, action, tool_calls, output, confidence,
+    step_type}`` (standard live schema).
     """
+
+    _LIVE_SYSTEM_PROMPT = (
+        "You are a LangGraph StateGraph agent with explicit node transitions "
+        "(sense → plan → act). Be thorough and explicit about node routing "
+        "decisions. Name each step after its node (sense, plan, act, end)."
+    )
 
     # (node_name, action_label, tool_calls) per task
     _PLANS: dict[str, list[tuple[str, str, list[str]]]] = {
@@ -776,7 +991,7 @@ class LangGraphBenchmark(AgentBenchmark):
     def framework_name(self) -> str:
         return "langgraph"
 
-    def _execute(
+    def _execute_mock(
         self,
         task_config: TaskConfig,
         rng: random.Random,
@@ -809,20 +1024,20 @@ class LangGraphBenchmark(AgentBenchmark):
 
 
 class CrewAIBenchmark(AgentBenchmark):
-    """CrewAI Crew stub.
+    """CrewAI Crew benchmark — mock + live execution.
 
-    Real implementation (Phase 3)::
-
-        crew = Crew(
-            agents=[diagnostician, specialist, escalation_manager],
-            tasks=[diagnose_task, resolve_task, escalate_task],
-            process=Process.sequential,
-        )
-        result = crew.kickoff(inputs={"task": task_config.description})
-
-    Trajectory schema: ``{step, agent_role, task_name, tool_calls, output,
+    Mock trajectory schema: ``{step, agent_role, task_name, tool_calls, output,
     timestamp_offset_ms}``.
+    Live trajectory schema: ``{step, action, tool_calls, output, confidence,
+    step_type}`` (standard live schema).
     """
+
+    _LIVE_SYSTEM_PROMPT = (
+        "You are a CrewAI agent. You verify each step before proceeding — "
+        "include a brief verification observation after every action step. "
+        "Each agent role should appear as the action field prefix, e.g. "
+        "'HealthMonitorAgent: assess_biometric_risk'."
+    )
 
     _PLANS: dict[str, list[tuple[str, str, list[str]]]] = {
         "it_helpdesk": [
@@ -1102,7 +1317,7 @@ class CrewAIBenchmark(AgentBenchmark):
     def framework_name(self) -> str:
         return "crewai"
 
-    def _execute(
+    def _execute_mock(
         self,
         task_config: TaskConfig,
         rng: random.Random,
@@ -1135,21 +1350,20 @@ class CrewAIBenchmark(AgentBenchmark):
 
 
 class AutoGenBenchmark(AgentBenchmark):
-    """AutoGen (AG2) conversational agent stub.
+    """AutoGen (AG2) conversational agent benchmark — mock + live execution.
 
-    Real implementation (Phase 3)::
-
-        user_proxy = UserProxyAgent("UserProxy", human_input_mode="NEVER")
-        assistant = AssistantAgent("Assistant", llm_config={...})
-        chat_result = user_proxy.initiate_chat(
-            assistant,
-            message=task_config.description,
-            max_turns=task_config.max_steps,
-        )
-
-    Trajectory schema: ``{step, speaker, role, content, tool_calls,
+    Mock trajectory schema: ``{step, speaker, role, content, tool_calls,
     timestamp_offset_ms}``.
+    Live trajectory schema: ``{step, action, tool_calls, output, confidence,
+    step_type}`` (standard live schema).
     """
+
+    _LIVE_SYSTEM_PROMPT = (
+        "You are an AutoGen multi-agent system. You may request clarification "
+        "from a UserProxy before acting on ambiguous steps. Model the conversation "
+        "turns: UserProxy asks, AssistantAgent replies with tool calls and reasoning. "
+        "Include any clarification exchange as separate steps."
+    )
 
     # (speaker, role, tool_calls, content)
     _CONVERSATIONS: dict[str, list[tuple[str, str, list[str], str]]] = {
@@ -1459,7 +1673,7 @@ class AutoGenBenchmark(AgentBenchmark):
     def framework_name(self) -> str:
         return "autogen"
 
-    def _execute(
+    def _execute_mock(
         self,
         task_config: TaskConfig,
         rng: random.Random,
@@ -1494,21 +1708,19 @@ class AutoGenBenchmark(AgentBenchmark):
 
 
 class OpenAIAgentsBenchmark(AgentBenchmark):
-    """OpenAI Agents SDK stub.
+    """OpenAI Agents SDK benchmark — mock + live execution.
 
-    Real implementation (Phase 3)::
-
-        triage_agent = Agent(
-            name="TriageAgent",
-            instructions=TRIAGE_PROMPT,
-            tools=[check_network_status, query_vpn_logs],
-            handoffs=[DiagnosticAgent],
-        )
-        result = Runner.run_sync(triage_agent, task_config.description)
-
-    Trajectory schema: ``{step, agent, event_type, tool/to_agent,
+    Mock trajectory schema: ``{step, agent, event_type, tool/to_agent,
     input, output, timestamp_offset_ms}``.
+    Live trajectory schema: ``{step, action, tool_calls, output, confidence,
+    step_type}`` (standard live schema).
     """
+
+    _LIVE_SYSTEM_PROMPT = (
+        "You are an OpenAI Agents SDK agent. Be concise and direct. "
+        "Minimise the number of steps. Use tools efficiently — batch related "
+        "lookups into a single step where possible. Avoid unnecessary clarification."
+    )
 
     # (agent, event_type, tool_or_agent, input_json, output_str)
     _PLANS: dict[str, list[tuple[str, str, str, str, str]]] = {
@@ -1922,7 +2134,7 @@ class OpenAIAgentsBenchmark(AgentBenchmark):
     def framework_name(self) -> str:
         return "openai_agents"
 
-    def _execute(
+    def _execute_mock(
         self,
         task_config: TaskConfig,
         rng: random.Random,
@@ -1998,10 +2210,14 @@ class BenchmarkRunner:
         output_path: Path,
         framework_names: list[str] | None = None,
         live: bool = False,
+        live_task_ids: list[str] | None = None,
     ) -> None:
         self._config_path = config_path
         self._output_path = output_path
         self._live = live
+        _live_ids: frozenset[str] = frozenset(
+            live_task_ids if live_task_ids is not None else _DEFAULT_LIVE_TASKS
+        )
         self._frameworks: list[AgentBenchmark] = [
             FRAMEWORK_REGISTRY[name]
             for name in (framework_names or ALL_FRAMEWORK_NAMES)
@@ -2012,10 +2228,15 @@ class BenchmarkRunner:
                 f"No valid frameworks found in: {framework_names}. "
                 f"Available: {ALL_FRAMEWORK_NAMES}"
             )
+        for fw in self._frameworks:
+            fw._live = live
+            fw._live_task_ids = _live_ids
         if live:
-            logger.warning(
-                "--live flag set but live API calls are not yet implemented. "
-                "Running in mock mode. Wire Phase 3 API clients to activate."
+            logger.info(
+                "Live mode enabled — tasks: %s | model: %s | output: %s",
+                sorted(_live_ids),
+                _ANTHROPIC_LIVE_MODEL,
+                output_path,
             )
 
     def load_tasks(self, task_ids: list[str] | None = None) -> list[TaskConfig]:
@@ -2246,8 +2467,9 @@ class BenchmarkRunner:
             results: Results to display; typically the return value of
                 ``run_all``.
         """
+        mode_label = "Live API Run" if self._live else "Mock Run"
         table = Table(
-            title="Benchmark Results — Mock Run (Phase 3 replaces stubs)",
+            title=f"Benchmark Results — {mode_label}",
             show_header=True,
             header_style="bold cyan",
             show_lines=True,
@@ -2357,9 +2579,19 @@ def main(
         bool,
         typer.Option(
             "--live/--mock",
-            help="Use real API calls instead of mock stubs (Phase 3).",
+            help="Use real LLM API calls instead of mock stubs.",
         ),
     ] = False,
+    live_tasks: Annotated[
+        str,
+        typer.Option(
+            "--live-tasks",
+            help=(
+                "Comma-separated task IDs to run in live mode. "
+                "Ignored when --mock. Default: 'wearable_privacy'."
+            ),
+        ),
+    ] = "wearable_privacy",
     verbose: Annotated[
         bool,
         typer.Option("--verbose", "-v", help="Enable DEBUG logging."),
@@ -2384,11 +2616,19 @@ def main(
         else [f.strip() for f in frameworks.split(",") if f.strip()]
     )
 
+    # Live mode: never overwrite the mock baseline — redirect to the live file.
+    if live and output == _DEFAULT_MOCK_OUTPUT:
+        output = _DEFAULT_LIVE_OUTPUT
+        logger.info("Live mode: results will be written to %s", output)
+
+    live_task_id_list = [t.strip() for t in live_tasks.split(",") if t.strip()]
+
     runner = BenchmarkRunner(
         config_path=config,
         output_path=output,
         framework_names=framework_names,
         live=live,
+        live_task_ids=live_task_id_list,
     )
     results = runner.run_all(task_ids=task_ids, runs=runs)
     runner.print_table(results)

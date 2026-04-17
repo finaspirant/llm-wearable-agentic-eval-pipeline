@@ -653,11 +653,34 @@ Started: Day 19
   - scripts/generate_leaderboard_report.py added
   - ruff check ✓  mypy strict ✓  pytest 21/21 ✓ (446 total, no regressions)
 
-### Tomorrow (Day 23)
-- HITL trigger logic: 4 trigger types (confidence, safety, novel tool, domain)
-- GitHub Actions CI: eval-as-CI gate (trajectory_quality > 0.70,
-  tool_accuracy > 0.75)
-- Live API run of benchmark_runner --live (if API budget allows)
+### Day 23 — COMPLETE ✅
+- HITL trigger design + CI eval gate + live API smoke test
+  - src/eval/hitl_trigger.py: HITLTriggerEvaluator — 4 trigger types
+    (confidence, safety-adjacent, novel tool, domain expertise),
+    evaluate_trajectory(), summary() method
+  - KNOWN_TOOLS registry: 10 approved tools; any tool outside registry
+    forces HITL review via NOVEL_TOOL_PATTERN trigger
+  - data/processed/hitl_triggers.json: trigger analysis on 120
+    benchmark trajectories; trigger_rate, critical_count, by_type breakdown
+  - .github/workflows/eval_gate.yml: 3-job CI pipeline
+    (lint+type-check → unit tests → eval quality gate); badge-ready
+  - scripts/check_eval_gate.py: threshold checker, rich pass/fail
+    table, exit code gate (trajectory_quality≥0.70, tool_accuracy≥0.75);
+    pass path exits 0, fail path exits 1 (confirmed)
+  - data/processed/benchmark_results_live.jsonl: real token + latency
+    anchors for wearable_privacy × 4 frameworks (claude-sonnet-4-6);
+    OpenAI SDK: 966 tokens / 10.3s; CrewAI: 1,458 tokens / 14.8s
+  - reports/wp2_leaderboard.md: live baseline table added (§ Live API
+    baseline); all 4 frameworks goal_achieved=True, score=0.8235
+  - tests/eval/test_hitl_trigger.py: 12 tests covering all 4 trigger
+    types, trajectory aggregation, summary keys, severity levels
+  - ruff check ✓  mypy strict ✓  pytest 458/458 ✓
+
+### Tomorrow (Day 24)
+- Gradio/Streamlit demo: upload wearable log → agent runs →
+  eval scores displayed live (HITL triggers shown in real time)
+- Record 2-min Loom walkthrough
+- Embed Loom in README + LinkedIn Post #3 draft
 
 ### Phase 3 Deliverables Tracker
 | Deliverable | Status |
@@ -666,6 +689,9 @@ Started: Day 19
 | TrajectoryScorer + PIA rubric | ✅ Day 20 |
 | A/B experiment results | ✅ Day 21 |
 | Framework benchmark (4 frameworks) | ✅ Day 22 |
+| HITL trigger design | ✅ Day 23 |
+| CI eval gate | ✅ Day 23 |
+| Live API smoke test | ✅ Day 23 |
 | Loom demo + Gradio UI | 🔜 Day 24 |
 | LinkedIn Post #3 + HuggingFace dataset | 🔜 Day 25 |
 | Multi-agent pipeline | 🔜 Day 26 |

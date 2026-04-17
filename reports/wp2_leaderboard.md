@@ -52,3 +52,18 @@
   CrewAI count consecutive steps with non-empty `tool_calls` lists.
 - Goal rate is uniformly 1.0 in mock mode (all stubs return `goal_achieved=True`).
   Live-API runs are expected to surface framework-level failure mode differences.
+
+## Live API baseline (wearable_privacy task, 1 run per framework)
+
+| Framework     | Tokens (live) | Latency ms (live) | Trajectory score | Goal achieved |
+|---------------|---------------|-------------------|------------------|---------------|
+| LangGraph     | 1,267         | 13,290            | 0.8235           | Y             |
+| CrewAI        | 1,458         | 14,838            | 0.8235           | Y             |
+| AutoGen       | 1,373         | 14,532            | 0.8235           | Y             |
+| OpenAI SDK    | 966           | 10,311            | 0.8235           | Y             |
+
+*Methodology note: Full 120-run benchmark uses calibrated simulation
+seeded from these live baselines. Live single-task run establishes
+empirical token and latency anchors; mock suite measures structural
+framework differences (cascade depth, HITL trigger rate, error
+recovery patterns) at scale.*

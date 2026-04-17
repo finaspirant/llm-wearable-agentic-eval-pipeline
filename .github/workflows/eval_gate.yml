@@ -1,0 +1,108 @@
+# Badge: [![Eval Gate](https://github.com/{owner}/{repo}/actions/workflows/eval_gate.yml/badge.svg)](https://github.com/{owner}/{repo}/actions/workflows/eval_gate.yml)
+
+name: Eval Gate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # ── Job 1: Lint + type check ─────────────────────────────────────────────
+  lint-and-type-check:
+    name: Lint & Type Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install lint tools
+        run: pip install ruff mypy
+
+      - name: ruff check
+        run: ruff check src/ tests/
+
+      - name: mypy
+        run: mypy src/ --ignore-missing-imports
+
+  # ── Job 2: Unit tests ────────────────────────────────────────────────────
+  unit-tests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    needs: lint-and-type-check
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install uv
+        run: pip install uv
+
+      - name: Install project + dev dependencies
+        run: uv sync --group dev
+
+      - name: Run pytest
+        run: uv run pytest tests/ -v --tb=short
+        env:
+          # Prevent any test from accidentally hitting live APIs
+          OPENAI_API_KEY: "test-key-ci"
+          ANTHROPIC_API_KEY: "test-key-ci"
+
+  # ── Job 3: Eval quality gate ─────────────────────────────────────────────
+  eval-quality-gate:
+    name: Eval Quality Gate
+    runs-on: ubuntu-latest
+    needs: unit-tests
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install uv
+        run: pip install uv
+
+      - name: Install project dependencies
+        run: uv sync
+
+      - name: Generate fresh mock benchmark results
+        run: |
+          uv run python -m src.eval.benchmark_runner \
+            --tasks all \
+            --runs 1 \
+            --output data/processed/benchmark_results.jsonl
+
+      - name: Run HITL trigger evaluator
+        run: |
+          uv run python -m src.eval.hitl_trigger \
+            --input data/processed/benchmark_results.jsonl \
+            --output data/processed/hitl_triggers.json
+
+      - name: Assert eval quality thresholds
+        run: |
+          uv run python scripts/check_eval_gate.py \
+            --results data/processed/benchmark_results.jsonl \
+            --thresholds trajectory_quality=0.70,tool_accuracy=0.75
+
+      - name: Upload eval artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eval-results
+          path: |
+            data/processed/benchmark_results.jsonl
+            data/processed/hitl_triggers.json
+          retention-days: 7
