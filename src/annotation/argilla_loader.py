@@ -226,17 +226,13 @@ class ArgillaTrajectoryLoader:
         )
 
         header = (
-            "─── Wearable Context "
-            + "─" * 43
-            + "\n"
+            "─── Wearable Context " + "─" * 43 + "\n"
             f"Scenario:    {log.scenario_type}\n"
             f"Consent:     {log.consent_model.value.upper()}\n"
             f"DP applied:  True (Gaussian, ε=1.0)\n"
             f"Step:        {step_label} (index {step_index} of "
             f"{len(log.trajectory) - 1})\n"
-            "─── Sensor Snapshot (noised) "
-            + "─" * 35
-            + "\n"
+            "─── Sensor Snapshot (noised) " + "─" * 35 + "\n"
             f"Heart rate:  {s.heart_rate_noised:+.1f} bpm"
             f"   SpO₂:    {s.spo2_noised:.1f}%\n"
             f"Steps:       {s.steps_noised:.1f}"
@@ -244,10 +240,7 @@ class ArgillaTrajectoryLoader:
             f"GPS:         {s.gps_lat_noised:.4f}, {s.gps_lon_noised:.4f}\n"
             f"Skin temp:   {s.skin_temp_c:.1f}°C  (raw — no DP on temperature)\n"
             f"Audio:       {audio_line}\n"
-            f"Keywords:    {keywords_line}\n"
-            + "─" * 63
-            + "\n"
-            + step_obs
+            f"Keywords:    {keywords_line}\n" + "─" * 63 + "\n" + step_obs
         )
         return header
 
@@ -434,9 +427,7 @@ class ArgillaTrajectoryLoader:
                 )
             except Exception as exc:
                 errors.append({"log_id": log.log_id, "error": str(exc)})
-                logger.warning(
-                    "Failed to load log_id=%s: %s", log.log_id, exc
-                )
+                logger.warning("Failed to load log_id=%s: %s", log.log_id, exc)
 
         logger.info(
             "Batch complete — loaded: %d step-records | skipped: %d | errors: %d",
@@ -668,9 +659,7 @@ def main(
             else output / "annotations_v1.parquet"
         )
         df = loader.export_annotations(output_path)
-        typer.echo(
-            f"Export complete — {len(df)} annotation rows → {output_path}"
-        )
+        typer.echo(f"Export complete — {len(df)} annotation rows → {output_path}")
 
     else:
         typer.echo(

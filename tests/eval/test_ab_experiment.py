@@ -52,8 +52,7 @@ def _score_entry(tid: str, weighted_total: float = 0.897) -> dict[str, Any]:
 
 def _scores_payload(n: int = 100, varied: bool = False) -> dict[str, Any]:
     scores = [
-        _score_entry(f"traj_{i:04d}", i / n if varied else 0.897)
-        for i in range(n)
+        _score_entry(f"traj_{i:04d}", i / n if varied else 0.897) for i in range(n)
     ]
     return {
         "generated_at": "2026-04-16T00:00:00+00:00",
@@ -143,9 +142,7 @@ class TestNoOverlap:
 class TestMetricKeys:
     """ab_results.json contains all 6 Kore.ai metric keys in every section."""
 
-    def test_all_sections_contain_all_metric_keys(
-        self, ab_result: ABResult
-    ) -> None:
+    def test_all_sections_contain_all_metric_keys(self, ab_result: ABResult) -> None:
         d = ab_result.to_dict()
         expected = set(_METRIC_NAMES)
         assert expected <= set(d["raw"].keys())

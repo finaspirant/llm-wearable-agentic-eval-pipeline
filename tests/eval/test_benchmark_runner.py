@@ -12,7 +12,6 @@ Covers:
 from __future__ import annotations
 
 import json
-import tempfile
 from pathlib import Path
 
 import pytest
@@ -46,7 +45,9 @@ _MINIMAL_TASK = TaskConfig(
 # ---------------------------------------------------------------------------
 
 
-def _make_runner(tmp_path: Path, framework_names: list[str] | None = None) -> BenchmarkRunner:
+def _make_runner(
+    tmp_path: Path, framework_names: list[str] | None = None
+) -> BenchmarkRunner:
     output = tmp_path / "results.jsonl"
     return BenchmarkRunner(
         config_path=CONFIG_PATH,
@@ -112,9 +113,13 @@ class TestTrajectoryScoreAfterRunTask:
         bench = LangGraphBenchmark()
         result = bench.run_task(_MINIMAL_TASK, run_index=1)
         # Field must exist and be float or None (never raises AttributeError)
-        assert result.trajectory_score is None or isinstance(result.trajectory_score, float)
+        assert result.trajectory_score is None or isinstance(
+            result.trajectory_score, float
+        )
 
-    def test_run_all_single_task_populates_trajectory_score(self, tmp_path: Path) -> None:
+    def test_run_all_single_task_populates_trajectory_score(
+        self, tmp_path: Path
+    ) -> None:
         runner = _make_runner(tmp_path, framework_names=["langgraph"])
         results = runner.run_all(task_ids=["it_helpdesk"], runs=1)
         assert len(results) == 1
@@ -148,10 +153,16 @@ class TestThreeRunsVariance:
                 assert isinstance(r.nondeterminism_variance, float)
                 assert r.nondeterminism_variance >= 0.0
 
-    def test_variance_consistent_across_runs_in_same_batch(self, tmp_path: Path) -> None:
+    def test_variance_consistent_across_runs_in_same_batch(
+        self, tmp_path: Path
+    ) -> None:
         runner = _make_runner(tmp_path, framework_names=["langgraph"])
         results = runner.run_all(task_ids=["it_helpdesk"], runs=3)
-        variances = [r.nondeterminism_variance for r in results if r.nondeterminism_variance is not None]
+        variances = [
+            r.nondeterminism_variance
+            for r in results
+            if r.nondeterminism_variance is not None
+        ]
         if variances:
             # All runs in same (task, framework) batch share the same variance
             assert len(set(variances)) == 1
@@ -186,7 +197,9 @@ class TestLeaderboardKeys:
 
     def test_each_ranking_contains_all_frameworks(self, leaderboard: dict) -> None:
         for dim, ranked in leaderboard["rankings"].items():
-            assert set(ranked) == set(ALL_FRAMEWORK_NAMES), f"Dim {dim!r} missing frameworks"
+            assert set(ranked) == set(ALL_FRAMEWORK_NAMES), (
+                f"Dim {dim!r} missing frameworks"
+            )
 
     def test_n_frameworks_matches_registry(self, leaderboard: dict) -> None:
         assert leaderboard["n_frameworks"] == len(ALL_FRAMEWORK_NAMES)
@@ -201,7 +214,9 @@ class TestLeaderboardKeys:
             "avg_cascade_depth",
         }
         for fw, metrics in leaderboard["frameworks"].items():
-            assert required <= set(metrics.keys()), f"Framework {fw!r} missing aggregate keys"
+            assert required <= set(metrics.keys()), (
+                f"Framework {fw!r} missing aggregate keys"
+            )
 
 
 # ---------------------------------------------------------------------------
@@ -247,7 +262,7 @@ class TestAllTenTasksRun:
         runner = _make_runner(tmp_path)
         results = runner.run_all(runs=3)
         assert len(results) == 120, (
-            f"Expected 120 results (10 tasks × 4 frameworks × 3 runs), got {len(results)}"
+            f"Expected 120 results (10 tasks × 4 frameworks × 3 runs), got {len(results)}"  # noqa: E501
         )
 
     def test_all_four_frameworks_represented(self, tmp_path: Path) -> None:
@@ -263,7 +278,7 @@ class TestAllTenTasksRun:
             output_path=output,
         )
         runner.run_all(runs=3)
-        lines = [l for l in output.read_text().splitlines() if l.strip()]
+        lines = [ln for ln in output.read_text().splitlines() if ln.strip()]
         assert len(lines) == 120
 
     def test_each_result_has_goal_achieved(self, tmp_path: Path) -> None:

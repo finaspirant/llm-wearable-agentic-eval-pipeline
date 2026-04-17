@@ -22,16 +22,13 @@ import pytest
 from src.annotation.poisoning_detector import (
     RUBRIC_DIMENSIONS,
     PoisoningDetector,
-    _POISONER_NAMES,
 )
 
 # ---------------------------------------------------------------------------
 # Fixtures
 # ---------------------------------------------------------------------------
 
-_ANNOTATIONS_PATH = Path(
-    "data/annotations/day12_annotations.jsonl"
-)
+_ANNOTATIONS_PATH = Path("data/annotations/day12_annotations.jsonl")
 _REAL_PERSONA_NAMES = {
     "PrivacyMaximalist",
     "OutcomeOptimist",
@@ -127,7 +124,7 @@ class TestDetectOutlierAnnotators:
         assert max(scores.values()) == pytest.approx(1.0)
 
     def test_min_score_is_zero(self, real_annotations: list[dict[str, Any]]) -> None:
-        """The least deviant annotator must receive a normalised score of exactly 0.0."""
+        """The least deviant annotator must receive a normalised score of exactly 0.0."""  # noqa: E501
         detector = PoisoningDetector()
         scores = detector.detect_outlier_annotators(real_annotations)
         assert min(scores.values()) == pytest.approx(0.0)
@@ -231,8 +228,7 @@ class TestInjectSyntheticPoisoners:
         for r in real_annotations:
             dim_scores[r["log_id"]].append(float(r["privacy_compliance"]))
         original_consensus = {
-            log_id: sum(vals) / len(vals)
-            for log_id, vals in dim_scores.items()
+            log_id: sum(vals) / len(vals) for log_id, vals in dim_scores.items()
         }
 
         detector = PoisoningDetector()
@@ -258,8 +254,7 @@ class TestInjectSyntheticPoisoners:
         for r in real_annotations:
             dim_scores[r["log_id"]].append(float(r["step_quality"]))
         original_consensus = {
-            log_id: sum(vals) / len(vals)
-            for log_id, vals in dim_scores.items()
+            log_id: sum(vals) / len(vals) for log_id, vals in dim_scores.items()
         }
 
         detector = PoisoningDetector()
@@ -281,7 +276,7 @@ class TestInjectSyntheticPoisoners:
         """inject_synthetic_poisoners must not modify the input list in place."""
         original_ids = {r["annotation_id"] for r in real_annotations}
         detector = PoisoningDetector()
-        augmented = detector.inject_synthetic_poisoners(real_annotations, n_malicious=3)
+        detector.inject_synthetic_poisoners(real_annotations, n_malicious=3)
         # The input list itself must be unchanged.
         assert {r["annotation_id"] for r in real_annotations} == original_ids
 
@@ -399,9 +394,7 @@ class TestPoisonersDetectable:
 
         scores = detector.detect_outlier_annotators(augmented)
         poisoner_score = scores[poisoner_name]
-        honest_scores = [
-            s for name, s in scores.items() if name != poisoner_name
-        ]
+        honest_scores = [s for name, s in scores.items() if name != poisoner_name]
         # The single injected poisoner should outrank every honest annotator.
         assert poisoner_score > max(honest_scores), (
             f"Poisoner ({poisoner_score:.4f}) did not outscore all honest "

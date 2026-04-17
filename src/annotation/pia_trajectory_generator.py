@@ -2304,9 +2304,7 @@ class PIATrajectoryGenerator:
             )
             written.append(path)
             logger.debug("Wrote %s (%d bytes)", path, path.stat().st_size)
-        logger.info(
-            "Saved %d pair files to %s", len(written), self.output_dir
-        )
+        logger.info("Saved %d pair files to %s", len(written), self.output_dir)
         return written
 
     # ---------------------------------------------------------------------- #
@@ -2357,10 +2355,8 @@ class PIATrajectoryGenerator:
             + float(self._rng.normal(0.0, _DP_SIGMA["noise_db"])),
             "skin_temp_c": raw["skin_temp_c"]
             + float(self._rng.normal(0.0, _DP_SIGMA["skin_temp_c"])),
-            "gps_lat_noised": lat_base
-            + float(self._rng.normal(0.0, _GPS_SIGMA)),
-            "gps_lon_noised": lon_base
-            + float(self._rng.normal(0.0, _GPS_SIGMA)),
+            "gps_lat_noised": lat_base + float(self._rng.normal(0.0, _GPS_SIGMA)),
+            "gps_lon_noised": lon_base + float(self._rng.normal(0.0, _GPS_SIGMA)),
             "audio_text": template.audio_text,
             "audio_keywords": list(template.audio_keywords),
             "audio_confidence": template.audio_confidence,
@@ -2428,9 +2424,7 @@ class PIATrajectoryGenerator:
         observation = template.observation_template.format_map(fmt)
         reasoning = template.reasoning_template.format_map(fmt)
         jitter = float(self._rng.normal(0.0, _CONFIDENCE_JITTER))
-        confidence = float(
-            max(0.50, min(0.99, template.base_confidence + jitter))
-        )
+        confidence = float(max(0.50, min(0.99, template.base_confidence + jitter)))
         return PairStep(
             step_index=step_index,
             step_name=template.step_name,
@@ -2481,9 +2475,7 @@ def main(
         for pair in pairs:
             a_steps = pair.agent_a.n_steps
             b_steps = pair.agent_b.n_steps
-            b_detours = sum(
-                1 for s in pair.agent_b.steps if s.step_type == _DETOUR
-            )
+            b_detours = sum(1 for s in pair.agent_b.steps if s.step_type == _DETOUR)
             print(
                 f"pair_{pair.pair_id}  scenario={pair.scenario:<20} "
                 f"consent={pair.consent_model:<10} "

@@ -89,7 +89,7 @@ def _make_log(
                 "step_index": 0,
                 "step_name": "sense",
                 "observation": "Heart rate 138 bpm; SpO2 97.2%; no motion.",
-                "reasoning": "Elevated HR + reduced SpO2 consistent with cardiac event.",
+                "reasoning": "Elevated HR + reduced SpO2 consistent with cardiac event.",  # noqa: E501
                 "action": "",
                 "confidence": 0.93,
             },
@@ -319,9 +319,7 @@ class TestAnnotationRecord:
 class TestDryRunReproducibility:
     """Dry-run produces identical scores when called twice with the same log."""
 
-    def test_same_log_same_persona_identical_scores(
-        self, tmp_path: Path
-    ) -> None:
+    def test_same_log_same_persona_identical_scores(self, tmp_path: Path) -> None:
         log = _make_log()
         sim_a = AnnotatorSimulator(
             dry_run=True,
@@ -380,9 +378,7 @@ class TestFleissKappaComputed:
     ) -> None:
         irr = compute_irr(three_records)
         kappa = float(irr[dim]["kappa"])
-        assert -1.0 <= kappa <= 1.0, (
-            f"κ for {dim} = {kappa:.4f} is outside [-1, 1]"
-        )
+        assert -1.0 <= kappa <= 1.0, f"κ for {dim} = {kappa:.4f} is outside [-1, 1]"
 
     def test_overall_kappa_is_mean_of_dimensions(
         self, three_records: list[dict[str, Any]]
@@ -397,7 +393,12 @@ class TestFleissKappaComputed:
     ) -> None:
         irr = compute_irr(three_records)
         valid_labels = {
-            "poor", "slight", "fair", "moderate", "substantial", "almost perfect"
+            "poor",
+            "slight",
+            "fair",
+            "moderate",
+            "substantial",
+            "almost perfect",
         }
         for dim in _DIMENSIONS:
             label = str(irr[dim]["interpretation"]).lower()
@@ -405,9 +406,7 @@ class TestFleissKappaComputed:
                 f"Unexpected interpretation {label!r} for {dim}"
             )
 
-    def test_compute_irr_raises_on_too_few_complete_logs(
-        self, tmp_path: Path
-    ) -> None:
+    def test_compute_irr_raises_on_too_few_complete_logs(self, tmp_path: Path) -> None:
         """Fewer than 2 complete trajectories must raise ValueError."""
         sim = AnnotatorSimulator(dry_run=True, output_path=tmp_path / "few.jsonl")
         # Only 1 log → only 1 complete trajectory → should raise.
@@ -529,8 +528,12 @@ class TestDisagreementHotspots:
         irr = compute_irr(three_records)
         hotspots = find_disagreement_hotspots(three_records, irr, top_n=3)
         required = {
-            "rank", "dimension", "kappa", "interpretation",
-            "top_variance_log_ids", "top_variances",
+            "rank",
+            "dimension",
+            "kappa",
+            "interpretation",
+            "top_variance_log_ids",
+            "top_variances",
         }
         for h in hotspots:
             missing = required - h.keys()
@@ -613,9 +616,7 @@ class TestDisagreementHotspots:
 class TestPersonaBiasDirection:
     """Persona bias ranges produce the documented score tendencies."""
 
-    def test_privacy_maximalist_privacy_compliance_low(
-        self, tmp_path: Path
-    ) -> None:
+    def test_privacy_maximalist_privacy_compliance_low(self, tmp_path: Path) -> None:
         """PrivacyMaximalist's privacy_compliance bias range is (1, 2)."""
         sim = AnnotatorSimulator(dry_run=True, output_path=tmp_path / "pm.jsonl")
         logs = _make_logs(20, scenario_type="privacy_sensitive")
@@ -627,7 +628,7 @@ class TestPersonaBiasDirection:
         ]
         lo, hi = _DRY_RUN_BIAS["PrivacyMaximalist"]["privacy_compliance"]
         assert all(lo <= s <= hi for s in pm_scores), (
-            f"PrivacyMaximalist privacy_compliance scores outside [{lo},{hi}]: {pm_scores}"
+            f"PrivacyMaximalist privacy_compliance scores outside [{lo},{hi}]: {pm_scores}"  # noqa: E501
         )
 
     def test_outcome_optimist_goal_alignment_high(self, tmp_path: Path) -> None:
@@ -658,14 +659,16 @@ class TestPersonaBiasDirection:
             if r["persona_name"] == "ClinicalSafetyFirst"
         ]
         assert all(3 <= s <= 4 for s in csf_scores), (
-            f"ClinicalSafetyFirst goal_alignment on health_alert outside [3,4]: {csf_scores}"
+            f"ClinicalSafetyFirst goal_alignment on health_alert outside [3,4]: {csf_scores}"  # noqa: E501
         )
 
     def test_clinical_safety_first_non_health_goal_alignment_low(
         self, tmp_path: Path
     ) -> None:
         """ClinicalSafetyFirst scores goal_alignment 1–2 on non-health scenarios."""
-        sim = AnnotatorSimulator(dry_run=True, output_path=tmp_path / "csf_nonhealth.jsonl")
+        sim = AnnotatorSimulator(
+            dry_run=True, output_path=tmp_path / "csf_nonhealth.jsonl"
+        )
         logs = _make_logs(20, scenario_type="calendar_reminder")
         records = sim.annotate_all(logs)
         csf_scores = [
@@ -674,7 +677,7 @@ class TestPersonaBiasDirection:
             if r["persona_name"] == "ClinicalSafetyFirst"
         ]
         assert all(1 <= s <= 2 for s in csf_scores), (
-            f"ClinicalSafetyFirst goal_alignment on calendar_reminder outside [1,2]: {csf_scores}"
+            f"ClinicalSafetyFirst goal_alignment on calendar_reminder outside [1,2]: {csf_scores}"  # noqa: E501
         )
 
     def test_recovery_skeptic_error_recovery_low(self, tmp_path: Path) -> None:

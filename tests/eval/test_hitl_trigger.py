@@ -5,7 +5,6 @@ from __future__ import annotations
 import pytest
 
 from src.eval.hitl_trigger import (
-    HITLTrigger,
     HITLTriggerEvaluator,
     TriggerType,
 )
@@ -70,7 +69,12 @@ def test_novel_tool_fires(evaluator: HITLTriggerEvaluator) -> None:
 
 def test_known_tool_suppressed(evaluator: HITLTriggerEvaluator) -> None:
     # All tools in KNOWN_TOOLS; no other trigger conditions present.
-    step = {"tool_calls": ["search", "log"], "confidence": 0.95, "action": "lookup", "output": "ok"}
+    step = {
+        "tool_calls": ["search", "log"],
+        "confidence": 0.95,
+        "action": "lookup",
+        "output": "ok",
+    }
     trigger = evaluator.evaluate_step(step, step_index=0, trajectory_id="t1")
     assert trigger is None
 
@@ -124,13 +128,28 @@ def test_evaluate_trajectory_multiple(evaluator: HITLTriggerEvaluator) -> None:
         # step 0 — triggers: confidence low
         {"confidence": 0.45},
         # step 1 — triggers: novel tool
-        {"tool_calls": ["custom_sensor_api"], "confidence": 0.95, "action": "fetch", "output": "data"},
+        {
+            "tool_calls": ["custom_sensor_api"],
+            "confidence": 0.95,
+            "action": "fetch",
+            "output": "data",
+        },
         # step 2 — clean
-        {"tool_calls": ["search"], "confidence": 0.90, "action": "lookup", "output": "results"},
+        {
+            "tool_calls": ["search"],
+            "confidence": 0.90,
+            "action": "lookup",
+            "output": "results",
+        },
         # step 3 — triggers: safety
         {"action": "escalate_to_emergency", "confidence": 0.95},
         # step 4 — clean
-        {"tool_calls": ["log"], "confidence": 0.80, "action": "record", "output": "done"},
+        {
+            "tool_calls": ["log"],
+            "confidence": 0.80,
+            "action": "record",
+            "output": "done",
+        },
     ]
     triggers = evaluator.evaluate_trajectory(trajectory, trajectory_id="multi_test")
     assert len(triggers) == 3
@@ -164,9 +183,24 @@ def test_summary_keys(evaluator: HITLTriggerEvaluator) -> None:
 
 def test_no_triggers_trajectory(evaluator: HITLTriggerEvaluator) -> None:
     trajectory = [
-        {"tool_calls": ["search"], "confidence": 0.95, "action": "lookup", "output": "ok"},
-        {"tool_calls": ["log"], "confidence": 0.80, "action": "record", "output": "saved"},
-        {"tool_calls": ["notify"], "confidence": 0.92, "action": "send", "output": "sent"},
+        {
+            "tool_calls": ["search"],
+            "confidence": 0.95,
+            "action": "lookup",
+            "output": "ok",
+        },
+        {
+            "tool_calls": ["log"],
+            "confidence": 0.80,
+            "action": "record",
+            "output": "saved",
+        },
+        {
+            "tool_calls": ["notify"],
+            "confidence": 0.92,
+            "action": "send",
+            "output": "sent",
+        },
     ]
     triggers = evaluator.evaluate_trajectory(trajectory, trajectory_id="clean")
     assert triggers == []

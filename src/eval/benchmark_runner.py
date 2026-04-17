@@ -129,7 +129,9 @@ def _call_llm_for_trajectory(
         )
         first_block = msg.content[0]
         if not hasattr(first_block, "text"):
-            raise ValueError(f"Unexpected Anthropic response block type: {type(first_block)}")
+            raise ValueError(
+                f"Unexpected Anthropic response block type: {type(first_block)}"
+            )
         raw: str = str(first_block.text)
         tokens: int = msg.usage.input_tokens + msg.usage.output_tokens
     elif openai_key:

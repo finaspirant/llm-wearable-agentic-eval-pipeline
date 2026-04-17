@@ -354,8 +354,8 @@ def test_deepeval_judge_scores_clamped(judge: DeepEvalJudge) -> None:
 
 import math  # noqa: E402 — placed here to keep existing imports unmodified
 
-from src.data.privacy_gate import ConsentModel
-from src.data.wearable_generator import (
+from src.data.privacy_gate import ConsentModel  # noqa: E402
+from src.data.wearable_generator import (  # noqa: E402
     AgentAction,
     AudioTranscript,
     ScenarioType,
@@ -363,7 +363,10 @@ from src.data.wearable_generator import (
     TrajectoryStep,
     WearableLog,
 )
-from src.eval.agentic_eval import AgenticEvaluator, _wearable_steps_to_kore_dicts
+from src.eval.agentic_eval import (  # noqa: E402
+    AgenticEvaluator,
+    _wearable_steps_to_kore_dicts,
+)
 
 
 def _make_wearable_log(
@@ -512,15 +515,24 @@ class TestEvaluateWithTrajectoryScore:
     def test_pia_keys_in_unit_interval(self, evaluator: AgenticEvaluator) -> None:
         log = _make_wearable_log()
         result = evaluator.evaluate_with_trajectory_score(log)
-        for key in ("pia_planning_quality", "pia_error_recovery", "pia_goal_alignment", "pia_tool_precision"):
+        for key in (
+            "pia_planning_quality",
+            "pia_error_recovery",
+            "pia_goal_alignment",
+            "pia_tool_precision",
+        ):
             assert 0.0 <= result[key] <= 1.0, f"{key} out of range"
 
-    def test_layer_recovery_none_for_non_escalation(self, evaluator: AgenticEvaluator) -> None:
+    def test_layer_recovery_none_for_non_escalation(
+        self, evaluator: AgenticEvaluator
+    ) -> None:
         log = _make_wearable_log(final_action=AgentAction.SEND_ALERT)
         result = evaluator.evaluate_with_trajectory_score(log)
         assert result["layer_recovery"] is None
 
-    def test_layer_recovery_float_for_escalation(self, evaluator: AgenticEvaluator) -> None:
+    def test_layer_recovery_float_for_escalation(
+        self, evaluator: AgenticEvaluator
+    ) -> None:
         log = _make_wearable_log(final_action=AgentAction.ESCALATE_TO_EMERGENCY)
         result = evaluator.evaluate_with_trajectory_score(log)
         assert result["layer_recovery"] == pytest.approx(0.70)
@@ -580,7 +592,6 @@ class TestComputeBatchNondeterminism:
         assert evaluator.compute_batch_nondeterminism({}) == {}
 
     def test_identical_runs_zero_score_std(self, evaluator: AgenticEvaluator) -> None:
-        log = _make_wearable_log()
         groups = {"same": [_make_wearable_log(log_id=f"s-{i}") for i in range(3)]}
         result = evaluator.compute_batch_nondeterminism(groups)
         assert result["same"]["score_std"] == pytest.approx(0.0, abs=1e-9)

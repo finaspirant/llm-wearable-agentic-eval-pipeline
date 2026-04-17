@@ -230,9 +230,11 @@ def _print_results(results: dict[str, Any]) -> None:
     console.print(table)
 
     s = results["summary"]
-    console.print(f"\n[bold]Summary:[/bold] Fleiss κ={s['mean_fleiss_kappa']:.3f} "
-                  f"| Cohen κ={s['mean_cohens_kappa']:.3f} "
-                  f"| Krippendorff α={s['mean_krippendorffs_alpha']:.3f}")
+    console.print(
+        f"\n[bold]Summary:[/bold] Fleiss κ={s['mean_fleiss_kappa']:.3f} "
+        f"| Cohen κ={s['mean_cohens_kappa']:.3f} "
+        f"| Krippendorff α={s['mean_krippendorffs_alpha']:.3f}"
+    )
     console.print(f"[dim]{s['cohere_gap_note']}[/dim]")
 
 

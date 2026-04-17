@@ -385,9 +385,7 @@ def test_distribution_all_five_scenarios() -> None:
         f"Missing scenarios: {set(ScenarioType) - set(counts.keys())}"
     )
     for scenario, n in counts.items():
-        assert n == 20, (
-            f"Expected 20 logs for {scenario}, got {n}"
-        )
+        assert n == 20, f"Expected 20 logs for {scenario}, got {n}"
 
 
 def test_privacy_gate_modifies_sensor_values() -> None:
@@ -457,9 +455,7 @@ def test_empty_audio_transcript_has_zero_confidence() -> None:
     # Health-alert scenario includes "" as a possible transcript text (silent
     # fall-detection event).  Generate enough logs to hit that case.
     gen = WearableLogGenerator(seed=3)
-    logs = gen.generate_batch(
-        60, scenario_filter=[ScenarioType.HEALTH_ALERT]
-    )
+    logs = gen.generate_batch(60, scenario_filter=[ScenarioType.HEALTH_ALERT])
     empty_logs = [lg for lg in logs if lg.audio_transcript.text == ""]
     assert empty_logs, "Expected at least one empty transcript in 60 health_alert logs"
     for log in empty_logs:

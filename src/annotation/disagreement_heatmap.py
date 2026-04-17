@@ -85,9 +85,7 @@ def compute_disagreement_matrix(
     cell_stdevs: dict[tuple[str, str], list[float]] = {}
     for (topic, dim, _sid), scores in buckets.items():
         if len(scores) >= 2:
-            cell_stdevs.setdefault((topic, dim), []).append(
-                statistics.stdev(scores)
-            )
+            cell_stdevs.setdefault((topic, dim), []).append(statistics.stdev(scores))
 
     result: dict[str, dict[str, float]] = {t: {} for t in _TOPICS}
     for topic in _TOPICS:
@@ -118,8 +116,7 @@ def render_heatmap(
     """
     # Build ordered 2-D list for seaborn (rows=topics, cols=dimensions).
     data: list[list[float]] = [
-        [matrix[topic].get(dim, 0.0) for dim in _DIMENSIONS]
-        for topic in _TOPICS
+        [matrix[topic].get(dim, 0.0) for dim in _DIMENSIONS] for topic in _TOPICS
     ]
 
     # ---- CSV export -------------------------------------------------------

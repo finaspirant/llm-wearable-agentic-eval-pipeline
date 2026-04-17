@@ -149,9 +149,7 @@ class TestAgentTrajectories:
         for pair in pairs:
             assert pair.agent_b.path_style == "indirect", pair.pair_id
             n = pair.agent_b.n_steps
-            assert n in {4, 5}, (
-                f"{pair.pair_id} agent_b should have 4–5 steps, got {n}"
-            )
+            assert n in {4, 5}, f"{pair.pair_id} agent_b should have 4–5 steps, got {n}"
 
     def test_agent_b_longer_than_a(self, pairs: list[TrajectoryPair]) -> None:
         for pair in pairs:
@@ -651,10 +649,7 @@ class TestFormatMapSafety:
                     # Observations should not contain unresolved {placeholders}
                     has_open = "{" in step.observation
                     has_close = "}" in step.observation
-                    loc = (
-                        f"{pair.pair_id}/{traj.agent_id}"
-                        f" step {step.step_index}"
-                    )
+                    loc = f"{pair.pair_id}/{traj.agent_id} step {step.step_index}"
                     assert not (has_open and has_close), (
                         f"{loc} has unresolved placeholder in observation"
                     )
@@ -668,9 +663,7 @@ class TestFormatMapSafety:
 class TestDPNoiseApplied:
     """GPS and sensor values differ from baselines due to DP noise."""
 
-    def test_gps_differs_from_exact_baseline(
-        self, pairs: list[TrajectoryPair]
-    ) -> None:
+    def test_gps_differs_from_exact_baseline(self, pairs: list[TrajectoryPair]) -> None:
         """At seed=42, DP GPS noise moves lat/lon away from exact baseline values."""
         exact_matches = 0
         for pair in pairs:

@@ -89,11 +89,11 @@ _PIA_SCALE: int = 5
 # Mode A — bias ranges for standard steps, keyed by persona.
 # These mirror _DRY_RUN_BIAS["step_quality"] from annotator_simulator.py.
 _STANDARD_STEP_BIAS: dict[str, tuple[int, int]] = {
-    "PrivacyMaximalist":  (2, 3),
-    "OutcomeOptimist":    (3, 4),
-    "ProcessPurist":      (2, 3),
+    "PrivacyMaximalist": (2, 3),
+    "OutcomeOptimist": (3, 4),
+    "ProcessPurist": (2, 3),
     "ClinicalSafetyFirst": (2, 4),
-    "RecoverySkeptic":    (2, 3),
+    "RecoverySkeptic": (2, 3),
 }
 
 # Mode A — detour step scores are FIXED per persona to maximise variance.
@@ -101,11 +101,11 @@ _STANDARD_STEP_BIAS: dict[str, tuple[int, int]] = {
 # PrivacyMaximalist / RecoverySkeptic: detour = wasted exposure / low confidence.
 # OutcomeOptimist: detour = thorough verification.
 _DETOUR_SCORES: dict[str, int] = {
-    "PrivacyMaximalist":  2,
-    "OutcomeOptimist":    4,
-    "ProcessPurist":      3,
+    "PrivacyMaximalist": 2,
+    "OutcomeOptimist": 4,
+    "ProcessPurist": 3,
     "ClinicalSafetyFirst": 3,
-    "RecoverySkeptic":    1,
+    "RecoverySkeptic": 1,
 }
 
 # Mode B — path-blind scores, keyed by scenario → path_style → dimension → persona.
@@ -134,30 +134,40 @@ _PIA_SCORES: dict[str, dict[str, dict[str, dict[str, int]]]] = {
     "health_alert": {
         "direct": {
             "planning_quality": {
-                "PrivacyMaximalist": 5, "OutcomeOptimist": 5,
-                "ProcessPurist": 5, "ClinicalSafetyFirst": 5,
+                "PrivacyMaximalist": 5,
+                "OutcomeOptimist": 5,
+                "ProcessPurist": 5,
+                "ClinicalSafetyFirst": 5,
                 "RecoverySkeptic": 4,
             },
             "goal_alignment": {
-                "PrivacyMaximalist": 5, "OutcomeOptimist": 5,
-                "ProcessPurist": 4, "ClinicalSafetyFirst": 5,
+                "PrivacyMaximalist": 5,
+                "OutcomeOptimist": 5,
+                "ProcessPurist": 4,
+                "ClinicalSafetyFirst": 5,
                 "RecoverySkeptic": 5,
             },
         },
         "indirect": {
             "planning_quality": {
-                "PrivacyMaximalist": 4, "OutcomeOptimist": 4,
-                "ProcessPurist": 4, "ClinicalSafetyFirst": 4,
+                "PrivacyMaximalist": 4,
+                "OutcomeOptimist": 4,
+                "ProcessPurist": 4,
+                "ClinicalSafetyFirst": 4,
                 "RecoverySkeptic": 3,
             },
             "error_recovery": {
-                "PrivacyMaximalist": 4, "OutcomeOptimist": 5,
-                "ProcessPurist": 4, "ClinicalSafetyFirst": 5,
+                "PrivacyMaximalist": 4,
+                "OutcomeOptimist": 5,
+                "ProcessPurist": 4,
+                "ClinicalSafetyFirst": 5,
                 "RecoverySkeptic": 4,
             },
             "goal_alignment": {
-                "PrivacyMaximalist": 4, "OutcomeOptimist": 5,
-                "ProcessPurist": 4, "ClinicalSafetyFirst": 4,
+                "PrivacyMaximalist": 4,
+                "OutcomeOptimist": 5,
+                "ProcessPurist": 4,
+                "ClinicalSafetyFirst": 4,
                 "RecoverySkeptic": 4,
             },
         },
@@ -165,30 +175,40 @@ _PIA_SCORES: dict[str, dict[str, dict[str, dict[str, int]]]] = {
     "privacy_sensitive": {
         "direct": {
             "planning_quality": {
-                "PrivacyMaximalist": 3, "OutcomeOptimist": 3,
-                "ProcessPurist": 3, "ClinicalSafetyFirst": 3,
+                "PrivacyMaximalist": 3,
+                "OutcomeOptimist": 3,
+                "ProcessPurist": 3,
+                "ClinicalSafetyFirst": 3,
                 "RecoverySkeptic": 3,
             },
             "goal_alignment": {
-                "PrivacyMaximalist": 4, "OutcomeOptimist": 4,
-                "ProcessPurist": 4, "ClinicalSafetyFirst": 4,
+                "PrivacyMaximalist": 4,
+                "OutcomeOptimist": 4,
+                "ProcessPurist": 4,
+                "ClinicalSafetyFirst": 4,
                 "RecoverySkeptic": 4,
             },
         },
         "indirect": {
             "planning_quality": {
-                "PrivacyMaximalist": 2, "OutcomeOptimist": 2,
-                "ProcessPurist": 2, "ClinicalSafetyFirst": 2,
+                "PrivacyMaximalist": 2,
+                "OutcomeOptimist": 2,
+                "ProcessPurist": 2,
+                "ClinicalSafetyFirst": 2,
                 "RecoverySkeptic": 2,
             },
             "error_recovery": {
-                "PrivacyMaximalist": 3, "OutcomeOptimist": 3,
-                "ProcessPurist": 3, "ClinicalSafetyFirst": 3,
+                "PrivacyMaximalist": 3,
+                "OutcomeOptimist": 3,
+                "ProcessPurist": 3,
+                "ClinicalSafetyFirst": 3,
                 "RecoverySkeptic": 3,
             },
             "goal_alignment": {
-                "PrivacyMaximalist": 3, "OutcomeOptimist": 3,
-                "ProcessPurist": 3, "ClinicalSafetyFirst": 3,
+                "PrivacyMaximalist": 3,
+                "OutcomeOptimist": 3,
+                "ProcessPurist": 3,
+                "ClinicalSafetyFirst": 3,
                 "RecoverySkeptic": 3,
             },
         },
@@ -196,30 +216,40 @@ _PIA_SCORES: dict[str, dict[str, dict[str, dict[str, int]]]] = {
     "location_trigger": {
         "direct": {
             "planning_quality": {
-                "PrivacyMaximalist": 4, "OutcomeOptimist": 4,
-                "ProcessPurist": 4, "ClinicalSafetyFirst": 4,
+                "PrivacyMaximalist": 4,
+                "OutcomeOptimist": 4,
+                "ProcessPurist": 4,
+                "ClinicalSafetyFirst": 4,
                 "RecoverySkeptic": 4,
             },
             "goal_alignment": {
-                "PrivacyMaximalist": 4, "OutcomeOptimist": 4,
-                "ProcessPurist": 4, "ClinicalSafetyFirst": 4,
+                "PrivacyMaximalist": 4,
+                "OutcomeOptimist": 4,
+                "ProcessPurist": 4,
+                "ClinicalSafetyFirst": 4,
                 "RecoverySkeptic": 4,
             },
         },
         "indirect": {
             "planning_quality": {
-                "PrivacyMaximalist": 3, "OutcomeOptimist": 3,
-                "ProcessPurist": 3, "ClinicalSafetyFirst": 4,
+                "PrivacyMaximalist": 3,
+                "OutcomeOptimist": 3,
+                "ProcessPurist": 3,
+                "ClinicalSafetyFirst": 4,
                 "RecoverySkeptic": 3,
             },
             "error_recovery": {
-                "PrivacyMaximalist": 4, "OutcomeOptimist": 4,
-                "ProcessPurist": 4, "ClinicalSafetyFirst": 4,
+                "PrivacyMaximalist": 4,
+                "OutcomeOptimist": 4,
+                "ProcessPurist": 4,
+                "ClinicalSafetyFirst": 4,
                 "RecoverySkeptic": 4,
             },
             "goal_alignment": {
-                "PrivacyMaximalist": 3, "OutcomeOptimist": 4,
-                "ProcessPurist": 3, "ClinicalSafetyFirst": 3,
+                "PrivacyMaximalist": 3,
+                "OutcomeOptimist": 4,
+                "ProcessPurist": 3,
+                "ClinicalSafetyFirst": 3,
                 "RecoverySkeptic": 3,
             },
         },
@@ -227,30 +257,40 @@ _PIA_SCORES: dict[str, dict[str, dict[str, dict[str, int]]]] = {
     "ambient_noise": {
         "direct": {
             "planning_quality": {
-                "PrivacyMaximalist": 3, "OutcomeOptimist": 3,
-                "ProcessPurist": 3, "ClinicalSafetyFirst": 3,
+                "PrivacyMaximalist": 3,
+                "OutcomeOptimist": 3,
+                "ProcessPurist": 3,
+                "ClinicalSafetyFirst": 3,
                 "RecoverySkeptic": 3,
             },
             "goal_alignment": {
-                "PrivacyMaximalist": 3, "OutcomeOptimist": 3,
-                "ProcessPurist": 3, "ClinicalSafetyFirst": 3,
+                "PrivacyMaximalist": 3,
+                "OutcomeOptimist": 3,
+                "ProcessPurist": 3,
+                "ClinicalSafetyFirst": 3,
                 "RecoverySkeptic": 3,
             },
         },
         "indirect": {
             "planning_quality": {
-                "PrivacyMaximalist": 2, "OutcomeOptimist": 3,
-                "ProcessPurist": 2, "ClinicalSafetyFirst": 2,
+                "PrivacyMaximalist": 2,
+                "OutcomeOptimist": 3,
+                "ProcessPurist": 2,
+                "ClinicalSafetyFirst": 2,
                 "RecoverySkeptic": 2,
             },
             "error_recovery": {
-                "PrivacyMaximalist": 2, "OutcomeOptimist": 2,
-                "ProcessPurist": 2, "ClinicalSafetyFirst": 2,
+                "PrivacyMaximalist": 2,
+                "OutcomeOptimist": 2,
+                "ProcessPurist": 2,
+                "ClinicalSafetyFirst": 2,
                 "RecoverySkeptic": 2,
             },
             "goal_alignment": {
-                "PrivacyMaximalist": 2, "OutcomeOptimist": 2,
-                "ProcessPurist": 2, "ClinicalSafetyFirst": 3,
+                "PrivacyMaximalist": 2,
+                "OutcomeOptimist": 2,
+                "ProcessPurist": 2,
+                "ClinicalSafetyFirst": 3,
                 "RecoverySkeptic": 2,
             },
         },
@@ -258,30 +298,40 @@ _PIA_SCORES: dict[str, dict[str, dict[str, dict[str, int]]]] = {
     "calendar_reminder": {
         "direct": {
             "planning_quality": {
-                "PrivacyMaximalist": 4, "OutcomeOptimist": 4,
-                "ProcessPurist": 4, "ClinicalSafetyFirst": 4,
+                "PrivacyMaximalist": 4,
+                "OutcomeOptimist": 4,
+                "ProcessPurist": 4,
+                "ClinicalSafetyFirst": 4,
                 "RecoverySkeptic": 3,
             },
             "goal_alignment": {
-                "PrivacyMaximalist": 4, "OutcomeOptimist": 5,
-                "ProcessPurist": 4, "ClinicalSafetyFirst": 4,
+                "PrivacyMaximalist": 4,
+                "OutcomeOptimist": 5,
+                "ProcessPurist": 4,
+                "ClinicalSafetyFirst": 4,
                 "RecoverySkeptic": 4,
             },
         },
         "indirect": {
             "planning_quality": {
-                "PrivacyMaximalist": 3, "OutcomeOptimist": 3,
-                "ProcessPurist": 3, "ClinicalSafetyFirst": 3,
+                "PrivacyMaximalist": 3,
+                "OutcomeOptimist": 3,
+                "ProcessPurist": 3,
+                "ClinicalSafetyFirst": 3,
                 "RecoverySkeptic": 3,
             },
             "error_recovery": {
-                "PrivacyMaximalist": 3, "OutcomeOptimist": 3,
-                "ProcessPurist": 3, "ClinicalSafetyFirst": 3,
+                "PrivacyMaximalist": 3,
+                "OutcomeOptimist": 3,
+                "ProcessPurist": 3,
+                "ClinicalSafetyFirst": 3,
                 "RecoverySkeptic": 3,
             },
             "goal_alignment": {
-                "PrivacyMaximalist": 3, "OutcomeOptimist": 3,
-                "ProcessPurist": 3, "ClinicalSafetyFirst": 3,
+                "PrivacyMaximalist": 3,
+                "OutcomeOptimist": 3,
+                "ProcessPurist": 3,
+                "ClinicalSafetyFirst": 3,
                 "RecoverySkeptic": 3,
             },
         },
@@ -695,9 +745,7 @@ class _StandardStepAnnotator:
                         step.step_type,
                         persona,
                     )
-                    step_id = (
-                        f"{pair.pair_id}/{traj.agent_id}/{step.step_index}"
-                    )
+                    step_id = f"{pair.pair_id}/{traj.agent_id}/{step.step_index}"
                     results.append(
                         StepAnnotation(
                             step_id=step_id,
@@ -716,9 +764,7 @@ class _StandardStepAnnotator:
                     )
         return results
 
-    def annotate_all(
-        self, pairs: list[TrajectoryPair]
-    ) -> list[StepAnnotation]:
+    def annotate_all(self, pairs: list[TrajectoryPair]) -> list[StepAnnotation]:
         """Score all steps across all pairs.
 
         Args:
@@ -808,9 +854,7 @@ class _PIADimensionAnnotator:
                 )
         return results
 
-    def annotate_all(
-        self, pairs: list[TrajectoryPair]
-    ) -> list[PIAAnnotation]:
+    def annotate_all(self, pairs: list[TrajectoryPair]) -> list[PIAAnnotation]:
         """Score all agents across all pairs.
 
         Returns a flat list of ``5 × 2 × len(pairs) = 100`` records for 10
@@ -875,8 +919,7 @@ class _StandardIRRComputer:
         step_ids = list(seen)
 
         score_map: dict[tuple[str, str], int] = {
-            (ann.step_id, ann.persona_name): ann.step_quality
-            for ann in annotations
+            (ann.step_id, ann.persona_name): ann.step_quality for ann in annotations
         }
 
         matrix = _build_label_matrix(
@@ -899,9 +942,7 @@ class _StandardIRRComputer:
             total_steps=n_steps_a + n_steps_b,
         )
 
-    def compute_overall(
-        self, per_pair: dict[str, StandardIRRResult]
-    ) -> float:
+    def compute_overall(self, per_pair: dict[str, StandardIRRResult]) -> float:
         """Step-count-weighted mean κ across all pairs.
 
         Args:
@@ -913,9 +954,7 @@ class _StandardIRRComputer:
         total_weight = sum(r.total_steps for r in per_pair.values())
         if total_weight == 0:
             return 0.0
-        weighted_sum = sum(
-            r.kappa * r.total_steps for r in per_pair.values()
-        )
+        weighted_sum = sum(r.kappa * r.total_steps for r in per_pair.values())
         return weighted_sum / total_weight
 
 
@@ -1280,16 +1319,13 @@ class PIACalculator:
             :class:`PIAComparisonResult` ready for serialisation.
         """
         standard_overall = self._std_computer.compute_overall(standard)
-        pia_overall = float(
-            sum(per_dimension.values()) / len(per_dimension)
-        )
+        pia_overall = float(sum(per_dimension.values()) / len(per_dimension))
         delta = pia_overall - standard_overall
 
         std_label = _kappa_interpretation(standard_overall)
         pia_label = _kappa_interpretation(pia_overall)
         headline = (
-            f"PIA raises IRR by +{delta:.2f} κ points "
-            f"({std_label} → {pia_label})"
+            f"PIA raises IRR by +{delta:.2f} κ points ({std_label} → {pia_label})"
         )
 
         # Per-scenario aggregation.
@@ -1298,9 +1334,7 @@ class PIACalculator:
         for pair in pairs:
             sc = pair.scenario
             scenario_std.setdefault(sc, []).append(standard[pair.pair_id].kappa)
-            scenario_pia.setdefault(sc, []).append(
-                pia[pair.pair_id].kappa_overall
-            )
+            scenario_pia.setdefault(sc, []).append(pia[pair.pair_id].kappa_overall)
 
         by_scenario: dict[str, ScenarioComparison] = {}
         for sc in scenario_std:
@@ -1327,9 +1361,7 @@ class PIACalculator:
             standard_interpretation=std_label,
             standard_per_pair=standard,
             pia_total_agents=len(pairs) * 2,
-            pia_per_dimension_kappa={
-                k: round(v, 4) for k, v in per_dimension.items()
-            },
+            pia_per_dimension_kappa={k: round(v, 4) for k, v in per_dimension.items()},
             pia_overall_kappa=round(pia_overall, 4),
             pia_interpretation=pia_label,
             pia_per_pair=pia,
@@ -1387,9 +1419,7 @@ class PIACalculator:
             The path written to.
         """
         self.output_path.parent.mkdir(parents=True, exist_ok=True)
-        self.output_path.write_text(
-            json.dumps(result.to_dict(), indent=2, default=str)
-        )
+        self.output_path.write_text(json.dumps(result.to_dict(), indent=2, default=str))
         logger.info("Wrote PIA results to %s.", self.output_path)
         return self.output_path
 
@@ -1421,9 +1451,7 @@ def main(
 ) -> None:
     """Compute Standard IRR vs PIA rubric IRR on trajectory pairs."""
     log_level = logging.DEBUG if verbose else logging.INFO
-    logging.basicConfig(
-        level=log_level, format="%(levelname)s %(name)s: %(message)s"
-    )
+    logging.basicConfig(level=log_level, format="%(levelname)s %(name)s: %(message)s")
 
     calc = PIACalculator(
         pairs_dir=pairs_dir,
@@ -1451,8 +1479,7 @@ def main(
     typer.echo("\n── Standard κ per pair ──────────────────────────────────")
     for pid, r in sorted(result.standard_per_pair.items()):
         typer.echo(
-            f"  pair_{pid}  {r.scenario:<22}"
-            f"  κ={r.kappa:.4f}  steps={r.total_steps}"
+            f"  pair_{pid}  {r.scenario:<22}  κ={r.kappa:.4f}  steps={r.total_steps}"
         )
     typer.echo(f"\nResults written to {output}\n")
 

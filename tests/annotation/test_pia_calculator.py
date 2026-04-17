@@ -86,8 +86,14 @@ class TestStepAnnotation:
         )
         keys = set(ann.to_dict())
         expected = {
-            "step_id", "pair_id", "agent_id", "step_index",
-            "step_type", "scenario", "persona_name", "step_quality",
+            "step_id",
+            "pair_id",
+            "agent_id",
+            "step_index",
+            "step_type",
+            "scenario",
+            "persona_name",
+            "step_quality",
             "rationale",
         }
         assert keys == expected
@@ -129,6 +135,7 @@ class TestStepAnnotation:
 class TestPIAAnnotation:
     def test_to_dict_keys(self) -> None:
         import uuid
+
         ann = PIAAnnotation(
             annotation_id=str(uuid.uuid4()),
             pair_id="01",
@@ -142,14 +149,21 @@ class TestPIAAnnotation:
         )
         keys = set(ann.to_dict())
         expected = {
-            "annotation_id", "pair_id", "agent_id", "scenario",
-            "persona_name", "planning_quality", "error_recovery",
-            "goal_alignment", "rationale",
+            "annotation_id",
+            "pair_id",
+            "agent_id",
+            "scenario",
+            "persona_name",
+            "planning_quality",
+            "error_recovery",
+            "goal_alignment",
+            "rationale",
         }
         assert keys == expected
 
     def test_error_recovery_none_for_direct(self) -> None:
         import uuid
+
         ann = PIAAnnotation(
             annotation_id=str(uuid.uuid4()),
             pair_id="01",
@@ -171,7 +185,8 @@ class TestPIAAnnotation:
 
 class TestStandardStepAnnotator:
     def test_annotate_pair_count(
-        self, pairs: list  # type: ignore[type-arg]
+        self,
+        pairs: list,  # type: ignore[type-arg]
     ) -> None:
         ann = _StandardStepAnnotator(dry_run=True)
         pair = pairs[0]  # pair_01
@@ -180,17 +195,17 @@ class TestStandardStepAnnotator:
         assert len(results) == expected
 
     def test_annotate_all_count(
-        self, pairs: list  # type: ignore[type-arg]
+        self,
+        pairs: list,  # type: ignore[type-arg]
     ) -> None:
         ann = _StandardStepAnnotator(dry_run=True)
         results = ann.annotate_all(pairs)
-        total_steps = sum(
-            p.agent_a.n_steps + p.agent_b.n_steps for p in pairs
-        )
+        total_steps = sum(p.agent_a.n_steps + p.agent_b.n_steps for p in pairs)
         assert len(results) == len(_PERSONAS) * total_steps
 
     def test_step_quality_in_scale(
-        self, pairs: list  # type: ignore[type-arg]
+        self,
+        pairs: list,  # type: ignore[type-arg]
     ) -> None:
         ann = _StandardStepAnnotator(dry_run=True)
         for a in ann.annotate_all(pairs):
@@ -199,7 +214,8 @@ class TestStandardStepAnnotator:
             )
 
     def test_detour_scores_match_table(
-        self, pairs: list  # type: ignore[type-arg]
+        self,
+        pairs: list,  # type: ignore[type-arg]
     ) -> None:
         ann = _StandardStepAnnotator(dry_run=True)
         for pair in pairs:
@@ -212,7 +228,8 @@ class TestStandardStepAnnotator:
                     )
 
     def test_detour_scores_have_wide_spread(
-        self, pairs: list  # type: ignore[type-arg]
+        self,
+        pairs: list,  # type: ignore[type-arg]
     ) -> None:
         """Detour scores span [1, 4] across personas — required for low κ."""
         detour_scores = set(_DETOUR_SCORES.values())
@@ -220,22 +237,20 @@ class TestStandardStepAnnotator:
         assert max(detour_scores) == 4
 
     def test_standard_step_scores_persona_variation(
-        self, pairs: list  # type: ignore[type-arg]
+        self,
+        pairs: list,  # type: ignore[type-arg]
     ) -> None:
         """Different personas must produce different standard step scores."""
         ann = _StandardStepAnnotator(dry_run=True)
         pair = pairs[0]
         standard_only = [
-            a for a in ann.annotate_pair(pair)
-            if a.step_type == "standard"
+            a for a in ann.annotate_pair(pair) if a.step_type == "standard"
         ]
         scores_by_persona = {p: [] for p in _PERSONAS}
         for a in standard_only:
             scores_by_persona[a.persona_name].append(a.step_quality)
         # At least two personas must have different mean scores.
-        means = [
-            sum(v) / len(v) for v in scores_by_persona.values() if v
-        ]
+        means = [sum(v) / len(v) for v in scores_by_persona.values() if v]
         assert max(means) - min(means) > 0, (
             "All personas produced identical standard step scores"
         )
@@ -252,21 +267,24 @@ class TestStandardStepAnnotator:
 
 class TestPIADimensionAnnotator:
     def test_annotate_pair_count(
-        self, pairs: list  # type: ignore[type-arg]
+        self,
+        pairs: list,  # type: ignore[type-arg]
     ) -> None:
         ann = _PIADimensionAnnotator(dry_run=True)
         results = ann.annotate_pair(pairs[0])
         assert len(results) == len(_PERSONAS) * 2  # 5 × 2 agents
 
     def test_annotate_all_count(
-        self, pairs: list  # type: ignore[type-arg]
+        self,
+        pairs: list,  # type: ignore[type-arg]
     ) -> None:
         ann = _PIADimensionAnnotator(dry_run=True)
         results = ann.annotate_all(pairs)
         assert len(results) == len(_PERSONAS) * 2 * len(pairs)  # 100
 
     def test_error_recovery_none_for_direct_agents(
-        self, pairs: list  # type: ignore[type-arg]
+        self,
+        pairs: list,  # type: ignore[type-arg]
     ) -> None:
         ann = _PIADimensionAnnotator(dry_run=True)
         for pair in pairs:
@@ -277,7 +295,8 @@ class TestPIADimensionAnnotator:
                     )
 
     def test_error_recovery_scored_for_indirect_agents(
-        self, pairs: list  # type: ignore[type-arg]
+        self,
+        pairs: list,  # type: ignore[type-arg]
     ) -> None:
         ann = _PIADimensionAnnotator(dry_run=True)
         for pair in pairs:
@@ -289,7 +308,8 @@ class TestPIADimensionAnnotator:
                     assert 1 <= a.error_recovery <= 5
 
     def test_pia_scores_in_valid_range(
-        self, pairs: list  # type: ignore[type-arg]
+        self,
+        pairs: list,  # type: ignore[type-arg]
     ) -> None:
         ann = _PIADimensionAnnotator(dry_run=True)
         for a in ann.annotate_all(pairs):
@@ -299,15 +319,16 @@ class TestPIADimensionAnnotator:
                 assert 1 <= a.error_recovery <= 5
 
     def test_scores_match_pia_scores_table(
-        self, pairs: list  # type: ignore[type-arg]
+        self,
+        pairs: list,  # type: ignore[type-arg]
     ) -> None:
         ann = _PIADimensionAnnotator(dry_run=True)
         for pair in pairs:
             for a in ann.annotate_pair(pair):
                 path = "direct" if a.agent_id == "agent_a" else "indirect"
-                expected_pq = _PIA_SCORES[pair.scenario][path][
-                    "planning_quality"
-                ][a.persona_name]
+                expected_pq = _PIA_SCORES[pair.scenario][path]["planning_quality"][
+                    a.persona_name
+                ]
                 assert a.planning_quality == expected_pq, (
                     f"{a.pair_id}/{a.agent_id} {a.persona_name} "
                     f"planning_quality: got {a.planning_quality}, "
@@ -329,9 +350,12 @@ class TestBuildLabelMatrix:
         items = ["a", "b", "c"]
         raters = ["r1", "r2"]
         scores = {
-            ("a", "r1"): 3, ("a", "r2"): 4,
-            ("b", "r1"): 2, ("b", "r2"): 2,
-            ("c", "r1"): 4, ("c", "r2"): 3,
+            ("a", "r1"): 3,
+            ("a", "r2"): 4,
+            ("b", "r1"): 2,
+            ("b", "r2"): 2,
+            ("c", "r1"): 4,
+            ("c", "r2"): 3,
         }
         matrix = _build_label_matrix(items, raters, scores, scale_offset=1)
         assert len(matrix) == 3
@@ -367,14 +391,16 @@ class TestBuildLabelMatrix:
 
 class TestStandardIRRComputer:
     def test_run_standard_irr_returns_all_pairs(
-        self, calculator: PIACalculator,
+        self,
+        calculator: PIACalculator,
         loaded_pairs: list,  # type: ignore[type-arg]
     ) -> None:
         results = calculator.run_standard_irr(loaded_pairs)
         assert set(results.keys()) == {p.pair_id for p in loaded_pairs}
 
     def test_kappa_is_float_in_range(
-        self, calculator: PIACalculator,
+        self,
+        calculator: PIACalculator,
         loaded_pairs: list,  # type: ignore[type-arg]
     ) -> None:
         results = calculator.run_standard_irr(loaded_pairs)
@@ -383,7 +409,8 @@ class TestStandardIRRComputer:
             assert -1.0 <= r.kappa <= 1.0, f"{pid}: kappa={r.kappa} out of range"
 
     def test_step_counts_match_trajectories(
-        self, calculator: PIACalculator,
+        self,
+        calculator: PIACalculator,
         loaded_pairs: list,  # type: ignore[type-arg]
     ) -> None:
         results = calculator.run_standard_irr(loaded_pairs)
@@ -394,13 +421,15 @@ class TestStandardIRRComputer:
             assert r.total_steps == r.n_steps_a + r.n_steps_b
 
     def test_overall_kappa_is_poor(
-        self, calculator: PIACalculator,
+        self,
+        calculator: PIACalculator,
         loaded_pairs: list,  # type: ignore[type-arg]
     ) -> None:
         """Standard IRR must demonstrate the IRR-breaks-for-agents problem."""
         results = calculator.run_standard_irr(loaded_pairs)
         from src.annotation.irr_calculator import IRRCalculator
         from src.annotation.pia_calculator import _StandardIRRComputer
+
         computer = _StandardIRRComputer(IRRCalculator())
         overall = computer.compute_overall(results)
         assert overall < 0.40, (
@@ -416,21 +445,24 @@ class TestStandardIRRComputer:
 
 class TestPIAIRRComputer:
     def test_run_pia_irr_returns_all_pairs(
-        self, calculator: PIACalculator,
+        self,
+        calculator: PIACalculator,
         loaded_pairs: list,  # type: ignore[type-arg]
     ) -> None:
         per_pair, _ = calculator.run_pia_irr(loaded_pairs)
         assert set(per_pair.keys()) == {p.pair_id for p in loaded_pairs}
 
     def test_per_dimension_kappa_keys(
-        self, calculator: PIACalculator,
+        self,
+        calculator: PIACalculator,
         loaded_pairs: list,  # type: ignore[type-arg]
     ) -> None:
         _, per_dim = calculator.run_pia_irr(loaded_pairs)
         assert set(per_dim.keys()) == set(_PIA_DIMENSIONS)
 
     def test_per_dimension_kappa_range(
-        self, calculator: PIACalculator,
+        self,
+        calculator: PIACalculator,
         loaded_pairs: list,  # type: ignore[type-arg]
     ) -> None:
         _, per_dim = calculator.run_pia_irr(loaded_pairs)
@@ -438,7 +470,8 @@ class TestPIAIRRComputer:
             assert -1.0 <= kappa <= 1.0, f"{dim}: κ={kappa} out of range"
 
     def test_pia_overall_kappa_is_substantial(
-        self, calculator: PIACalculator,
+        self,
+        calculator: PIACalculator,
         loaded_pairs: list,  # type: ignore[type-arg]
     ) -> None:
         """PIA must demonstrate substantial agreement to validate the method."""
@@ -450,7 +483,8 @@ class TestPIAIRRComputer:
         )
 
     def test_per_pair_error_recovery_is_none(
-        self, calculator: PIACalculator,
+        self,
+        calculator: PIACalculator,
         loaded_pairs: list,  # type: ignore[type-arg]
     ) -> None:
         """Per-pair error_recovery κ must be None (only 1 agent has data)."""
@@ -462,7 +496,8 @@ class TestPIAIRRComputer:
             )
 
     def test_per_pair_kappa_overall_is_float(
-        self, calculator: PIACalculator,
+        self,
+        calculator: PIACalculator,
         loaded_pairs: list,  # type: ignore[type-arg]
     ) -> None:
         per_pair, _ = calculator.run_pia_irr(loaded_pairs)
@@ -498,9 +533,7 @@ class TestPIACalculator:
         assert result.n_pairs == 10
         assert result.n_annotators == 5
 
-    def test_delta_is_positive(
-        self, calculator: PIACalculator, tmp_path: Path
-    ) -> None:
+    def test_delta_is_positive(self, calculator: PIACalculator, tmp_path: Path) -> None:
         """PIA must outperform standard IRR — the core claim."""
         calc = PIACalculator(
             pairs_dir=_PAIRS_DIR,
@@ -509,8 +542,7 @@ class TestPIACalculator:
         )
         result = calc.run()
         assert result.delta > 0, (
-            f"delta={result.delta:.4f} must be positive "
-            "(PIA κ > standard κ)"
+            f"delta={result.delta:.4f} must be positive (PIA κ > standard κ)"
         )
 
     def test_standard_interpretation_poor_or_slight(
@@ -537,10 +569,10 @@ class TestPIACalculator:
         )
         result = calc.run()
         assert result.pia_interpretation in {
-            "moderate", "substantial", "almost perfect"
-        }, (
-            f"PIA IRR should be moderate+, got {result.pia_interpretation}"
-        )
+            "moderate",
+            "substantial",
+            "almost perfect",
+        }, f"PIA IRR should be moderate+, got {result.pia_interpretation}"
 
     def test_by_scenario_all_five_present(
         self, calculator: PIACalculator, tmp_path: Path
@@ -552,8 +584,11 @@ class TestPIACalculator:
         )
         result = calc.run()
         expected = {
-            "health_alert", "privacy_sensitive", "location_trigger",
-            "ambient_noise", "calendar_reminder",
+            "health_alert",
+            "privacy_sensitive",
+            "location_trigger",
+            "ambient_noise",
+            "calendar_reminder",
         }
         assert set(result.by_scenario.keys()) == expected
 
@@ -567,9 +602,7 @@ class TestPIACalculator:
         )
         result = calc.run()
         for sc, comp in result.by_scenario.items():
-            assert comp.delta > 0, (
-                f"{sc}: delta={comp.delta:.4f} must be positive"
-            )
+            assert comp.delta > 0, f"{sc}: delta={comp.delta:.4f} must be positive"
 
 
 # ---------------------------------------------------------------------------
@@ -581,9 +614,7 @@ class TestOutputSchema:
     @pytest.fixture(scope="class")
     def result_path(self, tmp_path_factory: pytest.TempPathFactory) -> Path:
         out = tmp_path_factory.mktemp("pia") / "pia_results.json"
-        calc = PIACalculator(
-            pairs_dir=_PAIRS_DIR, output_path=out, dry_run=True
-        )
+        calc = PIACalculator(pairs_dir=_PAIRS_DIR, output_path=out, dry_run=True)
         calc.run()
         return out
 
@@ -594,12 +625,23 @@ class TestOutputSchema:
     def test_top_level_keys(self, result_path: Path) -> None:
         obj = json.loads(result_path.read_text())
         required = {
-            "generated_at", "seed", "n_pairs", "n_annotators", "personas",
-            "standard_total_steps", "standard_overall_kappa",
-            "standard_interpretation", "standard_per_pair",
-            "pia_total_agents", "pia_per_dimension_kappa",
-            "pia_overall_kappa", "pia_interpretation", "pia_per_pair",
-            "delta", "delta_headline", "by_scenario",
+            "generated_at",
+            "seed",
+            "n_pairs",
+            "n_annotators",
+            "personas",
+            "standard_total_steps",
+            "standard_overall_kappa",
+            "standard_interpretation",
+            "standard_per_pair",
+            "pia_total_agents",
+            "pia_per_dimension_kappa",
+            "pia_overall_kappa",
+            "pia_interpretation",
+            "pia_per_pair",
+            "delta",
+            "delta_headline",
+            "by_scenario",
         }
         assert required <= set(obj.keys())
 
@@ -611,9 +653,7 @@ class TestOutputSchema:
         obj = json.loads(result_path.read_text())
         assert obj["n_annotators"] == 5
 
-    def test_standard_per_pair_has_ten_entries(
-        self, result_path: Path
-    ) -> None:
+    def test_standard_per_pair_has_ten_entries(self, result_path: Path) -> None:
         obj = json.loads(result_path.read_text())
         assert len(obj["standard_per_pair"]) == 10
 
@@ -621,9 +661,7 @@ class TestOutputSchema:
         obj = json.loads(result_path.read_text())
         assert len(obj["pia_per_pair"]) == 10
 
-    def test_pia_per_dimension_kappa_has_three_dims(
-        self, result_path: Path
-    ) -> None:
+    def test_pia_per_dimension_kappa_has_three_dims(self, result_path: Path) -> None:
         obj = json.loads(result_path.read_text())
         dims = set(obj["pia_per_dimension_kappa"].keys())
         assert dims == {"planning_quality", "error_recovery", "goal_alignment"}
@@ -669,9 +707,7 @@ class TestDryRunHelpers:
     def test_dry_run_step_score_standard_in_range(self) -> None:
         for persona, (lo, hi) in _STANDARD_STEP_BIAS.items():
             score = _dry_run_step_score("03", "agent_a", 0, "standard", persona)
-            assert lo <= score <= hi, (
-                f"{persona}: score={score} outside [{lo}, {hi}]"
-            )
+            assert lo <= score <= hi, f"{persona}: score={score} outside [{lo}, {hi}]"
 
     def test_dry_run_step_score_deterministic(self) -> None:
         s1 = _dry_run_step_score("05", "agent_a", 2, "standard", "ProcessPurist")
@@ -693,9 +729,7 @@ class TestDryRunHelpers:
         for scenario in _PIA_SCORES:
             for dim in ("planning_quality", "error_recovery", "goal_alignment"):
                 for persona in _PERSONAS:
-                    score = _dry_run_pia_score(
-                        scenario, "indirect", dim, persona
-                    )
+                    score = _dry_run_pia_score(scenario, "indirect", dim, persona)
                     assert score is not None
                     assert 1 <= score <= 5, (
                         f"{scenario}/indirect/{dim}/{persona}: "
@@ -704,8 +738,11 @@ class TestDryRunHelpers:
 
     def test_pia_scores_table_covers_all_scenarios(self) -> None:
         expected_scenarios = {
-            "health_alert", "privacy_sensitive", "location_trigger",
-            "ambient_noise", "calendar_reminder",
+            "health_alert",
+            "privacy_sensitive",
+            "location_trigger",
+            "ambient_noise",
+            "calendar_reminder",
         }
         assert set(_PIA_SCORES.keys()) == expected_scenarios
 
@@ -716,6 +753,5 @@ class TestDryRunHelpers:
                 for dim, persona_map in dims.items():
                     missing = set(_PERSONAS) - set(persona_map.keys())
                     assert not missing, (
-                        f"{scenario}/{path_style}/{dim} "
-                        f"missing personas: {missing}"
+                        f"{scenario}/{path_style}/{dim} missing personas: {missing}"
                     )

@@ -25,7 +25,7 @@ from typing import Any
 
 import pytest
 
-from src.annotation.argilla_loader import ArgillaTrajectoryLoader, PRS_DECODE
+from src.annotation.argilla_loader import PRS_DECODE, ArgillaTrajectoryLoader
 from src.annotation.irr_calculator import IRRCalculator
 from src.data.wearable_generator import WearableLogGenerator
 
@@ -136,7 +136,9 @@ class TestSchemaLoadsAndValidates:
         )
 
     def test_layer_3_tool_called_enum(self, schema: dict[str, Any]) -> None:
-        tool_called = schema["properties"]["steps"]["items"]["properties"]["tool_called"]
+        tool_called = schema["properties"]["steps"]["items"]["properties"][
+            "tool_called"
+        ]
         enum_vals = tool_called["enum"]
         expected_actions = {
             "send_alert",
@@ -153,13 +155,19 @@ class TestSchemaLoadsAndValidates:
 
     def test_schema_has_examples(self, schema: dict[str, Any]) -> None:
         assert "examples" in schema
-        assert len(schema["examples"]) >= 1, "Schema should include at least one example"
+        assert len(schema["examples"]) >= 1, (
+            "Schema should include at least one example"
+        )
 
     def test_schema_metadata_version(self, schema: dict[str, Any]) -> None:
         meta = schema.get("schema_metadata", {})
         assert meta.get("version") == "1.0.0"
-        assert "irr_integration" in meta, "Missing IRR integration note in schema_metadata"
-        assert "prm_integration" in meta, "Missing PRM integration note in schema_metadata"
+        assert "irr_integration" in meta, (
+            "Missing IRR integration note in schema_metadata"
+        )
+        assert "prm_integration" in meta, (
+            "Missing PRM integration note in schema_metadata"
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -177,11 +185,11 @@ class TestNominalFieldsWithCohensKappa:
     def _encode(self, labels: list[str]) -> list[int]:
         return [self._ENCODE[lbl] for lbl in labels]
 
-    def test_returns_kappa_and_interpretation_keys(
-        self, calc: IRRCalculator
-    ) -> None:
+    def test_returns_kappa_and_interpretation_keys(self, calc: IRRCalculator) -> None:
         r1 = self._encode(["correct", "correct", "incorrect", "acceptable", "correct"])
-        r2 = self._encode(["correct", "incorrect", "incorrect", "acceptable", "correct"])
+        r2 = self._encode(
+            ["correct", "incorrect", "incorrect", "acceptable", "correct"]
+        )
         result = calc.cohens_kappa(r1, r2)
         assert "kappa" in result
         assert "interpretation" in result
@@ -230,7 +238,7 @@ class TestNominalFieldsWithCohensKappa:
 
 
 class TestOrdinalFieldsWithKrippendorff:
-    """error_recovery_quality (not_applicable=0, poor=1, adequate=2, excellent=3) → α."""
+    """error_recovery_quality (not_applicable=0, poor=1, adequate=2, excellent=3) → α."""  # noqa: E501
 
     _ENCODE: dict[str, int] = {
         "not_applicable": 0,
@@ -255,7 +263,13 @@ class TestOrdinalFieldsWithKrippendorff:
         result = calc.krippendorffs_alpha(
             [rater_a, rater_b, rater_c], level_of_measurement="ordinal"
         )
-        for key in ("alpha", "interpretation", "n_raters", "n_items", "level_of_measurement"):
+        for key in (
+            "alpha",
+            "interpretation",
+            "n_raters",
+            "n_items",
+            "level_of_measurement",
+        ):
             assert key in result
 
     def test_alpha_in_valid_range(self, calc: IRRCalculator) -> None:
@@ -393,9 +407,7 @@ class TestRationaleFieldWithBERTScore:
         ):
             assert key in result
 
-    def test_specific_rationales_moderate_or_high_f1(
-        self, calc: IRRCalculator
-    ) -> None:
+    def test_specific_rationales_moderate_or_high_f1(self, calc: IRRCalculator) -> None:
         """Pairs that cite the same policy triggers should reach at least
         'moderate semantic agreement' (F1 ≥ 0.70) with distilbert.
         """
@@ -411,9 +423,7 @@ class TestRationaleFieldWithBERTScore:
             "grounded justifications — a training/calibration issue."
         )
 
-    def test_f1_per_pair_length_matches_input(
-        self, calc: IRRCalculator
-    ) -> None:
+    def test_f1_per_pair_length_matches_input(self, calc: IRRCalculator) -> None:
         result = calc.bertscore_agreement(
             self._SPECIFIC_A,
             self._SPECIFIC_B,
@@ -421,9 +431,7 @@ class TestRationaleFieldWithBERTScore:
         )
         assert len(result["f1_per_pair"]) == len(self._SPECIFIC_A)  # type: ignore[arg-type]
 
-    def test_vague_vs_specific_f1_ordering(
-        self, calc: IRRCalculator
-    ) -> None:
+    def test_vague_vs_specific_f1_ordering(self, calc: IRRCalculator) -> None:
         """Specific pairs must achieve higher F1 than vague pairs.
 
         This is the core Cohere gap test: rationale quality matters.
@@ -445,7 +453,7 @@ class TestRationaleFieldWithBERTScore:
         vague_f1 = float(vague_result["f1_mean"])  # type: ignore[arg-type]
         assert specific_f1 >= vague_f1, (
             f"Expected specific_f1 ({specific_f1:.4f}) ≥ vague_f1 ({vague_f1:.4f}). "
-            "Vague rationales ('Looks fine') should not match better than policy-grounded ones."
+            "Vague rationales ('Looks fine') should not match better than policy-grounded ones."  # noqa: E501
         )
 
     def test_n_pairs_reported_correctly(self, calc: IRRCalculator) -> None:
@@ -456,9 +464,7 @@ class TestRationaleFieldWithBERTScore:
         )
         assert result["n_pairs"] == 2
 
-    def test_identical_rationales_give_f1_one(
-        self, calc: IRRCalculator
-    ) -> None:
+    def test_identical_rationales_give_f1_one(self, calc: IRRCalculator) -> None:
         texts = [self._SPECIFIC_A[0], self._SPECIFIC_A[1]]
         result = calc.bertscore_agreement(
             texts,
