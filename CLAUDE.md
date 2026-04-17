@@ -676,13 +676,44 @@ Started: Day 19
     types, trajectory aggregation, summary keys, severity levels
   - ruff check ✓  mypy strict ✓  pytest 458/458 ✓
 
-### Tomorrow (Day 24)
-- Gradio/Streamlit demo: upload wearable log → agent runs →
-  eval scores displayed live (HITL triggers shown in real time)
-- Record 2-min Loom walkthrough
-- Embed Loom in README + LinkedIn Post #3 draft
+### Day 24 — COMPLETE ✅
+- Full wearable agentic demo + live eval dashboard
+  - Created demo/app.py — Streamlit app: sidebar scenario selector +
+    num_trajectories slider + privacy gate toggle
+  - Panels: Input Log (JSON), Eval Scores (5 st.metric cards),
+    Trajectory (step-level reasoning)
+  - Wired all 5 eval modules:
+    FACTSGroundingScorer: overall_facts_score displayed + color-coded threshold
+    HITLTrigger: trigger_type fired or "No trigger" per trajectory
+    Privacy gate: BLOCKED/PASSED per log
+    TrajectoryScorer: planning_quality, error_recovery, goal_alignment,
+      tool_precision
+    Tool accuracy: from AgenticEvaluator output
+  - Added Plotly radar chart (5 axes) with scenario overlays at 30% opacity
+  - Score history table accumulates via st.session_state across runs
+  - Refactored to demo/pipeline.py — pure function run_eval_pipeline()
+    testable headlessly
+  - 18 pytest integration tests — all passing
+  - ruff check ✓  mypy strict ✓  pytest 476/476 ✓
+  - demo/README.md created — one-command launch instructions + Loom placeholder
+  - Root README.md updated: "What's Built" table + Demo section with launch
+    command
+  - Git tag: day-24-complete
+  - TODO Day 25: Record Loom walkthrough + add link to README;
+    LinkedIn Post #3 + HuggingFace dataset release
 
 ### Phase 3 Deliverables Tracker
+
+**Phase 3 — Agentic Eval Mastery (Days 19–28)**
+
+- [x] Day 19: Eval harness (DeepEval + RAGAS + 6 Kore.ai metrics)
+- [x] Day 20: TrajectoryScorer + PIA rubric + nondeterminism variance
+- [x] Day 21: A/B experiment — curated vs raw (tool accuracy +177.8%: raw 36% → curated 100%)
+- [x] Day 22: Framework benchmark — 10 tasks × 4 frameworks leaderboard
+- [x] Day 23: HITL trigger design + CI eval gates
+- [x] Day 24: Streamlit demo + live eval dashboard
+- [ ] Day 25: LinkedIn Post #3 + 50-trajectory HuggingFace dataset release
+
 | Deliverable | Status |
 |---|---|
 | Eval harness (agentic_eval.py) | ✅ Day 19 |
@@ -692,7 +723,7 @@ Started: Day 19
 | HITL trigger design | ✅ Day 23 |
 | CI eval gate | ✅ Day 23 |
 | Live API smoke test | ✅ Day 23 |
-| Loom demo + Gradio UI | 🔜 Day 24 |
+| Streamlit demo + live eval dashboard | ✅ Day 24 |
 | LinkedIn Post #3 + HuggingFace dataset | 🔜 Day 25 |
 | Multi-agent pipeline | 🔜 Day 26 |
 | Flywheel notebook | 🔜 Day 27 |
