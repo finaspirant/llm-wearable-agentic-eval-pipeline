@@ -40,12 +40,11 @@ import logging
 import sys
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any
-
-import pandas as pd
-import typer
+from typing import Any, TypeAlias
 
 import argilla as rg
+import pandas as pd
+import typer
 
 from src.data.privacy_gate import ConsentModel
 from src.data.wearable_generator import AgentAction, WearableLog, WearableLogGenerator
@@ -58,7 +57,7 @@ logger = logging.getLogger(__name__)
 
 #: Forward-compatible alias.  Argilla v1 called this ``FeedbackRecord``.
 #: In v2 it is ``rg.Record``.  Importing code should use this alias.
-FeedbackRecord = rg.Record
+FeedbackRecord: TypeAlias = rg.Record
 
 # ---------------------------------------------------------------------------
 # Constants
@@ -580,7 +579,10 @@ def main(
         ...,
         "--mode",
         "-m",
-        help="Operation mode: 'load' (generate + upload) or 'export' (download annotations).",
+        help=(
+            "Operation mode: 'load' (generate + upload) or"
+            " 'export' (download annotations)."
+        ),
     ),
     n_logs: int = typer.Option(
         30,
@@ -617,7 +619,9 @@ def main(
         "--dataset",
         help="Argilla dataset name.",
     ),
-    verbose: bool = typer.Option(False, "--verbose", "-v", help="Enable debug logging."),
+    verbose: bool = typer.Option(
+        False, "--verbose", "-v", help="Enable debug logging."
+    ),
 ) -> None:
     """Load wearable agent trajectory data into Argilla or export annotations.
 
