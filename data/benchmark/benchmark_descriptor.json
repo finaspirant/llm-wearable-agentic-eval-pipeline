@@ -1,0 +1,33 @@
+{
+  "name": "wearable-agentic-eval-benchmark-v1",
+  "version": "1.0.0",
+  "release_date": "2026-04-17",
+  "trajectories": 50,
+  "annotators": 5,
+  "annotation_phases": ["pre_calibration", "post_calibration"],
+  "schema_version": "agenteval-schema-v1",
+  "iaa_metrics": {
+    "pre_cohens_kappa_mean": 0.017,
+    "post_cohens_kappa_mean": 1.0,
+    "pre_fleiss_kappa": -0.036,
+    "post_fleiss_kappa": 1.0,
+    "pre_krippendorffs_alpha": -0.107,
+    "post_krippendorffs_alpha": 1.0,
+    "_note": "Post-calibration values are dry-run artifacts (SHA-256-seeded deterministic blending at weight=0.82 collapses all personas to identical scores). Live API annotation expected: Cohen's kappa pre~0.55, post~0.78-0.85."
+  },
+  "eval_dimensions": [
+    "session_outcome",
+    "goal_achievement",
+    "privacy_compliance",
+    "tool_invocation_accuracy",
+    "error_recovery",
+    "hitl_trigger_correctness"
+  ],
+  "target_companies": ["Kore.ai", "DeepMind", "Anthropic", "Cohere", "AI21", "OpenAI", "Writer"],
+  "huggingface_repo": "https://huggingface.co/datasets/finaspirant/wearable-agent-trajectory-annotations",
+  "github_repo": "https://github.com/finaspirant/llm-wearable-agentic-eval-pipeline",
+  "linked_white_papers": ["WP1", "WP2"],
+  "parquet_path": "data/processed/wearable_annotated_50.parquet",
+  "annotation_schema_path": "data/annotations/agenteval-schema-v1.json",
+  "dataset_card_path": "data/annotations/README.md"
+}

@@ -1,10 +1,11 @@
-"""Build HuggingFace-loadable parquet for the 30-trajectory annotated wearable dataset.
+"""Build HuggingFace-loadable parquet for the 50-trajectory annotated wearable dataset.
 
 Joins pre-calibration and post-calibration annotations with trajectory metadata
-from the raw wearable logs. Output: data/processed/wearable_annotated_30.parquet
+from the raw wearable logs. Output: data/processed/wearable_annotated_50.parquet
 
 Usage:
     uv run python -m src.data.build_hf_dataset
+    uv run python -m src.data.build_hf_dataset --dry-run
     uv run python -m src.data.build_hf_dataset --output data/processed/custom.parquet
 """
 
@@ -23,7 +24,7 @@ logger = logging.getLogger(__name__)
 _DEFAULT_PRE_CAL = Path("data/annotations/pre_calibration/day12_annotations.jsonl")
 _DEFAULT_POST_CAL = Path("data/annotations/post_calibration/annotations_round2.json")
 _DEFAULT_RAW_LOGS = Path("data/raw/synthetic_wearable_logs.jsonl")
-_DEFAULT_OUTPUT = Path("data/processed/wearable_annotated_30.parquet")
+_DEFAULT_OUTPUT = Path("data/processed/wearable_annotated_50.parquet")
 
 _SCORE_DIMS = ["step_quality", "privacy_compliance", "goal_alignment", "error_recovery"]
 
@@ -89,6 +90,7 @@ def build_dataset(
     post_cal_path: Path,
     raw_logs_path: Path,
     output_path: Path,
+    write: bool = True,
 ) -> pd.DataFrame:
     """Produce the consolidated annotated dataset parquet.
 
@@ -97,9 +99,10 @@ def build_dataset(
         post_cal_path: Path to post-calibration JSON annotations.
         raw_logs_path: Path to raw wearable logs JSONL.
         output_path: Destination parquet file path.
+        write: If False, assemble and return the DataFrame without writing.
 
     Returns:
-        The assembled DataFrame (also written to output_path).
+        The assembled DataFrame (written to output_path unless write=False).
     """
     logger.info("Loading pre-calibration annotations from %s", pre_cal_path)
     pre_df = _load_pre_calibration(pre_cal_path)
@@ -155,9 +158,11 @@ def build_dataset(
         if col in df.columns:
             df[col] = df[col].astype("Int8")
 
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    df.to_parquet(output_path, index=False, engine="pyarrow")
-    logger.info("Wrote %d rows × %d cols to %s", len(df), len(df.columns), output_path)
+    if write:
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        df.to_parquet(output_path, index=False, engine="pyarrow")
+        n_rows, n_cols = len(df), len(df.columns)
+        logger.info("Wrote %d rows × %d cols to %s", n_rows, n_cols, output_path)
     return df
 
 
@@ -174,12 +179,13 @@ def main(
     ),
     raw_logs: Path = typer.Option(_DEFAULT_RAW_LOGS, help="Raw wearable logs JSONL"),
     output: Path = typer.Option(_DEFAULT_OUTPUT, help="Output parquet path"),
+    dry_run: bool = typer.Option(False, "--dry-run", help="Print stats; skip write"),
 ) -> None:
     """Build consolidated HuggingFace-loadable parquet for wearable annotation dataset."""  # noqa: E501
     logging.basicConfig(
         level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s"
     )
-    df = build_dataset(pre_cal, post_cal, raw_logs, output)
+    df = build_dataset(pre_cal, post_cal, raw_logs, output, write=not dry_run)
 
     # Print quick summary to stdout
     n_logs = df["log_id"].nunique()
@@ -199,6 +205,9 @@ def main(
         n_personas,
         len(df),
     )
+    if dry_run:
+        logger.info("DRY-RUN: columns=%s", list(df.columns))
+        logger.info("DRY-RUN: no parquet written")
 
 
 if __name__ == "__main__":

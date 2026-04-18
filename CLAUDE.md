@@ -702,6 +702,37 @@ Started: Day 19
   - TODO Day 25: Record Loom walkthrough + add link to README;
     LinkedIn Post #3 + HuggingFace dataset release
 
+### Day 25 — LinkedIn Post #3 + 50-Trajectory Benchmark Release
+- Expanded synthetic dataset from 30 → 50 trajectories; regenerated
+  wearable_annotated_50.parquet (500 rows × 23 cols)
+- Created data/benchmark/benchmark_descriptor.json with IAA metrics,
+  eval dimensions, target company list (7 companies)
+- Uploaded 50-trajectory annotated benchmark dataset to HuggingFace:
+  https://huggingface.co/datasets/finaspirant/wearable-agent-trajectory-annotations
+- Updated data/annotations/README.md frontmatter: size_categories,
+  num_rows, parquet filename, citation note — all reflect 50-traj scale
+- Added `--dry-run` flag to src/data/build_hf_dataset.py; dry-run
+  confirmed 500 records, 23 columns before push
+- Added ## Published Artifacts section to CLAUDE.md; ## Benchmark
+  Dataset section to root README.md
+- Fixed demo/app.py bar chart: None recovery scores now render grey
+  with "(not tested)" label instead of coercing to red (TypeError fix)
+- LinkedIn Post #3 (🟡 DO NOT POST): saved to Notion — target audience:
+  DeepMind researchers, OpenAI engineers; leads with framework benchmark table
+- ArXiv endorsement action item: DUE TODAY (Day 25) — status: PENDING
+- git tag: v0.3.0-day25
+
+## Published Artifacts
+
+| Artifact | URL | Date |
+|---|---|---|
+| HuggingFace Dataset | https://huggingface.co/datasets/finaspirant/wearable-agent-trajectory-annotations | 2026-04-17 |
+
+- 500 records (50 trajectories × 5 personas × 2 calibration phases)
+- Schema: agenteval-schema-v1 (3-layer: session / role / step)
+- Pre-cal Fleiss' κ = −0.036; post-cal = 1.00 (dry-run artifact — live API run pending)
+- Descriptor: data/benchmark/benchmark_descriptor.json
+
 ### Phase 3 Deliverables Tracker
 
 **Phase 3 — Agentic Eval Mastery (Days 19–28)**
@@ -712,7 +743,7 @@ Started: Day 19
 - [x] Day 22: Framework benchmark — 10 tasks × 4 frameworks leaderboard
 - [x] Day 23: HITL trigger design + CI eval gates
 - [x] Day 24: Streamlit demo + live eval dashboard
-- [ ] Day 25: LinkedIn Post #3 + 50-trajectory HuggingFace dataset release
+- [x] Day 25: ✅ Dataset expanded to 50 trajectories | ✅ Benchmark descriptor created | ✅ HuggingFace push | ✅ LinkedIn Post #3 drafted | ⬜ ArXiv endorsement
 
 | Deliverable | Status |
 |---|---|
@@ -724,7 +755,7 @@ Started: Day 19
 | CI eval gate | ✅ Day 23 |
 | Live API smoke test | ✅ Day 23 |
 | Streamlit demo + live eval dashboard | ✅ Day 24 |
-| LinkedIn Post #3 + HuggingFace dataset | 🔜 Day 25 |
+| LinkedIn Post #3 + HuggingFace dataset | ✅ Day 25 |
 | Multi-agent pipeline | 🔜 Day 26 |
 | Flywheel notebook | 🔜 Day 27 |
 | WP1 complete + submitted | 🔜 Day 28 |

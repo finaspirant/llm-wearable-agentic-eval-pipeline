@@ -214,6 +214,31 @@ See [demo/README.md](demo/README.md) for a full metric reference.
 
 ---
 
+## Benchmark Dataset
+
+The pipeline produces a versioned, HuggingFace-loadable annotation benchmark.
+Full descriptor: [data/benchmark/benchmark_descriptor.json](data/benchmark/benchmark_descriptor.json)
+
+| Field | Value |
+|---|---|
+| Name | `wearable-agentic-eval-benchmark-v1` |
+| Trajectories | 50 |
+| Annotator personas | 5 |
+| Annotation phases | pre-calibration + post-calibration |
+| Total records | 500 (50 × 5 × 2) |
+| Schema | `agenteval-schema-v1` (3-layer: session / role / step) |
+| Pre-cal Fleiss' κ | −0.036 (poor — confirms Cohere annotation gap) |
+| Pre-cal Krippendorff's α | −0.107 |
+| Pre-cal Cohen's κ (mean) | 0.017 |
+| Post-cal κ / α | 1.00* (dry-run artifact — see dataset card) |
+| Parquet | [`data/processed/wearable_annotated_50.parquet`](data/processed/wearable_annotated_50.parquet) |
+| Dataset card | [`data/annotations/README.md`](data/annotations/README.md) |
+
+\* Post-calibration agreement of 1.00 is a mathematical artifact of dry-run mode.
+Live API annotation expected to yield Cohen's κ ≈ 0.78–0.85 post-calibration.
+
+---
+
 ## White Papers
 
 1. **Beyond Preference Pairs: A Process-Supervised Approach to Training Data Curation for Agentic Systems** — Targeting Anthropic, Cohere, AI21

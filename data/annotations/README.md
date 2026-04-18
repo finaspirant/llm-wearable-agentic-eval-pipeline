@@ -13,14 +13,14 @@ tags:
 - trajectory-annotation
 pretty_name: Wearable Agent Trajectory Annotation Dataset
 size_categories:
-- n<1K
+- 100<n<1K
 ---
 
 # Wearable Agent Trajectory Annotation Dataset
 
 ## Dataset Summary
 
-30 wearable agent trajectories annotated by 5 LLM-simulated annotators using the
+50 wearable agent trajectories annotated by 5 LLM-simulated annotators using the
 `agenteval-schema-v1` JSON schema. Includes before/after calibration IAA scores
 (Cohen's κ: 0.55 → 0.82). Designed to benchmark annotation quality pipelines for
 agentic AI systems.
@@ -35,10 +35,10 @@ examples brings inter-rater agreement from poor to substantial.
 
 | | Value |
 |---|---|
-| Trajectories | 30 |
+| Trajectories | 50 |
 | Annotator personas | 5 |
 | Calibration phases | 2 (pre + post) |
-| Total annotation records | 300 |
+| Total annotation records | 500 |
 | Rubric dimensions | 4 (step_quality, privacy_compliance, goal_alignment, error_recovery) |
 | Scenario types | 5 (health_alert, privacy_sensitive, location_trigger, ambient_noise, calendar_reminder) |
 
@@ -66,7 +66,7 @@ One record per trajectory step: `process_reward_score` (float, −1.0 to +1.0),
 for BERTScore quality gate), `tool_called` (enum of 8 actions). This is the
 primary input for process-supervised reward model (PRM) training.
 
-### Parquet file layout (`../processed/wearable_annotated_30.parquet`)
+### Parquet file layout (`../processed/wearable_annotated_50.parquet`)
 
 The consolidated parquet joins pre- and post-calibration annotations with trajectory
 metadata from the raw wearable logs. Load with:
@@ -75,7 +75,7 @@ metadata from the raw wearable logs. Load with:
 from datasets import Dataset
 import pandas as pd
 
-df = pd.read_parquet("wearable_annotated_30.parquet")
+df = pd.read_parquet("wearable_annotated_50.parquet")
 ds = Dataset.from_pandas(df)
 ```
 
@@ -205,7 +205,7 @@ If you use this dataset, please cite:
   author  = {bade},
   year    = {2026},
   url     = {https://github.com/bade/llm-wearable-agentic-eval-pipeline},
-  note    = {30 trajectories, 5 LLM annotator personas, agenteval-schema-v1}
+  note    = {50 trajectories, 5 LLM annotator personas, agenteval-schema-v1}
 }
 ```
 
