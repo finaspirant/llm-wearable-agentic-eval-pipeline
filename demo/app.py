@@ -549,31 +549,39 @@ for idx, result in enumerate(results):
 
             # 5-layer breakdown bar chart
             st.caption("5-layer score breakdown")
-            layer_scores: dict[str, float | None] = {
+            _layer_raw: dict[str, float | None] = {
                 "intent": ev["layer_intent"],
                 "planning": ev["layer_planning"],
                 "tool_calls": ev["layer_tool_calls"],
                 "recovery": ev["layer_recovery"],
                 "outcome": ev["layer_outcome"],
             }
+            # recovery is None when no escalation occurred (not a failure — just
+            # not exercised); fall back to 0.0 so the bar shows a number.
+            layer_scores: dict[str, float] = {
+                k: (v if v is not None else 0.0) for k, v in _layer_raw.items()
+            }
+            _layer_na: set[str] = {k for k, v in _layer_raw.items() if v is None}
             try:
                 import plotly.graph_objects as go  # noqa: PLC0415
 
                 fig_bar = go.Figure(
                     go.Bar(
                         x=list(layer_scores.keys()),
-                        y=[v if v is not None else 0.0 for v in layer_scores.values()],
+                        y=list(layer_scores.values()),
                         marker_color=[
-                            "#2ecc71"
-                            if (v or 0) >= 0.7
+                            "#95a5a6"
+                            if k in _layer_na
+                            else "#2ecc71"
+                            if v >= 0.7
                             else "#f39c12"
-                            if (v or 0) >= 0.4
+                            if v >= 0.4
                             else "#e74c3c"
-                            for v in layer_scores.values()
+                            for k, v in layer_scores.items()
                         ],
                         text=[
-                            f"{v:.2f}" if v is not None else "N/A"
-                            for v in layer_scores.values()
+                            f"{v:.2f} (not tested)" if k in _layer_na else f"{v:.2f}"
+                            for k, v in layer_scores.items()
                         ],
                         textposition="outside",
                     )
