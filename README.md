@@ -208,7 +208,7 @@ streamlit run demo/app.py
 
 Select a scenario type, set the number of trajectories (1–10), toggle the privacy gate, and click **Run eval pipeline**. The dashboard shows trajectory quality, tool accuracy, FACTS grounding, privacy compliance, and HITL trigger counts — with a radar chart and per-trajectory bar chart for visual comparison.
 
-[Loom video walkthrough — link will be added after recording]
+📺 [2-min demo walkthrough](https://www.loom.com/share/5bec5764428b4e48aa868134e54a894e)
 
 See [demo/README.md](demo/README.md) for a full metric reference.
 

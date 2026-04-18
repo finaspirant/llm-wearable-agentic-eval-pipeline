@@ -25,6 +25,8 @@ streamlit run demo/app.py
 
 The app opens at `http://localhost:8501`.
 
+📺 Demo: https://www.loom.com/share/5bec5764428b4e48aa868134e54a894e
+
 ---
 
 ## Screenshot
