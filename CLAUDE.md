@@ -758,13 +758,44 @@ Started: Day 19
 - ruff check ✓  mypy strict ✓  pytest 27/27 ✓
 - git tag: v0.4.0-day26
 
-### Tomorrow — Day 27 Flywheel Notebook
-- Complete Agentic Eval Flywheel notebook (notebooks/03_agentic_eval_flywheel.ipynb)
-- Assemble all empirical results: curated vs raw, A/B, FACTS scores,
-  framework benchmark, multi-agent comparison
-- Key table: before/after curation across all 6 Kore.ai metrics
-- Charts: IAA calibration curve, PIA κ progression, framework leaderboard,
-  multi-agent attribution heatmap
+### Day 27 — COMPLETE ✅
+- notebooks/agentic_eval_flywheel.ipynb — Agentic Eval Flywheel notebook,
+  fully executed (exit code 0, --inplace):
+  - 8 sections: Flywheel Hypothesis (mermaid diagram), A/B experiment,
+    PIA lift, Framework benchmark, FACTS grounding, Multi-agent comparison,
+    WP2 Impact table, Reproducibility footer
+  - 6 figures saved to notebooks/figures/:
+    flywheel_fig1_ab_experiment.png (89 KB)
+    flywheel_fig2_pia_lift.png (86 KB)
+    flywheel_fig3_framework_leaderboard.png (129 KB)
+    flywheel_fig4_facts_grounding.png (98 KB)
+    flywheel_fig5_multiagent_comparison.png (113 KB)
+    flywheel_fig6_impact_table.png (77 KB — matplotlib table PNG)
+  - All dry-run/synthetic bars annotated with hatch="//" +
+    "synthetic — not citable" labels (same convention as
+    curation_pipeline_e2e.ipynb)
+  - Impact table (§7): rendered as both pandas DataFrame display AND
+    clean matplotlib table PNG (flywheel_fig6_impact_table.png);
+    green rows = citable lifts, yellow row = RAGAS fallback
+  - HTML export: notebooks/agentic_eval_flywheel.html (1.0 MB)
+  - Key stats confirmed from actual data files:
+    - tool_invocation_accuracy: +177.8% (raw 0.360 → curated 1.000)
+    - trajectory_success_rate: +177.8% (raw 0.120 → curated 0.333)
+    - PIA kappa lift: −0.065 → +0.743 (Δ = +0.808, poor → substantial)
+    - Framework benchmark (token efficiency): LangGraph wins (519 tokens);
+      all 4 frameworks tied at avg_trajectory_score=0.8235
+    - Framework benchmark (latency): OpenAI Agents SDK fastest
+    - FACTS grounding delta: 0.0 (RAGAS fallback=0.75 in all conditions;
+      annotated as non-citable; live retrieval context → WP3)
+    - Multi-agent wins: 3/10 logs; mean Δ = +0.071 (single=0.761 → multi=0.832)
+    - Multi-agent wins exclusively on privacy_sensitive + ambient_noise;
+      no lift on health_alert, location_trigger, calendar_reminder
+
+### Day 28 — TODO
+- WP1 complete: write §3–§7 (IAA methodology, PIA section,
+  poisoning detection, HH-RLHF analysis, conclusion)
+- Publish on Medium + submit to Alignment Forum
+- Tag v0.5.0-day28
 
 ## Published Artifacts
 
@@ -789,6 +820,7 @@ Started: Day 19
 - [x] Day 24: Streamlit demo + live eval dashboard
 - [x] Day 25: ✅ Dataset expanded to 50 trajectories | ✅ Benchmark descriptor created | ✅ HuggingFace push | ✅ LinkedIn Post #3 drafted | ⬜ ArXiv endorsement
 - [x] Day 26: Multi-agent pipeline + role attribution scorer + comparison run
+- [x] Day 27: Flywheel notebook ✅ — all 8 sections executed, 6 figures, HTML export
 
 | Deliverable | Status |
 |---|---|
@@ -802,5 +834,5 @@ Started: Day 19
 | Streamlit demo + live eval dashboard | ✅ Day 24 |
 | LinkedIn Post #3 + HuggingFace dataset | ✅ Day 25 |
 | Multi-agent pipeline + role attribution scorer | ✅ Day 26 |
-| Flywheel notebook | 🔜 Day 27 |
+| Flywheel notebook | ✅ Day 27 |
 | WP1 complete + submitted | 🔜 Day 28 |

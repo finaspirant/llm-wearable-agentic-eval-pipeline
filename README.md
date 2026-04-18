@@ -35,15 +35,20 @@ Run identical tasks across LangGraph, CrewAI, AutoGen (AG2), and OpenAI Agents S
 
 | Metric | Value | Source |
 |--------|-------|--------|
-| IRR Calculator | Implemented | Cohen's κ, Fleiss' κ, Krippendorff's α, BERTScore |
-| IAA before calibration (κ) | TBD — Day 10 | IRR calculator on HH-RLHF |
-| IAA after calibration (κ) | TBD | Calibration pipeline |
-| Framework benchmark winner | TBD | benchmark_runner.py |
-| Poisoning detection recall | TBD | poisoning_detector.py |
-| FACTS factuality score | TBD | facts_integration.py |
-| PIA agreement (non-deterministic) | TBD | pia_scorer.py |
+| Tool invocation accuracy lift (curation) | +177.8% (0.36 → 1.00) | `ab_experiment.py` Day 21 |
+| Trajectory success rate lift (curation) | +177.8% (0.12 → 0.33) | `ab_experiment.py` Day 21 |
+| IAA before calibration (Fleiss' κ) | −0.036 (poor) | `irr_calculator.py` on HH-RLHF |
+| IAA after calibration (Cohen's κ) | 1.00* (dry-run artifact) | `calibration_protocol.py` |
+| PIA kappa lift (non-deterministic agents) | −0.065 → +0.743 (Δ = +0.808) | `pia_calculator.py` Day 14 |
+| Framework benchmark winner (token efficiency) | LangGraph (519 tokens avg) | `benchmark_runner.py` Day 22 |
+| Framework benchmark winner (latency) | OpenAI Agents SDK | `benchmark_runner.py` Day 22 |
+| Multi-agent lift over single-agent | +0.071 mean Δ (3/10 scenarios) | `role_attribution.py` Day 26 |
+| FACTS grounding score | 0.75 (RAGAS fallback — live eval → WP3) | `agentic_eval.py` Day 19 |
+| Gradient conflict rate | 100% of failed trajectories (synthetic) | `prm_annotator.py` Day 16 |
 
-*Values will be populated as each phase completes. Building in public — [follow the journey](https://linkedin.com).*
+\* Post-calibration κ=1.00 is a dry-run artifact from score blending at weight=0.82. Live API annotation expected to yield Cohen's κ ≈ 0.78–0.85.
+
+*Full results assembled in the [Agentic Eval Flywheel notebook](notebooks/agentic_eval_flywheel.html). Building in public — [follow the journey](https://linkedin.com).*
 
 ---
 
@@ -177,7 +182,7 @@ cp .env.example .env
 
 ## Project Status
 
-**Phase 2 active — Day 11/45. IRR calculator + annotation schema + Argilla setup shipped.**
+**Phase 3 complete through Day 27/45. Flywheel notebook shipped — WP1 drafting in progress.**
 
 ### What's built
 
@@ -236,6 +241,17 @@ Full descriptor: [data/benchmark/benchmark_descriptor.json](data/benchmark/bench
 
 \* Post-calibration agreement of 1.00 is a mathematical artifact of dry-run mode.
 Live API annotation expected to yield Cohen's κ ≈ 0.78–0.85 post-calibration.
+
+---
+
+## Notebooks
+
+| Notebook | Description | HTML |
+|----------|-------------|------|
+| `curation_pipeline_e2e.ipynb` | End-to-end data curation pipeline (Days 1–18) | — |
+| `agentic_eval_flywheel.ipynb` | **Agentic Eval Flywheel** — all Phase 3 results assembled: A/B experiment, PIA lift, framework benchmark, FACTS grounding, multi-agent comparison, WP2 anchor table | [View HTML](notebooks/agentic_eval_flywheel.html) |
+
+Both notebooks execute clean via `uv run jupyter nbconvert --to notebook --execute --inplace <notebook>`.
 
 ---
 
