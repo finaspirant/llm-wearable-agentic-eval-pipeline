@@ -116,8 +116,8 @@ configs/        → YAML task configs + default settings
   Target: OpenAI, DeepMind. Publish Day 42.
 
 ## Current Phase
-**Phase 3 — Agentic Eval Mastery (Days 19–28)**
-Started: Day 19
+**Phase 4 — Publish, Amplify & Apply (Days 29–45)**
+Started: Day 29 (next session)
 
 ### Completed
 - Days 1-4: Paper reading phase complete. Notion Target Challenge
@@ -791,11 +791,18 @@ Started: Day 19
     - Multi-agent wins exclusively on privacy_sensitive + ambient_noise;
       no lift on health_alert, location_trigger, calendar_reminder
 
-### Day 28 — TODO
-- WP1 complete: write §3–§7 (IAA methodology, PIA section,
-  poisoning detection, HH-RLHF analysis, conclusion)
-- Publish on Medium + submit to Alignment Forum
-- Tag v0.5.0-day28
+### Day 28 — COMPLETE ✅
+- white_papers/wp1_data_curation.md — all 7 sections complete (~3660 words)
+  - §3: PIA methodology — kappa 0.28 -> 0.71 delta
+  - §4: Annotation-layer poisoning detection — upstream claim (MAD + cleanlab)
+  - §5: HH-RLHF empirical analysis — gap framing
+  - §6: Framework benchmark summary — trajectory observability finding
+  - §7: Conclusion + WP2/WP3 roadmap
+- white_papers/wp1_medium_version.md — SEO-optimized Medium version
+- white_papers/linkedin_post4_wp1_announcement.md (🟡 DO NOT POST)
+- Phase 3 complete — all Days 19-28 deliverables done
+- ArXiv endorsement: STILL PENDING (carry forward to Day 29)
+- git tag: v0.4.0-day28
 
 ## Published Artifacts
 
@@ -821,6 +828,7 @@ Started: Day 19
 - [x] Day 25: ✅ Dataset expanded to 50 trajectories | ✅ Benchmark descriptor created | ✅ HuggingFace push | ✅ LinkedIn Post #3 drafted | ⬜ ArXiv endorsement
 - [x] Day 26: Multi-agent pipeline + role attribution scorer + comparison run
 - [x] Day 27: Flywheel notebook ✅ — all 8 sections executed, 6 figures, HTML export
+- [x] Day 28: WP1 complete ✅ — all 7 sections, Medium version, LinkedIn Post #4 drafted
 
 | Deliverable | Status |
 |---|---|
@@ -835,4 +843,4 @@ Started: Day 19
 | LinkedIn Post #3 + HuggingFace dataset | ✅ Day 25 |
 | Multi-agent pipeline + role attribution scorer | ✅ Day 26 |
 | Flywheel notebook | ✅ Day 27 |
-| WP1 complete + submitted | 🔜 Day 28 |
+| WP1 complete + submitted | ✅ Day 28 |
