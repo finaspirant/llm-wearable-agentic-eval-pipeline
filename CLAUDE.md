@@ -793,7 +793,7 @@ Started: Day 29 (next session)
 
 ### Day 28 — COMPLETE ✅
 - white_papers/wp1_data_curation.md — all 7 sections complete (~3660 words)
-  - §3: PIA methodology — kappa 0.28 -> 0.71 delta
+  - §3: PIA methodology — kappa −0.065 → +0.743 (Δ = +0.808); CLAUDE.md had a rounding note "0.28 → 0.71" which is inaccurate — actual pia_results.json standard_overall_kappa = −0.065
   - §4: Annotation-layer poisoning detection — upstream claim (MAD + cleanlab)
   - §5: HH-RLHF empirical analysis — gap framing
   - §6: Framework benchmark summary — trajectory observability finding
@@ -801,8 +801,31 @@ Started: Day 29 (next session)
 - white_papers/wp1_medium_version.md — SEO-optimized Medium version
 - white_papers/linkedin_post4_wp1_announcement.md (🟡 DO NOT POST)
 - Phase 3 complete — all Days 19-28 deliverables done
-- ArXiv endorsement: STILL PENDING (carry forward to Day 29)
+- ArXiv endorsement: STILL PENDING (carry forward to Day 30)
 - git tag: v0.4.0-day28
+
+### Day 29 — COMPLETE ✅
+- docs/white_papers/wp2_beyond_task_success_DRAFT.md — WP2 draft, Sections 1–4 complete + §5–7 stubs
+  - Created docs/white_papers/ directory (new)
+  - YAML front-matter: title, author, date, status, target_companies, repo
+  - Abstract (~180 words): PIA headline, empirical lifts, framework benchmark, open-source pointer
+  - §1 (~560 words): I/O evaluation failure; Kore.ai 89%/52% gap; FACTS 70% ceiling; wearable AI stakes; 3-part framework preview
+  - §2 (~680 words): Formal trajectory definition T={s₀,a₁,...,sₙ}; 3-layer annotation schema table; PRM vs ORM motivation; HH-RLHF κ=−0.071 as training signal degradation evidence
+  - §3 (~790 words): PIA problem statement; standard κ=−0.065 pilot; PIA definition; 3 rubric dimensions; results table (−0.065 → +0.743, Δ=+0.808); HITL implication; DeepMind FACTS parallel
+  - §4 (~700 words): A/B anchor table (6 Kore.ai metrics, n=50 per group); tool accuracy +177.8% (0.36→1.00); trajectory success +177.8% (0.12→0.33); groundedness Δ=0 caveat (RAGAS fallback); framework benchmark table (n=31/framework); live API anchors
+  - §5 stub: multi-agent attribution (Day 26 data pointer)
+  - §6 stub: HITL trigger design (Day 23 data pointer)
+  - §7 stub: discussion, limitations, WP3 roadmap
+- Key number correction: standard PIA κ is −0.065 (not 0.28 as approximated in WP1 CLAUDE.md note); PIA κ = +0.743; Δ = +0.808 — use these exact values in all future citations
+- Word count: 4,173 words
+- ArXiv endorsement: STILL PENDING (carry forward to Day 30)
+
+### Tomorrow — Day 30
+- Write §5: multi-agent attribution scoring (Day 26 role_attribution.py results)
+- Write §6: HITL trigger design (Day 23 hitl_trigger.py results)
+- Write §7: discussion, limitations, open problems (WP3 roadmap, RAGAS live integration, always-on eval)
+- Tag AgentTrace v1.0 on GitHub
+- Publish WP2 to Medium + ArXiv informal preprint
 
 ## Published Artifacts
 
