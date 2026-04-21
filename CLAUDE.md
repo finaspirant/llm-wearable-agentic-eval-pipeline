@@ -874,10 +874,16 @@ Started: Day 29 (next session)
   - References AI21 Mind the Gap framing
   - Status: drafted, pending submission
 
-### Tomorrow — Day 33
-- LinkedIn Post #4 (AI21 + production gaps, 89%/52% observability-eval gap)
-- Tag @AI21 Labs, comment on their recent LinkedIn post
-- Include before/after impact table as image
+### Day 33 (complete)
+- Kore.ai guest blog draft: docs/outreach/kore_ai_guest_blog_draft.md (trajectory eval governance, ~900 words)
+- AI21 Labs pitch email draft: docs/outreach/ai21_pitch_draft.md (Mind the Gap extension, <200 words)
+- LinkedIn Post #4 draft: docs/outreach/linkedin_post4_draft.md (DRAFT - DO NOT POST)
+- All outreach drafts marked for review before submission
+
+### Tomorrow (Day 34)
+- Build 5-slide EM Impact Deck (PDF export for DMs and job applications)
+- Slide 3 results table: IAA 0.55->0.82 | PIA kappa 0.28->0.71 | Tool accuracy | FACTS grounding
+- Export to results/ folder
 
 ## Published Artifacts
 
