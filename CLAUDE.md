@@ -885,6 +885,16 @@ Started: Day 29 (next session)
 - Slide 3 results table: IAA 0.55->0.82 | PIA kappa 0.28->0.71 | Tool accuracy | FACTS grounding
 - Export to results/ folder
 
+### Day 35 (complete)
+- WP3 scaffold created: white_papers/wp3_ambient_ai_eval.md
+- §1–3 drafted: Ambient AI Gap, Ambient Data Taxonomy, Consent Decay Model
+- §4–6 placeholders in place — to be written Day 37
+- No code changes this session
+
+### Tomorrow (Day 36)
+- DMs 6–10 outreach
+- CFP submission to COLM 2026 / NeurIPS workshop
+
 ## Published Artifacts
 
 | Artifact | URL | Date |
