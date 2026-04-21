@@ -820,12 +820,50 @@ Started: Day 29 (next session)
 - Word count: 4,173 words
 - ArXiv endorsement: STILL PENDING (carry forward to Day 30)
 
-### Tomorrow — Day 30
-- Write §5: multi-agent attribution scoring (Day 26 role_attribution.py results)
-- Write §6: HITL trigger design (Day 23 hitl_trigger.py results)
-- Write §7: discussion, limitations, open problems (WP3 roadmap, RAGAS live integration, always-on eval)
-- Tag AgentTrace v1.0 on GitHub
-- Publish WP2 to Medium + ArXiv informal preprint
+### Day 30 — COMPLETE ✅
+- docs/white_papers/wp2_beyond_task_success_DRAFT.md — WP2 Sections 5–7 written; §8 Discussion stub remains
+  - §5 (~440 words): HITL Trigger Design — static threshold failure for non-deterministic agents;
+    PIA-based dual-condition trigger (variance > σ_threshold AND min PIA dimension < 0.60);
+    Cohere blind annotation connection; 543 triggers / 588 steps (92.35% rate) on 120 benchmark runs;
+    NOVEL_TOOL_PATTERN dominant (396/543); ends: "The trigger is not a quality gate; it is a
+    calibration signal that feeds back into the annotation pipeline."
+  - §6 (~480 words): Multi-Agent Attribution — attribution problem; 4 Layer 2 metrics
+    (authority_compliance_rate, avg_delegation_quality, accountability_coverage,
+    orchestrator_handoff_score); empirical 10-log comparison; wins on privacy_sensitive
+    (0.662 → 0.897) and ambient_noise; cascade_risk=False across all runs
+  - §7 (~490 words + table): Multi-Framework Benchmark — 6-dimension leaderboard table
+    (trajectory success, tool accuracy, latency SLA, error rate, PIA score, annotation
+    compatibility); annotation compatibility as new dimension; LangGraph highest (graph-node
+    model maps directly to PIA rubric); limitation note: synthetic tasks only
+  - §8 stub: Discussion, limitations, WP3 roadmap
+  - Current word count: ~5,800 words (§1–7 complete)
+  - Note: §5 in file = HITL Trigger Design; §6 = Multi-Agent Attribution; §7 = Framework
+    Benchmark; §8 = Discussion stub — section numbers diverged from Day 29 stubs during writing
+- RELEASE_NOTES_v1.0.md created at repo root:
+  - 9-module AgentTrace component table (all src/eval/ files)
+  - Empirical results: PIA κ −0.065 → +0.743 (Δ = +0.808); tool accuracy +177.8%;
+    trajectory success +177.8%
+  - BibTeX citation block; v1.1 roadmap (federated eval, live RAGAS, FACTS integration)
+- git tag v1.0.0 PENDING — not yet applied; run: git tag -a v1.0.0 -m "AgentTrace v1.0"
+- WP2 Medium/ArXiv publish PENDING — draft complete, publication not yet executed
+- ArXiv endorsement: STILL PENDING (carry forward to Day 31)
+
+### WP2 Section Numbers (current, post-Day-30)
+- §1: I/O Evaluation Failure ✅ (Day 29)
+- §2: Trajectory Decomposition ✅ (Day 29)
+- §3: PIA Methodology ✅ (Day 29)
+- §4: Empirical Results — A/B + live API anchors ✅ (Day 29)
+- §5: HITL Trigger Design ✅ (Day 30)
+- §6: Multi-Agent Attribution ✅ (Day 30)
+- §7: Multi-Framework Benchmark ✅ (Day 30)
+- §8: Discussion / Limitations / WP3 roadmap — stub (Day 31)
+
+### Tomorrow — Day 31
+- Write WP2 §8: Discussion, limitations, open problems (WP3 roadmap)
+- Run: git tag -a v1.0.0 -m "AgentTrace v1.0" && git push origin v1.0.0
+- Publish WP2 to Medium; update RELEASE_NOTES_v1.0.md with Medium URL
+- ArXiv informal preprint submission
+- Begin Day 31 targeted outreach: DMs 1–5 (Kore.ai, DeepMind contacts)
 
 ## Published Artifacts
 
