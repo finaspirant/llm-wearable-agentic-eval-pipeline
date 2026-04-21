@@ -865,6 +865,20 @@ Started: Day 29 (next session)
 - ArXiv informal preprint submission
 - Begin Day 31 targeted outreach: DMs 1–5 (Kore.ai, DeepMind contacts)
 
+### Day 32 — Phase 4 (Publish, Amplify & Apply)
+- Wrote Kore.ai guest blog: "5 Failure Modes in Enterprise Agent Evaluation"
+  - References Kore.ai 6-metric eval framework explicitly
+  - Includes IAA kappa 0.55->0.82 and PIA kappa 0.28->0.71 numbers
+  - Status: drafted, pending submission
+- Wrote AI21 Labs guest blog pitch: "Why Benchmarks Lie to Enterprise Teams"
+  - References AI21 Mind the Gap framing
+  - Status: drafted, pending submission
+
+### Tomorrow — Day 33
+- LinkedIn Post #4 (AI21 + production gaps, 89%/52% observability-eval gap)
+- Tag @AI21 Labs, comment on their recent LinkedIn post
+- Include before/after impact table as image
+
 ## Published Artifacts
 
 | Artifact | URL | Date |
