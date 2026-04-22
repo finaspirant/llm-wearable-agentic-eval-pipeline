@@ -895,6 +895,28 @@ Started: Day 29 (next session)
 - DMs 6–10 outreach
 - CFP submission to COLM 2026 / NeurIPS workshop
 
+### Day 37 (complete)
+- WP3 §4–6 written + abstract and references finalized:
+  - §4: Agentic Evaluation Framework — CATS, FIAA_gap, PPG, LBE formulas with thresholds
+  - §5: AmbientBench-v1 Benchmark Specification — 5 task categories (health_alert,
+    ambient_noise, privacy_sensitive, location_trigger, calendar_reminder), all with
+    exact formulas and thresholds; PIA extended to 4-dim with consent_adherence
+  - §6: Governance, Regulatory Considerations, Open Research Agenda — HIPAA/GDPR
+    analysis, DVC audit trail, 3 unsolved problems (federated IAA convergence,
+    consent-decay calibration, PRM without raw sensor labels)
+  - Abstract (~160 words, all headline numbers, repo link)
+  - References: 7 citations (HealthBench, FACTS, Anthropic backdoor, ReasonRAG,
+    AgentPRM, Cohere Command A, Kore.ai report)
+- docs/outreach/blog_pitch_writer.md: "Beyond Benchmark Theater" pitch (~500 words)
+- docs/outreach/blog_pitch_cohere.md: RAG annotation + reranker eval pitch (~550 words,
+  references Command A methodology directly)
+
+### Tomorrow (Day 38)
+- WP3 Medium/ArXiv publish preparation
+- EM impact deck: finalize slide 4 (WP3 ambient eval framing) + export PDF
+- Submit blog pitches: Writer + Cohere (send emails)
+- DMs 6–10 outreach if not done Day 36
+
 ## Published Artifacts
 
 | Artifact | URL | Date |
