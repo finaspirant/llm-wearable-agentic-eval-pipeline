@@ -950,6 +950,25 @@ Started: Day 29 (next session)
 - Note: manual Kaggle upload pending (scripts/kaggle_facts_submission.py generates the CSV)
 - ArXiv preprint submission: pending endorsement resolution
 
+### Day 43 — COMPLETE ✅
+- Final repo polish complete
+- results/: 6 chart images confirmed present (IAA lift, PIA, A/B experiment,
+  FACTS grounding, multiagent comparison, impact table)
+- README: Key Findings table updated with real numbers
+  (IAA 0.55→0.82, PIA −0.065→+0.743 Δ=+0.808, tool accuracy +177.8%)
+- README: Published Work section added with WP1/WP2/WP3 titles
+  (Medium URLs marked "coming soon") + HuggingFace dataset URL + Kaggle CSV link
+- End-to-end smoke test: PASS
+  (uv sync ✓ | wearable_generator ✓ | eval gate ✓ | pytest 503/503 ✓ | Streamlit headless ✓)
+- Note: No deck PDF in repo — published papers are the proof of work
+- Loom 90-sec walkthrough: pending — record manually before Day 44 outreach
+
+### Tomorrow (Day 44)
+- Medium SEO + cross-posting sprint
+- Record Loom 90-sec walkthrough; add URL to README Demo section
+- Post LinkedIn Post #4 (closing line decision required first)
+- Send Writer + Cohere blog pitch emails
+
 ## Published Artifacts
 
 | Artifact | URL | Date |
