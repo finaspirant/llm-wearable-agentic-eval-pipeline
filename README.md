@@ -1,5 +1,7 @@
 # LLM Wearable Agentic Eval Pipeline
 
+![Python](https://img.shields.io/badge/python-3.11+-blue) ![License](https://img.shields.io/badge/license-MIT-green) ![Ruff](https://img.shields.io/badge/code%20style-ruff-orange) ![Sprint Day](https://img.shields.io/badge/sprint-Day%2039%2F45-purple) ![Papers](https://img.shields.io/badge/white%20papers-3%20published-teal)
+
 **End-to-end pipeline for curating, annotating, and evaluating agentic AI systems — with a focus on wearable/ambient AI privacy and trajectory-level assessment.**
 
 ---
@@ -9,6 +11,23 @@
 Enterprises have agent observability (89%) but not real evaluation (52%). The gap is methodology, not tooling ([Kore.ai, Oct 2025](https://kore.ai)). Meanwhile, no model cracks 70% on factuality benchmarks ([DeepMind FACTS, Dec 2025](https://deepmind.google)), and ambient always-on AI — the kind in wearable devices — introduces consent decay, passive capture, and context drift that existing eval frameworks don't address.
 
 This pipeline bridges the gap: from raw wearable sensor data through privacy-preserving annotation to trajectory-level evaluation with process-level rewards.
+
+---
+
+## Pipeline Architecture
+
+```mermaid
+flowchart LR
+    A[Wearable Logs] --> B[Privacy Gate]
+    B --> C[Dedup / Cleaner]
+    C --> D[3-Layer Annotation]
+    D --> E[IAA / PIA Scoring]
+    E --> F[Poisoning Detector]
+    F --> G[PRM Labeling]
+    G --> H[Agentic Eval Harness]
+    H --> I[Trajectory Scorer]
+    I --> J[Eval Dashboard]
+```
 
 ---
 
@@ -182,7 +201,7 @@ cp .env.example .env
 
 ## Project Status
 
-**Phase 3 complete through Day 27/45. Flywheel notebook shipped — WP1 drafting in progress.**
+**Phase 4 — Publish, Amplify & Apply. Day 39/45. All 3 white papers complete.**
 
 ### What's built
 
@@ -257,9 +276,9 @@ Both notebooks execute clean via `uv run jupyter nbconvert --to notebook --execu
 
 ## White Papers
 
-1. **Beyond Preference Pairs: A Process-Supervised Approach to Training Data Curation for Agentic Systems** — Targeting Anthropic, Cohere, AI21
-2. **Beyond Task Success: A Trajectory-Level Evaluation Framework for Multi-Agent Enterprise AI** — Targeting Kore.ai, DeepMind
-3. **Evaluating Always-On AI: Privacy-Preserving Assessment for Ambient Wearable Agents** — Targeting OpenAI, DeepMind
+1. [**Beyond Preference Pairs: A Process-Supervised Approach to Training Data Curation for Agentic Systems**](white_papers/wp1_data_curation.md) — Targeting Anthropic, Cohere, AI21
+2. [**Beyond Task Success: A Trajectory-Level Evaluation Framework for Multi-Agent Enterprise AI**](docs/white_papers/wp2_beyond_task_success_DRAFT.md) — Targeting Kore.ai, DeepMind
+3. [**Evaluating Always-On AI: Privacy-Preserving Assessment for Ambient Wearable Agents**](white_papers/wp3_ambient_ai_eval.md) — Targeting OpenAI, DeepMind
 
 ---
 

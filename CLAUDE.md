@@ -926,9 +926,16 @@ Started: Day 29 (next session)
 - Blog pitches from Day 37: Writer + Cohere — status: DRAFTED, pending send to editorial contacts
 - Created white_papers/wp3_medium_version.md (SEO-optimised Medium draft)
 
-### Tomorrow (Day 39)
-- LinkedIn Post #5 (Cohere/Writer privacy angle)
-- Repo README polish
+### Day 39 (2026-04-22) — COMPLETE ✅
+- LinkedIn Post #4 drafted (Cohere/Writer privacy + RAG annotation angle) — DRAFT DO NOT POST
+- README.md: added Mermaid pipeline architecture diagram (flowchart LR, 10 nodes)
+- README.md: added GitHub badges (Python 3.11+, MIT license, ruff, sprint Day 39/45, 3 white papers)
+- README.md: full link audit — all notebook and white paper links verified; WP1/WP2/WP3 titles now linked to source files
+- CONTRIBUTING.md: created (67 lines — dev setup, new metric guide, schema extension guide, PR guidelines)
+
+### Tomorrow (Day 40)
+- DMs 11–15 outreach (Kore.ai, DeepMind, Cohere/AI21 contacts)
+- Job applications 3–4 (Kore.ai EM, DeepMind research engineer)
 - Replace [PASTE REAL URL HERE] in CLAUDE.md + wp3_medium_version.md footer once WP3 Medium is live
 - Send blog pitch emails: Writer + Cohere editorial contacts
 
