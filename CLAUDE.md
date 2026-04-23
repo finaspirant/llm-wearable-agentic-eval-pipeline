@@ -939,6 +939,17 @@ Started: Day 29 (next session)
 - Replace [PASTE REAL URL HERE] in CLAUDE.md + wp3_medium_version.md footer once WP3 Medium is live
 - Send blog pitch emails: Writer + Cohere editorial contacts
 
+### Day 41 — COMPLETE ✅
+- scripts/kaggle_facts_submission.py: scores wearable trajectories across FACTS 3 dimensions
+  (parametric, search, grounding) via FACTSGroundingScorer; --n flag controls sample size
+- results/facts_kaggle_submission.csv: 10 trajectories scored, mean overall FACTS score: 0.63
+  - parametric_score: 0.7000 (stub — parametric probe pending)
+  - search_score: 0.4286 (sentence token-overlap grounding)
+  - grounding_score: 0.7500 (RAGAS faithfulness fallback, no API key)
+  - overall_facts_score: 0.6262
+- Note: manual Kaggle upload pending (scripts/kaggle_facts_submission.py generates the CSV)
+- ArXiv preprint submission: pending endorsement resolution
+
 ## Published Artifacts
 
 | Artifact | URL | Date |
