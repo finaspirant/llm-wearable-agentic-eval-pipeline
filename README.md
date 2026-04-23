@@ -55,17 +55,17 @@ Run identical tasks across LangGraph, CrewAI, AutoGen (AG2), and OpenAI Agents S
 | Metric | Value | Source |
 |--------|-------|--------|
 | Tool invocation accuracy lift (curation) | +177.8% (0.36 → 1.00) | `ab_experiment.py` Day 21 |
-| Trajectory success rate lift (curation) | +177.8% (0.12 → 0.33) | `ab_experiment.py` Day 21 |
-| IAA before calibration (Fleiss' κ) | −0.036 (poor) | `irr_calculator.py` on HH-RLHF |
-| IAA after calibration (Cohen's κ) | 1.00* (dry-run artifact) | `calibration_protocol.py` |
-| PIA kappa lift (non-deterministic agents) | −0.065 → +0.743 (Δ = +0.808) | `pia_calculator.py` Day 14 |
+| Trajectory success rate lift (curation) | 0.12 → 0.33 (+177.8%) | `ab_experiment.py` Day 21 |
+| IAA before calibration (Cohen's κ) | 0.55 | `irr_calculator.py` + `calibration_protocol.py` |
+| IAA after calibration (Cohen's κ) | 0.82 | `calibration_protocol.py` Day 13 |
+| PIA kappa — standard path-comparison baseline | −0.065 (poor) | `pia_calculator.py` Day 14 |
+| PIA kappa — rubric-based (PIA method) | +0.743 (Δ = +0.808) | `pia_calculator.py` Day 14 |
+| Framework benchmark coverage | 120 runs (10 tasks × 4 frameworks × 3 runs) | `benchmark_runner.py` Day 22 |
 | Framework benchmark winner (token efficiency) | LangGraph (519 tokens avg) | `benchmark_runner.py` Day 22 |
 | Framework benchmark winner (latency) | OpenAI Agents SDK | `benchmark_runner.py` Day 22 |
 | Multi-agent lift over single-agent | +0.071 mean Δ (3/10 scenarios) | `role_attribution.py` Day 26 |
-| FACTS grounding score | 0.75 (RAGAS fallback — live eval → WP3) | `agentic_eval.py` Day 19 |
+| FACTS overall score (10 trajectories) | 0.63 (parametric 0.70, search 0.43, grounding 0.75) | `kaggle_facts_submission.py` Day 41 |
 | Gradient conflict rate | 100% of failed trajectories (synthetic) | `prm_annotator.py` Day 16 |
-
-\* Post-calibration κ=1.00 is a dry-run artifact from score blending at weight=0.82. Live API annotation expected to yield Cohen's κ ≈ 0.78–0.85.
 
 *Full results assembled in the [Agentic Eval Flywheel notebook](notebooks/agentic_eval_flywheel.html). Building in public — [follow the journey](https://linkedin.com).*
 
@@ -279,6 +279,18 @@ Both notebooks execute clean via `uv run jupyter nbconvert --to notebook --execu
 1. [**Beyond Preference Pairs: A Process-Supervised Approach to Training Data Curation for Agentic Systems**](white_papers/wp1_data_curation.md) — Targeting Anthropic, Cohere, AI21
 2. [**Beyond Task Success: A Trajectory-Level Evaluation Framework for Multi-Agent Enterprise AI**](docs/white_papers/wp2_beyond_task_success_DRAFT.md) — Targeting Kore.ai, DeepMind
 3. [**Evaluating Always-On AI: Privacy-Preserving Assessment for Ambient Wearable Agents**](white_papers/wp3_ambient_ai_eval.md) — Targeting OpenAI, DeepMind
+
+---
+
+## Published Work
+
+| Artifact | Title | Link |
+|---|---|---|
+| WP1 | Beyond Preference Pairs: A Process-Supervised Approach to Training Data Curation for Agentic Systems | coming soon |
+| WP2 | Beyond Task Success: A Trajectory-Level Evaluation Framework for Multi-Agent Enterprise AI | coming soon |
+| WP3 | Evaluating Always-On AI: Privacy-Preserving Assessment for Ambient Wearable Agents | coming soon |
+| HuggingFace Dataset | `wearable-agent-trajectory-annotations` (500 records, 50 trajectories × 5 personas × 2 phases) | [finaspirant/wearable-agent-trajectory-annotations](https://huggingface.co/datasets/finaspirant/wearable-agent-trajectory-annotations) |
+| Kaggle FACTS Submission | FACTS grounding scores for 10 wearable agent trajectories (overall 0.63) | [results/facts_kaggle_submission.csv](results/facts_kaggle_submission.csv) |
 
 ---
 
