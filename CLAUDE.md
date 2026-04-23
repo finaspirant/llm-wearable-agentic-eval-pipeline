@@ -917,6 +917,21 @@ Started: Day 29 (next session)
 - Submit blog pitches: Writer + Cohere (send emails)
 - DMs 6–10 outreach if not done Day 36
 
+### Day 38 (2026-04-22)
+- WP3 to be published on Medium (URL: [PASTE REAL URL HERE]) — saved draft Notion
+- WP3 cross-posted to Alignment Forum (docs/outreach/alignment_forum_hook_wp3.md — pending WP3 Medium URL)
+- Job application 1: OpenAI EM (Data/Eval team) — saved draft Notion 2026-04-22
+- Job application 2: Anthropic EM (Data/Alignment) — saved draft Notion 2026-04-22
+- Application package: repo link + WP1 + WP2 + WP3 Medium links (no deck — amended Day 31)
+- Blog pitches from Day 37: Writer + Cohere — status: DRAFTED, pending send to editorial contacts
+- Created white_papers/wp3_medium_version.md (SEO-optimised Medium draft)
+
+### Tomorrow (Day 39)
+- LinkedIn Post #5 (Cohere/Writer privacy angle)
+- Repo README polish
+- Replace [PASTE REAL URL HERE] in CLAUDE.md + wp3_medium_version.md footer once WP3 Medium is live
+- Send blog pitch emails: Writer + Cohere editorial contacts
+
 ## Published Artifacts
 
 | Artifact | URL | Date |
