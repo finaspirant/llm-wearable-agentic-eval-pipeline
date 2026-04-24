@@ -39,7 +39,7 @@ AgentTrace implements the Path-Invariant Agreement (PIA) methodology introduced 
 
 ### White Paper 2
 
-[White Paper 2 — Beyond Task Success: A Trajectory-Level Evaluation Framework for Multi-Agent Enterprise AI](https://medium.com/@shailendrabade) *(Medium URL — to be updated after publish)*
+[White Paper 2 — Beyond Task Success: A Trajectory-Level Evaluation Framework for Multi-Agent Enterprise AI](https://medium.com/@shail.subscribe/beyond-task-success-a-trajectory-level-evaluation-framework-for-multi-agent-enterprise-ai-d06d0fdf7e10)
 
 Full draft: [`docs/white_papers/wp2_beyond_task_success_DRAFT.md`](docs/white_papers/wp2_beyond_task_success_DRAFT.md)
 

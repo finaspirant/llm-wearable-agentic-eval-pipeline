@@ -846,7 +846,7 @@ Started: Day 29 (next session)
     trajectory success +177.8%
   - BibTeX citation block; v1.1 roadmap (federated eval, live RAGAS, FACTS integration)
 - git tag v1.0.0 PENDING — not yet applied; run: git tag -a v1.0.0 -m "AgentTrace v1.0"
-- WP2 Medium/ArXiv publish PENDING — draft complete, publication not yet executed
+- WP2 PUBLISHED: https://medium.com/@shail.subscribe/beyond-task-success-a-trajectory-level-evaluation-framework-for-multi-agent-enterprise-ai-d06d0fdf7e10
 - ArXiv endorsement: STILL PENDING (carry forward to Day 31)
 
 ### WP2 Section Numbers (current, post-Day-30)
@@ -975,6 +975,7 @@ Started: Day 29 (next session)
 | Artifact | URL | Date |
 |---|---|---|
 | WP1 (Medium) | https://medium.com/@shail.subscribe/why-your-agent-annotation-pipeline-is-quietly-corrupting-your-reward-model-and-what-to-do-about-5b494bac8234 | 2026-04-23 |
+| WP2 (Medium) | https://medium.com/@shail.subscribe/beyond-task-success-a-trajectory-level-evaluation-framework-for-multi-agent-enterprise-ai-d06d0fdf7e10 | 2026-04-24 |
 | HuggingFace Dataset | https://huggingface.co/datasets/finaspirant/wearable-agent-trajectory-annotations | 2026-04-17 |
 
 - 500 records (50 trajectories × 5 personas × 2 calibration phases)

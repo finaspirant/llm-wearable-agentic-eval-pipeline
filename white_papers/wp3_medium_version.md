@@ -187,7 +187,7 @@ I'm a machine learning engineer and AI systems researcher building evaluation in
 ## Related Posts in This Series
 
 - WP1: *"Why Your Agent Annotation Pipeline Is Quietly Corrupting Your Reward Model"* — gradient conflict problem, PIA methodology, annotation-layer poisoning detection → (https://medium.com/@shail.subscribe/why-your-agent-annotation-pipeline-is-quietly-corrupting-your-reward-model-and-what-to-do-about-5b494bac8234)
-- WP2: *"Beyond Task Success: Trajectory-Level Evaluation for Agentic AI"* — cascade errors, framework observability, live API benchmark → [WP2 Medium URL — paste after publish]
+- WP2: *"Beyond Task Success: Trajectory-Level Evaluation for Agentic AI"* — cascade errors, framework observability, live API benchmark → [Read on Medium](https://medium.com/@shail.subscribe/beyond-task-success-a-trajectory-level-evaluation-framework-for-multi-agent-enterprise-ai-d06d0fdf7e10)
 
 ---
 

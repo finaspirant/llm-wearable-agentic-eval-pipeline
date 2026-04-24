@@ -277,7 +277,7 @@ Both notebooks execute clean via `uv run jupyter nbconvert --to notebook --execu
 ## White Papers
 
 1. [**Beyond Preference Pairs: A Process-Supervised Approach to Training Data Curation for Agentic Systems**](https://medium.com/@shail.subscribe/why-your-agent-annotation-pipeline-is-quietly-corrupting-your-reward-model-and-what-to-do-about-5b494bac8234) — Targeting Anthropic, Cohere, AI21
-2. [**Beyond Task Success: A Trajectory-Level Evaluation Framework for Multi-Agent Enterprise AI**](docs/white_papers/wp2_beyond_task_success_DRAFT.md) — Targeting Kore.ai, DeepMind
+2. [**Beyond Task Success: A Trajectory-Level Evaluation Framework for Multi-Agent Enterprise AI**](https://medium.com/@shail.subscribe/beyond-task-success-a-trajectory-level-evaluation-framework-for-multi-agent-enterprise-ai-d06d0fdf7e10) — Targeting Kore.ai, DeepMind
 3. [**Evaluating Always-On AI: Privacy-Preserving Assessment for Ambient Wearable Agents**](white_papers/wp3_ambient_ai_eval.md) — Targeting OpenAI, DeepMind
 
 ---
@@ -287,7 +287,7 @@ Both notebooks execute clean via `uv run jupyter nbconvert --to notebook --execu
 | Artifact | Title | Link |
 |---|---|---|
 | WP1 | Beyond Preference Pairs: A Process-Supervised Approach to Training Data Curation for Agentic Systems | [Medium](https://medium.com/@shail.subscribe/why-your-agent-annotation-pipeline-is-quietly-corrupting-your-reward-model-and-what-to-do-about-5b494bac8234) |
-| WP2 | Beyond Task Success: A Trajectory-Level Evaluation Framework for Multi-Agent Enterprise AI | coming soon |
+| WP2 | Beyond Task Success: A Trajectory-Level Evaluation Framework for Multi-Agent Enterprise AI | [Medium](https://medium.com/@shail.subscribe/beyond-task-success-a-trajectory-level-evaluation-framework-for-multi-agent-enterprise-ai-d06d0fdf7e10) |
 | WP3 | Evaluating Always-On AI: Privacy-Preserving Assessment for Ambient Wearable Agents | coming soon |
 | HuggingFace Dataset | `wearable-agent-trajectory-annotations` (500 records, 50 trajectories × 5 personas × 2 phases) | [finaspirant/wearable-agent-trajectory-annotations](https://huggingface.co/datasets/finaspirant/wearable-agent-trajectory-annotations) |
 | Kaggle FACTS Submission | FACTS grounding scores for 10 wearable agent trajectories (overall 0.63) | [results/facts_kaggle_submission.csv](results/facts_kaggle_submission.csv) |
