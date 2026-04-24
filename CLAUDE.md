@@ -964,24 +964,75 @@ Started: Day 29 (next session)
 - Note: No deck PDF in repo — published papers are the proof of work
 - Loom 90-sec walkthrough: pending — record manually before Day 44 outreach
 
-### Tomorrow (Day 44)
-- Medium SEO + cross-posting sprint
-- Record Loom 90-sec walkthrough; add URL to README Demo section
-- Post LinkedIn Post #4 (closing line decision required first)
-- Send Writer + Cohere blog pitch emails
-
 ## Published Artifacts
 
 | Artifact | URL | Date |
 |---|---|---|
 | WP1 (Medium) | https://medium.com/@shail.subscribe/why-your-agent-annotation-pipeline-is-quietly-corrupting-your-reward-model-and-what-to-do-about-5b494bac8234 | 2026-04-23 |
 | WP2 (Medium) | https://medium.com/@shail.subscribe/beyond-task-success-a-trajectory-level-evaluation-framework-for-multi-agent-enterprise-ai-d06d0fdf7e10 | 2026-04-24 |
+| WP3 (Medium) | PENDING — publish date 2026-05-03 | — |
 | HuggingFace Dataset | https://huggingface.co/datasets/finaspirant/wearable-agent-trajectory-annotations | 2026-04-17 |
+| Loom Demo | https://www.loom.com/share/5bec5764428b4e48aa868134e54a894e | 2026-04-24 |
+| GitHub Repo | https://github.com/finaspirant/llm-wearable-agentic-eval-pipeline | — |
 
 - 500 records (50 trajectories × 5 personas × 2 calibration phases)
 - Schema: agenteval-schema-v1 (3-layer: session / role / step)
 - Pre-cal Fleiss' κ = −0.036; post-cal = 1.00 (dry-run artifact — live API run pending)
 - Descriptor: data/benchmark/benchmark_descriptor.json
+
+## Active Pending Items (updated 2026-04-24)
+
+### URLs confirmed and propagated
+- WP1 Medium: https://medium.com/@shail.subscribe/why-your-agent-annotation-pipeline-is-quietly-corrupting-your-reward-model-and-what-to-do-about-5b494bac8234
+- WP2 Medium: https://medium.com/@shail.subscribe/beyond-task-success-a-trajectory-level-evaluation-framework-for-multi-agent-enterprise-ai-d06d0fdf7e10
+- WP3 Medium: PENDING — publish date 2026-05-03. Paste URL here after live.
+- HuggingFace: https://huggingface.co/datasets/finaspirant/wearable-agent-trajectory-annotations
+- Loom: https://www.loom.com/share/5bec5764428b4e48aa868134e54a894e
+- GitHub repo: https://github.com/finaspirant/llm-wearable-agentic-eval-pipeline
+
+### Publishing pending
+- [ ] WP3 publish on Medium — 2026-05-03 (draft ready at white_papers/wp3_medium_version.md)
+      After publish: paste URL into Published Artifacts table above + README + cover letters
+- [ ] WP2 cross-post: Alignment Forum + HuggingFace blog (2026-05-05)
+- [ ] WP3 cross-post: Alignment Forum (2026-05-03)
+- [ ] WP1 post: LessWrong (2026-05-07)
+- [ ] WP2 submit: Towards Data Science (2026-05-07)
+- [ ] ArXiv: WP1 + WP2 as cs.AI preprints — BLOCKED on endorsement resolution (pending since Day 25)
+
+### Repo tasks pending
+- [ ] git tag v1.0.0 never applied — run after Day 43 polish:
+      git tag -a v1.0.0 -m "AgentTrace v1.0" && git push origin v1.0.0
+- [ ] Manual Kaggle upload: results/facts_kaggle_submission.csv → FACTS leaderboard (2026-05-09)
+
+### Outreach pending
+- [ ] DMs 1-5: send 2026-04-25/27 (WP1 + WP2 live, unblocked)
+- [ ] DeepMind FACTS LinkedIn comment: post Variant A BEFORE sending DM 9 (2026-04-30)
+- [ ] DMs 6-10: send 2026-04-30 (after FACTS comment posted)
+- [ ] DMs 11-15: draft + send 2026-05-02
+- [ ] Follow-up DMs to non-responders: 2026-05-11
+- [ ] Kore.ai guest blog: find editorial contact + send (2026-05-05)
+- [ ] AI21 Labs pitch: find editorial contact + send (2026-05-05)
+- [ ] Writer blog pitch: find contact + send (2026-05-07)
+- [ ] Cohere Labs pitch: find contact + send (2026-05-07)
+
+### Job applications pending
+- [ ] OpenAI EM: submit 2026-04-29 (cover letter drafted — fill GITHUB_REPO_URL + [Last Name] + [LinkedIn])
+- [ ] Anthropic EM: submit 2026-04-29 (same)
+- [ ] Kore.ai EM: submit 2026-05-01
+- [ ] DeepMind EM: submit 2026-05-01
+
+### LinkedIn posts (all drafts READY — schedule confirmed)
+- [ ] Post #2: 2026-04-29 — IAA 0.55→0.82
+- [ ] Post #3: 2026-05-01 — Framework benchmark + PIA κ
+- [ ] Post #4a: 2026-05-06 — WP1 announcement
+- [ ] Post #4b: 2026-05-08 — Cohere/Writer RAG angle
+- [ ] Post #5: 2026-05-13 — Day 45 wrap (draft needed after WP3 live)
+
+### CFPs pending (verify deadlines before submitting)
+- [ ] NeurIPS Workshop (Data-Centric AI / Agent Eval): neurips.cc
+- [ ] COLM 2026: colmweb.org
+- [ ] BOTS Summit 2026: botssummit.com
+- Abstracts drafted at: Notion — Day 36 CFP Abstracts page
 
 ### Phase 3 Deliverables Tracker
 
