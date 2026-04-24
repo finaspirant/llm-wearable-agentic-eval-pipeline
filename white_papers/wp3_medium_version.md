@@ -4,7 +4,7 @@
 
 *Part 3 of the Wearable AI Agentic Evaluation Pipeline research series.*
 
-*Tags: AI, Machine Learning, Wearable AI, AI Evaluation, Privacy*
+*Tags: AI, Machine Learning, Wearable AI, AI Evaluation, Privacy, Agentic AI*
 
 ---
 
@@ -186,7 +186,7 @@ I'm a machine learning engineer and AI systems researcher building evaluation in
 
 ## Related Posts in This Series
 
-- WP1: *"Why Your Agent Annotation Pipeline Is Quietly Corrupting Your Reward Model"* — gradient conflict problem, PIA methodology, annotation-layer poisoning detection → [WP1 Medium URL — paste after publish]
+- WP1: *"Why Your Agent Annotation Pipeline Is Quietly Corrupting Your Reward Model"* — gradient conflict problem, PIA methodology, annotation-layer poisoning detection → (https://medium.com/@shail.subscribe/why-your-agent-annotation-pipeline-is-quietly-corrupting-your-reward-model-and-what-to-do-about-5b494bac8234)
 - WP2: *"Beyond Task Success: Trajectory-Level Evaluation for Agentic AI"* — cascade errors, framework observability, live API benchmark → [WP2 Medium URL — paste after publish]
 
 ---
