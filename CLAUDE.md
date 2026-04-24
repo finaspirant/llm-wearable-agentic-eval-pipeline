@@ -799,6 +799,7 @@ Started: Day 29 (next session)
   - §6: Framework benchmark summary — trajectory observability finding
   - §7: Conclusion + WP2/WP3 roadmap
 - white_papers/wp1_medium_version.md — SEO-optimized Medium version
+  - PUBLISHED: https://medium.com/@shail.subscribe/why-your-agent-annotation-pipeline-is-quietly-corrupting-your-reward-model-and-what-to-do-about-5b494bac8234
 - white_papers/linkedin_post4_wp1_announcement.md (🟡 DO NOT POST)
 - Phase 3 complete — all Days 19-28 deliverables done
 - ArXiv endorsement: STILL PENDING (carry forward to Day 30)
@@ -973,6 +974,7 @@ Started: Day 29 (next session)
 
 | Artifact | URL | Date |
 |---|---|---|
+| WP1 (Medium) | https://medium.com/@shail.subscribe/why-your-agent-annotation-pipeline-is-quietly-corrupting-your-reward-model-and-what-to-do-about-5b494bac8234 | 2026-04-23 |
 | HuggingFace Dataset | https://huggingface.co/datasets/finaspirant/wearable-agent-trajectory-annotations | 2026-04-17 |
 
 - 500 records (50 trajectories × 5 personas × 2 calibration phases)
