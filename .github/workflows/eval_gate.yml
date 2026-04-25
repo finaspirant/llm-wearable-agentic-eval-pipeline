@@ -56,7 +56,8 @@ jobs:
 
       - name: Generate test data (wearable logs + trajectory scores)
         run: |
-          uv run python -m src.data.wearable_generator --count 100 --seed 42
+          uv run python -m src.data.wearable_generator --count 100 --seed 42 \
+            --output data/raw/synthetic_wearable_logs.jsonl
           uv run python -m src.eval.trajectory_scorer --dry-run
 
       - name: Run pytest
