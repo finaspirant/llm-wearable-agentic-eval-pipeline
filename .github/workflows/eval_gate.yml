@@ -22,14 +22,17 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install lint tools
-        run: pip install ruff mypy
+      - name: Install uv
+        run: pip install uv
+
+      - name: Install project + dev dependencies
+        run: uv sync --group dev
 
       - name: ruff check
-        run: ruff check src/ tests/
+        run: uv run ruff check src/ tests/
 
       - name: mypy
-        run: mypy src/ --ignore-missing-imports
+        run: uv run mypy src/ --ignore-missing-imports
 
   # ── Job 2: Unit tests ────────────────────────────────────────────────────
   unit-tests:
