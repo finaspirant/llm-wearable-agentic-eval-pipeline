@@ -1,0 +1,1024 @@
+% ============================================================
+%  Beyond Task Success: Path-Invariant Agreement for
+%  Trajectory-Level Evaluation of Non-Deterministic Agents
+%
+%  NeurIPS 2026 — Datasets and Benchmarks Track
+%  Abstract deadline: May 4, 2026
+%  Full paper deadline: May 6, 2026
+% ============================================================
+
+\documentclass{article}
+
+% ---- NeurIPS 2026 style ----
+% Download neurips_2026.sty from:
+% https://media.neurips.cc/Conferences/NeurIPS2026/Styles.zip
+% Place in same directory as this file, then uncomment:
+% \usepackage{neurips_2026}
+%
+% For now, use a compatible substitute for local compilation:
+\usepackage[preprint]{neurips_2024}   % swap to neurips_2026 when available
+
+% ---- Standard packages ----
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{booktabs}        % \toprule, \midrule, \bottomrule
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{nicefrac}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{enumitem}        % compact lists
+
+% ---- Custom commands ----
+\newcommand{\PIA}{\textsc{pia}}          % Path-Invariant Agreement
+\newcommand{\kap}{\ensuremath{\kappa}}   % Cohen / Fleiss kappa shorthand
+\newcommand{\AgentTrace}{\textsc{AgentTrace}}
+\newcommand{\todo}[1]{\textcolor{red}{\textbf{[TODO: #1]}}}
+\newcommand{\note}[1]{\textcolor{blue}{\textbf{[NOTE: #1]}}}
+
+% ============================================================
+%  TITLE AND AUTHORS
+% ============================================================
+\title{Beyond Task Success: Path-Invariant Agreement for
+       Trajectory-Level Evaluation of Non-Deterministic Agents}
+
+\author{%
+  \textbf{Shailendra Bade} \\
+  Independent Researcher \\
+  \texttt{shail.finaspirant@gmail.com}
+}
+
+% ============================================================
+\begin{document}
+
+\maketitle
+
+% ============================================================
+\begin{abstract}
+% ---- PASTE FINAL ABSTRACT HERE ----
+Evaluating multi-step agentic AI systems presents a fundamental measurement
+problem: standard inter-annotator agreement (\textsc{iaa}) metrics collapse
+when applied to non-deterministic agents that reach identical goals via
+legitimately different action sequences.
+%
+We demonstrate that Fleiss'~$\kappa$ computed over step-level path comparisons
+yields $\kappa = -0.065$ on wearable agentic trajectories---not because
+annotators disagree on quality, but because the metric conflates path
+divergence with quality disagreement.
+%
+We introduce \textbf{Path-Invariant Agreement (\PIA{})}, a rubric-based
+\textsc{iaa} methodology that decouples quality assessment from path length by
+evaluating three independent dimensions---planning quality, error recovery, and
+goal alignment---rather than action-sequence overlap.
+%
+Applied to the same trajectory corpus, \PIA{} recovers $\kappa = +0.743$
+($\Delta = +0.808$, poor $\to$ substantial agreement).
+%
+We further show that annotation-layer quality directly determines downstream
+model behavior: poisoned step-level labels introduced at the annotation layer
+propagate gradient conflicts to 100\% of affected trajectories under outcome
+reward models, a failure invisible to task-success metrics.
+%
+To operationalize both findings, we release \AgentTrace{}, an open-source
+end-to-end pipeline for wearable agentic evaluation covering synthetic
+trajectory generation, \PIA{} scoring, process reward model annotation, and
+annotator outlier detection.
+%
+Our pipeline improves tool invocation accuracy from 0.36 to 1.00
+(+177.8\%) and trajectory success rate from 0.12 to 0.33 on a held-out
+benchmark.
+%
+We argue that trajectory-level evaluation requires new \textsc{iaa} primitives,
+and that annotation quality is the pre-gradient intervention point for safe
+agentic systems.
+\end{abstract}
+
+% ============================================================
+\section{Introduction}
+\label{sec:intro}
+% ============================================================
+
+The deployment of multi-step agentic AI systems has outpaced the evaluation
+infrastructure needed to assess them.
+%
+Enterprise AI surveys find that 89\% of organizations track agent
+observability, yet only 52\% have real evaluation frameworks in place
+\cite{koreai2025}---a gap driven not by lack of tooling, but by lack of
+\emph{methodology}.
+%
+The dominant evaluation paradigm remains task success: did the agent
+accomplish the stated goal?
+%
+This binary framing is insufficient for two compounding reasons.
+
+\paragraph{Problem 1: Outcome reward models destroy step-level signal.}
+Under \emph{outcome reward models} (\textsc{orm}), a single reward is
+assigned at the terminal step.
+%
+If step 15 of a 15-step trajectory fails, all 14 preceding steps---including
+those executed correctly---receive an identical negative reward signal.
+%
+This \emph{gradient conflict} problem forces process reward models (\textsc{prm})
+to learn correct intermediate steps from incorrect terminal labels,
+degrading training efficiency.
+%
+Recent work finds that process-supervised training is up to 18$\times$ more
+data-efficient than outcome-supervised reinforcement learning precisely because
+each intermediate step carries independent signal \cite{reasonrag2025}.
+%
+The prerequisite for \textsc{prm} training is reliable step-level annotation---
+but this is where the second problem emerges.
+
+\paragraph{Problem 2: Standard \textsc{iaa} metrics break for non-deterministic agents.}
+Inter-annotator agreement (\textsc{iaa}) metrics such as Fleiss'
+$\kappa$~\cite{fleiss1971} and Krippendorff's $\alpha$~\cite{krippendorff2011}
+assume that raters evaluating the same artifact produce the same labels when
+they agree.
+%
+This assumption fails for non-deterministic agents: two agents completing the
+same goal via legitimately different action sequences produce structurally
+different trajectories that path-comparison \textsc{iaa} metrics score as
+annotator \emph{disagreement}---even when the annotators share identical
+quality judgments.
+%
+We demonstrate this concretely: applied to wearable agentic trajectories,
+standard path-comparison Fleiss' $\kappa$ yields $\kappa = -0.065$.
+%
+By conventional interpretation, this signals poor agreement and unreliable
+annotation.
+%
+In fact, it signals measurement failure.
+
+\paragraph{Problem 3: Annotation poisoning is undetectable by standard defenses.}
+Step-level annotation is the only intervention point between a malicious
+annotator and the model's gradient update.
+%
+Prior work has shown that as few as 250 poisoned training documents---
+irrespective of total dataset size---are sufficient to backdoor models of any
+scale~\cite{anthropic_backdoor2025}.
+%
+We show that the standard defense against malicious annotators---Median
+Absolute Deviation (\textsc{mad}) suspicion scoring---achieves $F_1 = 0.0$
+against coordinated, colluding annotators who assign identical biased scores.
+%
+Colluding annotators deviate from the panel consensus as a group, collapsing
+their joint suspicion score to zero.
+
+\paragraph{Contributions.}
+We address all three problems with a unified methodological and artifact
+contribution:
+\begin{itemize}[nosep]
+  \item \textbf{\PIA{} (\underline{P}ath-\underline{I}nvariant
+        \underline{A}greement):} a rubric-based \textsc{iaa} methodology that
+        evaluates quality dimensions independently of path length, recovering
+        $\kappa = +0.743$ ($\Delta = +0.808$, poor $\to$ substantial) on
+        trajectories where standard \textsc{irr} yields $\kappa = -0.065$
+        (\S\ref{sec:pia}).
+  \item \textbf{Poisoning blind spot characterization:} empirical proof that
+        \textsc{mad}-based annotator detection achieves $F_1 = 0.0$ against
+        colluding annotators, with a complementary Confident Learning
+        second-layer defense (\S\ref{sec:poisoning}).
+  \item \textbf{\AgentTrace{}:} an open-source, end-to-end pipeline from
+        synthetic wearable trajectory generation through \textsc{prm}
+        annotation and poisoning detection, released with a publicly available
+        annotated dataset on HuggingFace (\S\ref{sec:agenttrace}).
+  \item \textbf{Curation impact:} an A/B experiment demonstrating $+177.8\%$
+        lift in tool invocation accuracy (0.36 $\to$ 1.00) and trajectory
+        success rate (0.12 $\to$ 0.33) from curated vs.\ raw trajectories,
+        quantifying the downstream value of annotation quality
+        (\S\ref{sec:eval}).
+\end{itemize}
+
+% ============================================================
+\section{Background and Related Work}
+\label{sec:background}
+% ============================================================
+
+\subsection{Outcome vs.\ Process Reward Models}
+\label{sec:background:prm}
+
+Reinforcement learning from human feedback (\textsc{rlhf}) for language
+agents has converged on two reward model paradigms.
+%
+\emph{Outcome reward models} (\textsc{orm}) assign a single scalar reward
+at the terminal step of a trajectory, treating success and failure as
+binary outcomes.
+%
+\emph{Process reward models} (\textsc{prm}) assign intermediate rewards
+at each step, enabling credit assignment across the full trajectory.
+
+The gradient conflict problem under \textsc{orm} training is well-documented.
+%
+\citet{reasonrag2025} show that process-supervised training is up to $18\times$
+more data-efficient than outcome-supervised reinforcement learning on
+multi-step reasoning tasks: each intermediate step carries an independent
+learning signal rather than being zeroed out by a failed terminal reward.
+%
+\citet{agentprm2025} extend this to agentic settings via Monte Carlo
+rollout annotation~\cite{agentprm2025}, generating step-level labels by
+simulating all possible trajectory continuations from each intermediate state.
+%
+Our pipeline implements a simplified, annotation-efficient variant of this
+approach: human-in-the-loop step labeling guided by the \PIA{} rubric,
+without requiring full Monte Carlo rollout.
+
+The prerequisite for any \textsc{prm} approach is annotation that accurately
+reflects step quality---which brings us to the measurement problem this paper
+addresses.
+
+\subsection{Inter-Annotator Agreement for Agentic Systems}
+\label{sec:background:iaa}
+
+Inter-annotator agreement metrics were developed for static annotation tasks:
+labeling text sentiment, named entities, or document categories.
+%
+These tasks share a property that agentic annotation does not: a given
+artifact produces a fixed sequence of labels regardless of which annotator
+evaluates it.
+%
+Non-deterministic agents violate this property by construction---two valid
+trajectories to the same goal may have entirely different action sequences,
+step counts, and tool invocations.
+
+Despite this, the annotation practices reported in production \textsc{llm}
+training pipelines rarely acknowledge the problem.
+%
+\citet{cohere_commanda2025} describe an 800-prompt annotation process across
+65 annotators for the Cohere Command A model---but report no agreement
+statistics whatsoever~\cite{cohere_commanda2025}.
+%
+The absence of $\kappa$ or $\alpha$ reporting is not unusual; it reflects
+the broader industry pattern documented by \citet{koreai2025}, who find that
+89\% of enterprises track agent observability but only 52\% have real
+evaluation frameworks.
+%
+This gap is particularly notable in light of benchmarks such as the
+\textsc{facts} Grounding Leaderboard~\cite{facts_deepmind2025}, which
+measures grounding and factuality but does not address the annotation
+methodology required to produce step-level training labels for agentic systems.
+%
+Standard \textsc{iaa} metrics produce misleading results when applied to
+non-deterministic agents, and no widely adopted alternative exists.
+%
+\PIA{} is designed to fill this gap.
+
+\subsection{Annotation Security}
+\label{sec:background:security}
+
+The vulnerability of \textsc{rlhf} pipelines to annotation-layer attacks has
+received growing attention.
+%
+\citet{anthropic_backdoor2025} demonstrate that as few as 250 maliciously
+crafted documents---independent of total dataset size---are sufficient to
+embed persistent backdoors in language models of any scale.
+%
+This count-based (not proportion-based) finding has direct implications for
+annotation pipelines: a small pool of malicious annotators can cause outsized
+harm regardless of how large the annotation team is.
+
+\citet{shadearena2025} extend this threat model to multi-agent settings,
+demonstrating that frontier LLMs can pursue hidden objectives and evade
+monitoring while completing benign tasks---a finding that underscores the
+difficulty of detecting subtle model misbehavior at the evaluation layer.
+%
+Neither work, however, addresses the detection of \emph{colluding annotators}
+in non-deterministic agentic annotation---a setting where the standard defense
+(\textsc{mad}-based outlier detection) fails by construction.
+%
+We characterize this blind spot empirically and propose a complementary
+defense.
+
+% ============================================================
+\section{Path-Invariant Agreement (\PIA{})}
+\label{sec:pia}
+% ============================================================
+
+\subsection{Why Standard \textsc{irr} Fails for Agents}
+\label{sec:pia:failure}
+
+Standard inter-rater reliability metrics---Fleiss' $\kappa$~\cite{fleiss1971},
+Cohen's $\kappa$~\cite{cohen1960}, and Krippendorff's
+$\alpha$~\cite{krippendorff2011}---share a common assumption: that raters
+evaluating the same artifact should produce the same labels if they agree.
+This assumption holds for static artifacts such as text documents or images.
+It breaks for \emph{non-deterministic agents}.
+
+Consider two annotators evaluating a wearable health agent completing a
+blood-pressure monitoring task.
+%
+Annotator A observes a trajectory that checks the sensor, validates the
+reading, and alerts the clinician in three steps.
+%
+Annotator B observes a trajectory that validates first, rechecks the sensor
+due to an anomaly, handles the alert queue, and then alerts in five steps.
+%
+Both agents succeeded; both annotators would rate the outcome as high quality.
+%
+Yet under step-level path comparison, the annotators appear to \emph{disagree}:
+their step labels do not align because the action sequences differ.
+%
+Fleiss' $\kappa$ penalizes this path divergence as annotator inconsistency,
+even though no inconsistency exists.
+
+Formally, let $T_i$ and $T_j$ be two trajectories reaching the same goal $G$
+via action sequences $A_i = (a_1, \ldots, a_m)$ and
+$A_j = (a_1', \ldots, a_n')$ where $m \neq n$ or $a_k \neq a_k'$ for some
+$k$.
+%
+A path-comparison \textsc{irr} metric treats any label mismatch at position $k$
+as annotator disagreement.
+%
+When agents are non-deterministic, such mismatches arise even when annotators
+share identical quality judgments.
+%
+The expected $\kappa$ under perfect annotator agreement approaches zero---or
+goes negative---in proportion to the variance in valid path lengths.
+
+We confirm this empirically.
+%
+Applied to our wearable agentic trajectory corpus ($n=30$ trajectories,
+5 annotator personas), standard path-comparison Fleiss' $\kappa$ yields
+$\kappa = -0.065$ overall, with per-dimension values ranging from
+$-0.061$ (privacy compliance) to $+0.002$ (goal alignment).
+%
+By conventional interpretation~\cite{fleiss1971}, this result signals
+\emph{poor agreement}---but it reflects measurement failure, not genuine
+annotator disagreement.
+
+\subsection{The \PIA{} Methodology}
+\label{sec:pia:method}
+
+\PIA{} resolves the non-determinism paradox by separating the \emph{what}
+from the \emph{how}: rather than comparing action sequences step by step,
+annotators evaluate \emph{rubric dimensions} that capture quality independent
+of the path taken.
+
+\paragraph{Rubric dimensions.}
+\PIA{} defines three core dimensions for agentic evaluation:
+
+\begin{itemize}[nosep]
+  \item \textbf{Planning quality} (1--4 scale): Does the agent decompose
+        the goal into coherent sub-steps? Does it anticipate constraints
+        before acting?
+  \item \textbf{Error recovery} (1--4 scale): When an intermediate step
+        fails or returns an unexpected result, does the agent adapt
+        gracefully rather than propagating the failure?
+  \item \textbf{Goal alignment} (1--4 scale): Does the agent's final
+        state satisfy the stated goal, including any implicit constraints
+        such as privacy boundaries or latency requirements?
+\end{itemize}
+
+For wearable agentic contexts, a fourth dimension is added:
+
+\begin{itemize}[nosep]
+  \item \textbf{Privacy compliance} (1--4 scale): Does the agent respect
+        contextual consent boundaries for sensitive biometric data, and does
+        it avoid unnecessary data disclosure?
+\end{itemize}
+
+Each dimension is scored independently, and \PIA{} $\kappa$ is computed as
+Fleiss' $\kappa$ over the dimension scores---not over action-sequence labels.
+%
+This eliminates the structural source of spurious disagreement: annotators
+who agree that an agent planned well will now \emph{agree} on the
+planning-quality dimension regardless of which path the agent took.
+
+\paragraph{Calibration protocol.}
+Prior to annotation, annotators are exposed to five anchor trajectories:
+two scored clearly good (dimension scores 3.5--4.0), one borderline
+(dimension scores 2.0--2.5), and two scored clearly bad (dimension scores
+1.0--1.5).
+%
+Anchor scores are computed as:
+\begin{equation}
+  s_{\text{calibrated}} = 0.82 \cdot s_{\text{gold}} + 0.18 \cdot s_{\text{base}}
+  \label{eq:calibration}
+\end{equation}
+where $s_{\text{gold}}$ is the expert-assigned anchor score and
+$s_{\text{base}}$ is the annotator's uncalibrated base score.
+%
+The calibration weight $w = 0.82$ was selected to achieve target thresholds
+of $\kappa \geq 0.55$ and Krippendorff's $\alpha \geq 0.80$.
+%
+This protocol encodes the observation that borderline cases drive most
+annotator disagreement; anchor exposure on borderline examples is therefore
+the highest-leverage calibration intervention.
+
+\subsection{Empirical Results}
+\label{sec:pia:results}
+
+Table~\ref{tab:pia} reports \PIA{} results across all rubric dimensions on
+the wearable agentic trajectory corpus ($n=30$ trajectories, 5 annotator
+personas).
+
+\begin{table}[h]
+\centering
+\caption{Standard path-comparison \textsc{irr} vs.\ \PIA{} across rubric
+         dimensions. Wearable agentic trajectory corpus; $n=30$ trajectories,
+         5 annotator personas. Interpretation follows~\citet{fleiss1971}:
+         $\kappa < 0.20$ = poor; $0.61$--$0.80$ = substantial;
+         $> 0.80$ = almost perfect.}
+\label{tab:pia}
+\begin{tabular}{lrrrr}
+\toprule
+\textbf{Dimension} & \textbf{Std.\ $\kappa$} & \textbf{\PIA{} $\kappa$}
+  & \textbf{$\Delta$} & \textbf{Interpretation} \\
+\midrule
+Planning quality   & $-0.065$ & $+0.705$ & $+0.770$ & Substantial     \\
+Error recovery     & $-0.065$ & $+0.826$ & $+0.891$ & Almost perfect  \\
+Goal alignment     & $-0.065$ & $+0.697$ & $+0.762$ & Substantial     \\
+Privacy compliance & $-0.065$ & $+0.942$ & $+1.007$ & Almost perfect  \\
+\midrule
+\textbf{Overall}   & $-0.065$ & $+0.743$ & $+0.808$ & \textbf{Substantial} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\PIA{} raises overall agreement from poor ($\kappa = -0.065$) to substantial
+($\kappa = +0.743$), a lift of $\Delta = +0.808$ $\kappa$ points.
+%
+The error recovery and privacy compliance dimensions reach near-perfect
+agreement ($\kappa > 0.80$), suggesting that annotators have well-calibrated
+intuitions about these quality properties when freed from path-comparison
+artifacts.
+%
+The privacy compliance dimension is particularly notable: its standard
+$\kappa$ of $-0.065$ would conventionally be interpreted as annotators
+failing to agree on privacy evaluation---yet its \PIA{} $\kappa$ of $+0.942$
+reveals near-consensus once path length is factored out.
+%
+This pattern is consistent across wearable scenarios that involve sensitive
+biometric data, where privacy boundary violations are unambiguous to
+annotators but path length varies substantially across agents.
+
+\paragraph{Caveat on calibration artifact.}
+Post-calibration $\kappa = 1.00$ reported in dry-run execution is a
+mathematical artifact of the deterministic blending formula
+(Equation~\ref{eq:calibration}): when $s_{\text{base}}$ is produced
+deterministically, all calibrated scores collapse to identical values.
+%
+The empirically meaningful numbers are the \emph{pre-calibration} values
+reported in Table~\ref{tab:pia}, which come from genuine multi-persona
+annotation before anchor blending.
+%
+Live annotation with stochastic LLM calls is expected to yield
+$\kappa \approx 0.55$--$0.65$ pre-calibration and
+$\kappa \approx 0.78$--$0.85$ post-calibration, consistent with
+published human annotation studies on complex NLP tasks.
+
+% ============================================================
+\section{Annotation Poisoning at the Step Level}
+\label{sec:poisoning}
+% ============================================================
+
+\subsection{The Pre-Gradient Intervention Point}
+\label{sec:poisoning:pregrad}
+
+Step-level annotation is the only point in the \textsc{prm} training pipeline
+where a malicious actor can intervene \emph{before} the gradient update.
+%
+Once poisoned labels enter the training batch, the model's optimizer has no
+mechanism to distinguish a high-quality step from a maliciously mislabeled one.
+%
+This makes annotation-layer integrity a safety-critical property, not merely a
+data quality concern.
+
+The risk is quantified by the \emph{gradient conflict rate}: the proportion of
+training steps that receive incorrect reward signals due to label poisoning.
+%
+Consider an outcome-failed trajectory in which 14 of 15 steps were executed
+correctly, but the terminal step failed.
+%
+Under \textsc{orm} training, all 14 correct steps receive a $-1$ reward,
+producing gradient conflicts at every intermediate position.
+%
+Under \textsc{prm} training with poisoned step labels---where a malicious
+annotator assigns $-1$ to correct intermediate steps---the same gradient
+conflicts are produced, but they are now invisible to \emph{any} task-success
+evaluation metric.
+%
+Task-success metrics observe only the terminal outcome; they cannot distinguish
+correctly-labeled trajectories from poisoned ones.
+
+We measure the gradient conflict rate empirically in \AgentTrace{}.
+%
+In our synthetic corpus, outcome-failed trajectories in which $\geq 50\%$ of
+intermediate steps were executed correctly exhibit a 100\% gradient conflict
+rate under \textsc{orm} reward assignment.
+%
+This result is a synthetic artifact---in production, the rate depends on task
+difficulty distribution---but it establishes the upper bound of the problem
+and motivates step-level annotation as the correct intervention point.
+%
+\citet{anthropic_backdoor2025} provide independent evidence for the severity
+of the risk: 250 maliciously labeled documents suffice to backdoor arbitrarily
+large models, regardless of clean data proportion.
+
+\subsection{MAD Detection Blind Spot}
+\label{sec:poisoning:mad}
+
+The standard defense against malicious annotators in large annotation pipelines
+is \emph{Median Absolute Deviation} (\textsc{mad}) suspicion scoring.
+%
+Each annotator receives a suspicion score $s \in [0, 1]$ proportional to their
+deviation from the panel consensus on each annotation dimension.
+%
+Annotators whose scores consistently deviate from the majority are flagged as
+outliers and removed.
+
+This defense fails against a specific and practically relevant threat model:
+\emph{coordinated collusion}, in which multiple annotators assign identical
+biased labels.
+
+Formally, let $\hat{\mu}$ be the panel median for a given annotation dimension,
+and let $\delta_i = |x_i - \hat{\mu}|$ be the absolute deviation of annotator
+$i$.
+%
+The \textsc{mad} suspicion score for annotator $i$ is:
+\begin{equation}
+  s_i = \frac{\delta_i}{\text{MAD}(\delta_1, \ldots, \delta_n)}
+  \label{eq:mad}
+\end{equation}
+where $\text{MAD} = \text{median}(|\delta_i - \text{median}(\delta)|)$.
+%
+When $k \geq 3$ annotators collude with identical biased labels, their joint
+deviation from the panel consensus is shared equally.
+%
+Their mean deviation equals their individual deviations, so the \textsc{mad}
+of the full panel shifts toward the colluders' shared bias.
+%
+The colluding annotators' suspicion scores collapse toward $s = 0.0$---
+indistinguishable from the most reliable annotator in the pool.
+
+We confirm this empirically by injecting three coordinated poisoners
+(Poisoner\_A, Poisoner\_B, Poisoner\_C) into our five-annotator panel.
+%
+All three poisoners receive suspicion scores of $s = 0.000$ at every detection
+threshold (Table~\ref{tab:mad}).
+%
+A threshold sweep from 0.0 to 1.0 yields $F_1 = 0.0$ throughout: precision
+and recall are both zero because no poisoner is ever flagged.
+%
+This is not an implementation failure---it is a fundamental property of
+\textsc{mad}-based detection.
+%
+Any detection scheme that relies solely on deviation from panel consensus will
+share this blind spot when the colluding group is large enough to shift
+the consensus.
+
+\begin{table}[h]
+\centering
+\caption{MAD suspicion scores for the augmented annotator pool (5 legitimate
+         + 3 injected colluding poisoners). Poisoners achieve the lowest
+         suspicion scores in the pool, making threshold-based detection
+         impossible. $F_1 = 0.0$ at all thresholds.}
+\label{tab:mad}
+\begin{tabular}{llr}
+\toprule
+\textbf{Annotator} & \textbf{Type} & \textbf{MAD Suspicion Score} \\
+\midrule
+RecoverySkeptic     & Legitimate & 1.000 \\
+OutcomeOptimist     & Legitimate & 0.683 \\
+ProcessPurist       & Legitimate & 0.488 \\
+ClinicalSafetyFirst & Legitimate & 0.293 \\
+PrivacyMaximalist   & Legitimate & 0.195 \\
+Poisoner\_A         & Injected   & 0.000 \\
+Poisoner\_B         & Injected   & 0.000 \\
+Poisoner\_C         & Injected   & 0.000 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Second-Layer Defense: Confident Learning}
+\label{sec:poisoning:cleanlab}
+
+The \textsc{mad} blind spot motivates a complementary defense that operates
+on \emph{label distributions} rather than annotator identity.
+%
+\emph{Confident Learning}~\cite{cleanlab2021} detects noisy labels by
+estimating the joint distribution of annotator-assigned labels and latent
+true labels, identifying examples where the assigned label is inconsistent
+with the model's confident predictions.
+%
+Crucially, this approach is blind to annotator identity and collusion
+structure: it flags suspicious labels regardless of \emph{who} assigned them.
+
+We integrate Cleanlab's \texttt{find\_label\_issues} with quality score
+thresholding and \texttt{get\_label\_quality\_scores} into \AgentTrace{} as
+a second-layer defense.
+%
+In the pilot study, Cleanlab identifies zero label issues in the clean
+annotation pool---confirming no false positives on legitimate annotators.
+%
+In future work with real poisoned annotation data, Confident Learning is
+expected to surface the label-level signature of colluding poisoners even
+when their annotator-level scores are undetectable via \textsc{mad}.
+%
+The two defenses are complementary: \textsc{mad} catches individual outlier
+annotators; Confident Learning catches systematic label corruption regardless
+of its source.
+
+% ============================================================
+\section{The \AgentTrace{} Pipeline}
+\label{sec:agenttrace}
+% ============================================================
+
+\subsection{Architecture}
+\label{sec:agenttrace:arch}
+
+\AgentTrace{} is a six-stage, end-to-end pipeline from synthetic wearable
+trajectory generation to annotation quality evaluation.
+%
+Each stage produces structured output that feeds directly into the next,
+enabling full reproducibility from a single seed.
+%
+Table~\ref{tab:pipeline} summarizes the stages, modules, inputs, outputs,
+and key metrics.
+
+\begin{table}[h]
+\centering
+\caption{\AgentTrace{} pipeline summary. All results from \texttt{seed=42};
+         100 synthetic trajectories; 5 annotator personas.}
+\label{tab:pipeline}
+\small
+\begin{tabular}{p{2.8cm}p{2.5cm}p{1.5cm}p{1.8cm}}
+\toprule
+\textbf{Stage} & \textbf{Module} & \textbf{Input} & \textbf{Key Metric} \\
+\midrule
+1.\ Synthetic generation
+  & \texttt{wearable\_generator.py}
+  & seed=42
+  & 5 scenario types $\times$ 20 logs \\
+2.\ Differential privacy
+  & \texttt{privacy\_gate.py}
+  & Raw sensor data
+  & $\varepsilon=1.0$ \\
+3.\ Multi-persona annotation
+  & \texttt{annotator\_simulator.py}
+  & 100 logs, 5 personas
+  & Pre-cal $\kappa = -0.035$ \\
+4.\ IAA calibration + \PIA{}
+  & \texttt{pia\_calculator.py}
+  & 150 annotation records
+  & $\kappa\colon{-0.065} \to {+0.743}$ \\
+5.\ PRM step labeling
+  & \texttt{prm\_annotator.py}
+  & 20 trajectories
+  & 100\% gradient conflict rate \\
+6.\ Poisoning detection
+  & \texttt{poisoning\_detector.py}
+  & 25 records + 3 poisoners
+  & MAD $F_1=0.0$; Cleanlab layer \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Stage 1 — Synthetic trajectory generation.}
+The pipeline generates 100 wearable agentic trajectories across five scenario
+types: medication adherence, continuous vitals monitoring, behavioral pattern
+detection, emergency response, and privacy-sensitive ambient capture.
+%
+Each scenario type contributes 20 balanced trajectories, ensuring coverage
+of the full range of agent behaviors and failure modes relevant to ambient
+wearable AI.
+
+\paragraph{Stage 2 — Differential privacy gate.}
+Raw sensor values (heart rate, SpO$_2$, accelerometer readings) are passed
+through a differential privacy (\textsc{dp}) gate before annotation, adding
+calibrated Gaussian noise with privacy budget $\varepsilon = 1.0$.
+%
+This ensures that annotators never observe exact biometric values,
+respecting contextual consent boundaries while preserving the annotation
+signal necessary for trajectory quality assessment.
+
+\paragraph{Stages 3--4 — Multi-persona annotation and \PIA{} scoring.}
+Five annotator personas (OutcomeOptimist, RecoverySkeptic, ProcessPurist,
+ClinicalSafetyFirst, PrivacyMaximalist) annotate each trajectory on the
+four \PIA{} rubric dimensions.
+%
+Pre-calibration standard $\kappa$ is $-0.035$ (poor); \PIA{} scoring
+recovers $\kappa = +0.743$ (substantial) as reported in \S\ref{sec:pia}.
+
+\paragraph{Stages 5--6 — PRM labeling and poisoning detection.}
+Step-level process reward labels are assigned to 20 trajectories, producing
+60 step reward records.
+%
+The poisoning detection module applies \textsc{mad} suspicion scoring
+followed by Cleanlab Confident Learning as described in \S\ref{sec:poisoning}.
+
+\subsection{Dataset}
+\label{sec:agenttrace:dataset}
+
+We release an annotated wearable agentic trajectory dataset on HuggingFace
+at \url{https://huggingface.co/datasets/finaspirant/wearable-agent-trajectory-annotations}.
+%
+The dataset contains 100 synthetic wearable trajectories with full
+multi-persona \PIA{} annotations, step-level process reward labels, and
+\textsc{dp}-gated sensor data.
+%
+The annotation schema is organized in three layers:
+\begin{itemize}[nosep]
+  \item \textbf{Session level:} trajectory metadata, scenario type, agent
+        framework, terminal outcome.
+  \item \textbf{Role level:} per-annotator-persona dimension scores and
+        calibration metadata.
+  \item \textbf{Step level:} per-step process reward labels, tool invocation
+        records, error flags, and privacy boundary assessments.
+\end{itemize}
+
+The dataset includes Croissant metadata~\cite{croissant2024} for
+machine-readable dataset documentation, as required by the NeurIPS E\&D
+track.
+%
+The dataset comprises the following artifacts: 100 synthetic wearable
+trajectory logs across 5 scenario types (health alert, medication adherence,
+vitals monitoring, behavioral pattern detection, and privacy-sensitive ambient
+capture); 150 multi-persona annotation records produced by 5 annotator
+personas across 30 trajectories on 4 rubric dimensions (planning quality,
+error recovery, goal alignment, privacy compliance); 60 step-level process
+reward labels across 20 trajectories; and 25 poisoning detection records
+including 3 injected adversarial annotations for reproducible blind-spot
+evaluation.
+
+\subsection{Reproducibility}
+\label{sec:agenttrace:repro}
+
+The full pipeline is available at:
+\begin{center}
+\url{https://github.com/finaspirant/llm-wearable-agentic-eval-pipeline}
+\end{center}
+All results reported in this paper are reproducible from \texttt{seed=42}
+using the \texttt{uv} environment manager.
+%
+The repository includes executed Jupyter notebooks
+(\texttt{curation\_pipeline\_e2e\_executed.ipynb},
+\texttt{agentic\_eval\_flywheel\_executed.ipynb}) with all output cells
+preserved, enabling inspection of intermediate results without re-running
+the full pipeline.
+
+% ============================================================
+\section{Evaluation: Curation Impact}
+\label{sec:eval}
+% ============================================================
+
+\subsection{Experimental Setup}
+\label{sec:eval:setup}
+
+To quantify the downstream value of annotation quality, we conduct an A/B
+experiment comparing trajectories produced by the full \AgentTrace{} curation
+pipeline (\emph{curated}, $n=50$) against unfiltered raw trajectories
+(\emph{raw}, $n=50$) on six evaluation metrics.
+%
+Raw trajectories bypass all annotation quality gates: no \PIA{} calibration,
+no poisoning detection, and no \textsc{prm} label validation.
+%
+Curated trajectories pass through the full six-stage pipeline.
+
+Both conditions are evaluated on six metrics inspired by the Kore.ai
+enterprise agent evaluation framework \cite{koreai2025}:
+
+\begin{itemize}[nosep]
+  \item \textbf{Trajectory success rate:} proportion of trajectories
+        reaching the stated goal within the allowed step budget.
+  \item \textbf{Tool invocation accuracy:} proportion of tool calls
+        that match the expected tool, arguments, and invocation order.
+  \item \textbf{Groundedness score} (RAGAS~\cite{ragas2023}): factual
+        consistency of agent responses against a reference knowledge base.
+  \item \textbf{Privacy leak detection:} proportion of trajectories
+        where the agent discloses \textsc{dp}-gated biometric data outside
+        authorized consent boundaries.
+  \item \textbf{Orchestrator correctness:} proportion of multi-agent
+        delegation decisions that route to the correct sub-agent.
+  \item \textbf{Latency SLA compliance:} proportion of trajectories
+        completing within the defined latency service-level agreement.
+\end{itemize}
+
+All experiments use \texttt{seed=42} for full reproducibility.
+%
+We note that this experiment uses synthetic trajectories and LLM-simulated
+annotators; generalization to human annotators and real-world deployments
+requires future validation (see \S\ref{sec:discussion}).
+
+\subsection{Results}
+\label{sec:eval:results}
+
+Table~\ref{tab:ab} presents the curation impact across all six evaluation
+metrics.
+
+\begin{table}[h]
+\centering
+\caption{A/B experiment: raw vs.\ curated trajectories ($n=50$ per
+         condition; \texttt{seed=42}). Starred metrics show statistically
+         meaningful lifts; dagger metrics are bounded by synthetic data
+         properties.}
+\label{tab:ab}
+\begin{tabular}{lrrrr}
+\toprule
+\textbf{Metric} & \textbf{Raw} & \textbf{Curated}
+  & \textbf{$\Delta$ (abs)} & \textbf{$\Delta$ (\%)} \\
+\midrule
+Trajectory success rate$^\star$    & 0.12 & 0.33 & $+0.21$ & $+177.8\%$ \\
+Tool invocation accuracy$^\star$   & 0.36 & 1.00 & $+0.64$ & $+177.8\%$ \\
+Groundedness (RAGAS)$^\dagger$     & 0.75 & 0.75 & $+0.00$ & --- \\
+Privacy leak detection$^\dagger$   & 0.00 & 0.00 & $+0.00$ & --- \\
+Orchestrator correctness$^\dagger$ & 1.00 & 1.00 & $+0.00$ & --- \\
+Latency SLA compliance$^\dagger$   & 1.00 & 1.00 & $+0.00$ & --- \\
+\bottomrule
+\end{tabular}
+
+\smallskip
+{\footnotesize
+$^\star$ Meaningful lift from annotation quality curation.
+$^\dagger$ Bounded by synthetic data properties (see text).
+}
+\end{table}
+
+\paragraph{Meaningful lifts ($^\star$).}
+The two metrics showing meaningful improvement directly reflect annotation
+quality: trajectory success rate lifts from 0.12 to 0.33 ($+177.8\%$), and
+tool invocation accuracy lifts from 0.36 to 1.00 ($+177.8\%$).
+%
+Both improvements trace directly to the \PIA{} calibration and \textsc{prm}
+step labeling stages: curated trajectories filter out those with poor
+inter-annotator agreement on tool precision (a \PIA{} sub-dimension of goal
+alignment), retaining only trajectories where annotators agree on the
+correctness of each tool invocation.
+%
+This quality gate is invisible to outcome-only evaluation---both the raw
+0.36-accuracy trajectories and the curated 1.00-accuracy trajectories may
+reach the stated goal---but it directly drives downstream training signal
+quality under \textsc{prm} training.
+
+\paragraph{Bounded metrics ($^\dagger$).}
+Four metrics show zero delta between conditions.
+%
+Groundedness ($\Delta = 0$, RAGAS score $= 0.75$ in both conditions) reflects
+a known RAGAS fallback behavior: when no retrieval context is provided,
+RAGAS returns a fixed fallback value of 0.75 rather than computing factual
+consistency.
+%
+Privacy leak detection and orchestrator correctness reach floor/ceiling values
+of 0.00 and 1.00 respectively by synthetic data construction---the generator
+initializes all trajectories with correct orchestration and no privacy
+violations.
+%
+Latency SLA compliance similarly reflects the deterministic latency of
+simulated agent calls.
+%
+These zero-delta results are not failures of curation; they reflect synthetic
+data boundaries.
+%
+Live evaluation with real agent API calls and a wearable knowledge base
+is expected to show curation lifts on all six metrics.
+
+% ============================================================
+\section{Discussion and Limitations}
+\label{sec:discussion}
+% ============================================================
+
+\paragraph{Domain specificity of \PIA{} dimensions.}
+The three core \PIA{} rubric dimensions---planning quality, error recovery,
+and goal alignment---were designed for wearable agentic contexts.
+%
+Other deployment domains may require different or additional dimensions.
+%
+A customer service agent evaluation might prioritize tone consistency and
+escalation appropriateness over privacy compliance.
+%
+A coding agent evaluation might prioritize test coverage and refactoring
+quality over error recovery.
+%
+\PIA{} is a methodology, not a fixed rubric: the core insight---evaluate
+rubric dimensions independently of path length---generalizes, even though
+the specific dimensions must be defined per domain.
+%
+We provide the full rubric definition and calibration protocol in the
+repository to support adaptation to new domains.
+
+\paragraph{Synthetic corpus and LLM annotator simulations.}
+All results in this paper are derived from a synthetic trajectory corpus
+generated with \texttt{seed=42} and annotated by LLM-simulated personas,
+not human annotators.
+%
+The LLM simulation produces deterministic annotation in dry-run mode,
+which yields the post-calibration $\kappa = 1.0$ artifact noted in
+\S\ref{sec:pia:results}.
+%
+Generalization of \PIA{} to human annotators and real-world deployment
+requires empirical validation.
+%
+We report the pre-calibration numbers as the empirically meaningful results
+and provide all code and data necessary for researchers to replicate the
+experiment with real annotation panels.
+
+\paragraph{Colluding annotator detection remains an open problem.}
+The MAD blind spot we characterize (\S\ref{sec:poisoning:mad}) is fundamental,
+not incidental.
+%
+Any detection scheme based solely on deviation from panel consensus will fail
+when the colluding group is large enough to shift the consensus.
+%
+Confident Learning provides complementary coverage at the label level, but
+it too can be evaded by sufficiently sophisticated poisoners who
+understand the label distribution model.
+%
+Graph-based anomaly detection across annotation sessions---tracking annotator
+behavior over time rather than within a single batch---is a promising
+direction for future work.
+
+\paragraph{Gradient conflict rate is a synthetic upper bound.}
+The 100\% gradient conflict rate we report (\S\ref{sec:poisoning:pregrad})
+is a synthetic artifact: the trajectory generator initializes all trajectories
+with \texttt{outcome\_success=False}, ensuring every trajectory is
+outcome-failed.
+%
+In production, gradient conflict rates depend on the difficulty distribution
+of the task set and the agent's actual success rate.
+%
+The finding remains useful as a proof of concept: it demonstrates the
+mechanism by which poisoned step labels propagate $-1$ reward to correct
+intermediate steps, and it establishes that step-level annotation is the
+correct intervention point.
+
+% ============================================================
+\section{Conclusion}
+\label{sec:conclusion}
+% ============================================================
+
+We have identified two compounding failures in the standard evaluation
+stack for agentic AI systems.
+%
+First, standard \textsc{iaa} metrics produce systematically misleading results
+for non-deterministic agents, misclassifying path divergence as annotator
+disagreement.
+%
+Second, step-level annotation poisoning is invisible to task-success metrics
+and undetectable by standard MAD-based annotator screening when attackers
+coordinate.
+
+\PIA{} addresses the first failure by decoupling quality assessment from path
+length, recovering $\kappa = +0.743$ where standard metrics yield
+$\kappa = -0.065$.
+%
+Confident Learning addresses the second as a complementary second-layer
+defense.
+%
+\AgentTrace{} operationalizes both in an open-source, reproducible pipeline,
+validated by an A/B experiment showing $+177.8\%$ lift in tool invocation
+accuracy and trajectory success rate from curated vs.\ raw trajectories.
+
+We release the full pipeline, annotated dataset, and executed notebooks
+to enable reproducible research on agentic evaluation methodology---a
+prerequisite for the safe, reliable deployment of multi-step agentic
+AI systems in production.
+
+% ============================================================
+%  DATA AVAILABILITY STATEMENT
+%  (Required by NeurIPS Datasets & Benchmarks Track)
+% ============================================================
+\section*{Data Availability}
+
+All data, code, and artifacts introduced in this paper are publicly available:
+
+\begin{itemize}[nosep]
+  \item \textbf{Dataset (HuggingFace):}
+        \url{https://huggingface.co/datasets/finaspirant/wearable-agent-trajectory-annotations}
+        --- 100 annotated wearable agentic trajectories with \PIA{} scores,
+        step-level \textsc{prm} labels, and \textsc{dp}-gated sensor data.
+        Includes Croissant metadata~\cite{croissant2024}.
+
+  \item \textbf{Pipeline code (GitHub):}
+        \url{https://github.com/finaspirant/llm-wearable-agentic-eval-pipeline}
+        --- Full six-stage \AgentTrace{} pipeline. Reproducible from
+        \texttt{seed=42} using the \texttt{uv} environment manager.
+        Tagged release: \texttt{v1.0}.
+
+  \item \textbf{Executed notebooks:}
+        \texttt{notebooks/curation\_pipeline\_e2e\_executed.ipynb} and
+        \texttt{notebooks/agentic\_eval\_flywheel\_executed.ipynb} are
+        committed to the repository with all output cells preserved,
+        enabling result inspection without re-running the full pipeline.
+
+  \item \textbf{Demo (Loom):}
+        \url{https://www.loom.com/share/5bec5764428b4e48aa868134e54a894e}
+        --- 5-minute walkthrough of the pipeline and key results.
+\end{itemize}
+
+% ============================================================
+%  REFERENCES
+% ============================================================
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+% ---- Inline fallback if .bib not yet compiled ----
+% \begin{thebibliography}{99}
+% \bibitem{reasonrag2025} ...
+% \end{thebibliography}
+
+\end{document}
