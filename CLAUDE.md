@@ -1016,7 +1016,7 @@ Started: Day 29 (next session)
 - [ ] Cohere Labs pitch: find contact + send (2026-05-07)
 
 ### Job applications pending
-- [ ] OpenAI EM: submit 2026-04-29 (cover letter drafted — fill GITHUB_REPO_URL + [Last Name] + [LinkedIn])
+- [ ] OpenAI EM: submit 2026-04-29 (cover letter drafted — fill https://github.com/finaspirant/llm-wearable-agentic-eval-pipeline + [Last Name] + [LinkedIn])
 - [ ] Anthropic EM: submit 2026-04-29 (same)
 - [ ] Kore.ai EM: submit 2026-05-01
 - [ ] DeepMind EM: submit 2026-05-01
