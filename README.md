@@ -1,8 +1,10 @@
-# LLM Wearable Agentic Eval Pipeline
+# Agentic Eval Pipeline — Trajectory-Level Annotation & Path-Invariant Agreement
+
+> Demonstrated on wearable health agent data · generalises to any non-deterministic multi-agent system
 
 ![Python](https://img.shields.io/badge/python-3.11+-blue) ![License](https://img.shields.io/badge/license-MIT-green) ![Ruff](https://img.shields.io/badge/code%20style-ruff-orange) ![Sprint Day](https://img.shields.io/badge/sprint-Day%2039%2F45-purple) ![Papers](https://img.shields.io/badge/white%20papers-3%20published-teal)
 
-**End-to-end pipeline for curating, annotating, and evaluating agentic AI systems — with a focus on wearable/ambient AI privacy and trajectory-level assessment.**
+**Open-source trajectory-level evaluation framework for non-deterministic agentic systems. Path-Invariant Agreement (PIA) recovers IAA κ from −0.065 → +0.743. Wearable agents used as demonstration domain.**
 
 ---
 
