@@ -919,7 +919,7 @@ Started: Day 29 (next session)
 - DMs 6–10 outreach if not done Day 36
 
 ### Day 38 (2026-04-22)
-- WP3 to be published on Medium (URL: [PASTE REAL URL HERE]) — saved draft Notion
+- WP3 published on Medium: https://medium.com/@shail.subscribe/evaluating-always-on-ai-privacy-preserving-data-curation-and-model-evaluation-for-ambient-c34ba7512636
 - WP3 cross-posted to Alignment Forum (docs/outreach/alignment_forum_hook_wp3.md — pending WP3 Medium URL)
 - Job application 1: OpenAI EM (Data/Eval team) — saved draft Notion 2026-04-22
 - Job application 2: Anthropic EM (Data/Alignment) — saved draft Notion 2026-04-22
@@ -970,7 +970,7 @@ Started: Day 29 (next session)
 |---|---|---|
 | WP1 (Medium) | https://medium.com/@shail.subscribe/why-your-agent-annotation-pipeline-is-quietly-corrupting-your-reward-model-and-what-to-do-about-5b494bac8234 | 2026-04-23 |
 | WP2 (Medium) | https://medium.com/@shail.subscribe/beyond-task-success-a-trajectory-level-evaluation-framework-for-multi-agent-enterprise-ai-d06d0fdf7e10 | 2026-04-24 |
-| WP3 (Medium) | PENDING — publish date 2026-05-03 | — |
+| WP3 (Medium) | https://medium.com/@shail.subscribe/evaluating-always-on-ai-privacy-preserving-data-curation-and-model-evaluation-for-ambient-c34ba7512636 | 2026-05-03 |
 | HuggingFace Dataset | https://huggingface.co/datasets/finaspirant/wearable-agent-trajectory-annotations | 2026-04-17 |
 | Loom Demo | https://www.loom.com/share/5bec5764428b4e48aa868134e54a894e | 2026-04-24 |
 | GitHub Repo | https://github.com/finaspirant/llm-wearable-agentic-eval-pipeline | — |
@@ -985,14 +985,13 @@ Started: Day 29 (next session)
 ### URLs confirmed and propagated
 - WP1 Medium: https://medium.com/@shail.subscribe/why-your-agent-annotation-pipeline-is-quietly-corrupting-your-reward-model-and-what-to-do-about-5b494bac8234
 - WP2 Medium: https://medium.com/@shail.subscribe/beyond-task-success-a-trajectory-level-evaluation-framework-for-multi-agent-enterprise-ai-d06d0fdf7e10
-- WP3 Medium: PENDING — publish date 2026-05-03. Paste URL here after live.
+- WP3 Medium: https://medium.com/@shail.subscribe/evaluating-always-on-ai-privacy-preserving-data-curation-and-model-evaluation-for-ambient-c34ba7512636
 - HuggingFace: https://huggingface.co/datasets/finaspirant/wearable-agent-trajectory-annotations
 - Loom: https://www.loom.com/share/5bec5764428b4e48aa868134e54a894e
 - GitHub repo: https://github.com/finaspirant/llm-wearable-agentic-eval-pipeline
 
 ### Publishing pending
-- [ ] WP3 publish on Medium — 2026-05-03 (draft ready at white_papers/wp3_medium_version.md)
-      After publish: paste URL into Published Artifacts table above + README + cover letters
+- [x] WP3 publish on Medium — 2026-05-03 https://medium.com/@shail.subscribe/evaluating-always-on-ai-privacy-preserving-data-curation-and-model-evaluation-for-ambient-c34ba7512636
 - [ ] WP2 cross-post: Alignment Forum + HuggingFace blog (2026-05-05)
 - [ ] WP3 cross-post: Alignment Forum (2026-05-03)
 - [ ] WP1 post: LessWrong (2026-05-07)
