@@ -32,10 +32,11 @@
   \@natbibfalse
 }
 
-% E&D track single-blind flag (no-op in this style; declared to prevent unknown-option error)
+% preprint = E&D track single-blind per official NeurIPS 2026 E&D FAQ
+% Authors are revealed to reviewers; use this flag for E&D submissions.
+\DeclareOption{preprint}{\@nipsfinaltrue}
+% eandd declared as no-op for compatibility (preprint is the correct flag)
 \DeclareOption{eandd}{}
-% preprint option (no-op; declared for compatibility)
-\DeclareOption{preprint}{}
 
 \ProcessOptions\relax
 
