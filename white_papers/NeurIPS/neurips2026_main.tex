@@ -10,13 +10,7 @@
 \documentclass{article}
 
 % ---- NeurIPS 2026 style ----
-% Download neurips_2026.sty from:
-% https://media.neurips.cc/Conferences/NeurIPS2026/Styles.zip
-% Place in same directory as this file, then uncomment:
-% \usepackage{neurips_2026}
-%
-% For now, use a compatible substitute for local compilation:
-\usepackage[preprint]{neurips_2024}   % swap to neurips_2026 when available
+\usepackage[eandd]{neurips_2026}
 
 % ---- Standard packages ----
 \usepackage[utf8]{inputenc}
@@ -41,6 +35,11 @@
 \newcommand{\AgentTrace}{\textsc{AgentTrace}}
 \newcommand{\todo}[1]{\textcolor{red}{\textbf{[TODO: #1]}}}
 \newcommand{\note}[1]{\textcolor{blue}{\textbf{[NOTE: #1]}}}
+
+% ---- NeurIPS Paper Checklist answer macros ----
+\newcommand{\answerYes}[1]{\textbf{[Yes]} #1}
+\newcommand{\answerNo}[1]{\textbf{[No]} #1}
+\newcommand{\answerNA}[1]{\textbf{[N/A]} #1}
 
 % ============================================================
 %  TITLE AND AUTHORS
@@ -883,5 +882,124 @@ enable reproducible research on agentic evaluation methodology.
 % \begin{thebibliography}{99}
 % \bibitem{reasonrag2025} ...
 % \end{thebibliography}
+
+% ============================================================
+%  NeurIPS PAPER CHECKLIST
+% ============================================================
+\newpage
+\section*{NeurIPS Paper Checklist}
+
+The checklist is \textbf{not} part of the paper page limit.
+Answers in \textbf{bold} indicate the applicable choice.
+
+\begin{enumerate}
+
+\item[\textbf{1.}] \textbf{Claims.}
+Do the main claims made in the abstract and introduction accurately
+reflect the paper's contributions and scope?
+\answerYes{All quantitative claims (PIA $\kappa$ lift, curation
+  $+177.8\%$, IAA $0.55{\to}0.82$) are derived from code and data
+  released at the linked repository; the methodology is fully
+  reproducible from \texttt{seed=42}.}
+
+\item[\textbf{2.}] \textbf{Limitations.}
+Did you discuss the limitations of your work?
+\answerYes{See \S7 Limitations: synthetic corpus, LLM-simulated
+  personas, domain-specific PIA rubric, MAD blind spot for colluding
+  annotators, 100\% gradient-conflict rate as a synthetic upper bound.}
+
+\item[\textbf{3.}] \textbf{Theory assumptions and proofs.}
+For each theoretical result, did you state the assumptions on which it
+relies, and did you give a complete proof?
+\answerNA{The paper presents an empirical framework and methodology;
+  no new theorems are proved.}
+
+\item[\textbf{4.}] \textbf{Experimental result reproducibility.}
+Did you include complete information for reproducing the main
+experimental results?
+\answerYes{All experiments reproducible from \texttt{seed=42} via the
+  open-source repository at
+  \url{https://github.com/finaspirant/llm-wearable-agentic-eval-pipeline};
+  executed Jupyter notebooks with preserved output cells are included.}
+
+\item[\textbf{5.}] \textbf{Open access to data and code.}
+Did you include all the information needed to access the data and code
+to reproduce your results?
+\answerYes{Code is MIT-licensed on GitHub (link in \S8); the annotated
+  dataset (500 records) is publicly available on HuggingFace with a
+  Croissant metadata descriptor.}
+
+\item[\textbf{6.}] \textbf{Experimental setting/details.}
+Did you specify all the training and test splits, evaluation metrics,
+and hyperparameters?
+\answerYes{All splits (50 curated / 50 raw, 5 personas, 2 calibration
+  phases), evaluation metrics (Cohen's $\kappa$, Fleiss' $\kappa$,
+  Krippendorff's $\alpha$, PIA rubric, 6 Kore.ai metrics), and
+  hyperparameters ($\varepsilon{=}1.0$, $w{=}0.82$ calibration weight,
+  MAD threshold, \texttt{seed=42}) are reported in the text.}
+
+\item[\textbf{7.}] \textbf{Experiment statistical significance.}
+Did you report error bars or statistical significance of your results?
+\answerNo{PIA and IAA metrics are computed on a single 50-trajectory
+  synthetic corpus; bootstrap confidence intervals are a planned
+  extension for live-annotator replication.}
+
+\item[\textbf{8.}] \textbf{Experiments compute cost.}
+Did you include the compute used to produce your results?
+\answerYes{All annotation runs use LLM-simulated personas (no GPU
+  training); live API smoke test used \texttt{claude-sonnet-4-6}
+  (\textasciitilde{}966 tokens / 10.3 s per trajectory, reported in
+  \S4).}
+
+\item[\textbf{9.}] \textbf{Code of ethics.}
+Did you review the NeurIPS Code of Ethics?
+\answerYes{This study uses fully synthetic wearable sensor data with
+  no human participants and no real personal health information.
+  IRB review is not required.}
+
+\item[\textbf{10.}] \textbf{Broader impacts.}
+Did you discuss any potential negative societal impacts of your work?
+\answerYes{See \S7: risks of ambient/wearable AI (consent decay,
+  passive capture) are framed as motivation for this work rather than
+  a product of it; the framework is designed to surface and mitigate
+  these harms via privacy-compliant annotation and HITL triggers.}
+
+\item[\textbf{11.}] \textbf{Safeguards.}
+If the paper introduces potentially harmful artifacts (e.g., datasets
+that could be used for harmful purposes), did you employ safeguards?
+\answerNA{All data is synthetic and contains no real personal
+  information; differential privacy ($\varepsilon{=}1.0$) is applied
+  to all sensor fields before any downstream use.}
+
+\item[\textbf{12.}] \textbf{Licenses for existing assets.}
+Did you cite the license for each existing asset used?
+\answerYes{All third-party libraries (LangGraph, CrewAI, AutoGen,
+  RAGAS, cleanlab, sentence-transformers) are MIT- or Apache-2.0-
+  licensed; citations are provided for all benchmarks and datasets
+  referenced.}
+
+\item[\textbf{13.}] \textbf{New assets.}
+Did you include everything needed to reproduce the results from the
+new assets?
+\answerYes{The annotated dataset is on HuggingFace with Croissant
+  metadata; the generation code (\texttt{wearable\_generator.py},
+  \texttt{annotator\_simulator.py}) is open-source and includes
+  \texttt{seed=42} reproducibility.}
+
+\item[\textbf{14.}] \textbf{Crowdsourcing / human subjects.}
+Did you include the full text of the instructions given to
+participants, recruitment details, and analysis of the resulting data?
+\answerYes{Annotator personas are fully specified in \S3 and
+  Appendix~A; no real human annotators were recruited — all annotation
+  is performed by LLM-simulated personas with deterministic biases
+  documented in code.}
+
+\item[\textbf{15.}] \textbf{Institutional Review Board (IRB) approvals.}
+Did you describe any potential risks to study participants and whether
+you obtained IRB approval?
+\answerNA{No human participants; all annotation is LLM-simulated on
+  fully synthetic sensor data. IRB review is not required.}
+
+\end{enumerate}
 
 \end{document}
