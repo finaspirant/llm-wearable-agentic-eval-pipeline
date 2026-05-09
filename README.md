@@ -286,13 +286,25 @@ Both notebooks execute clean via `uv run jupyter nbconvert --to notebook --execu
 
 ## Published Work
 
-| Artifact | Title | Link |
-|---|---|---|
-| WP1 | Beyond Preference Pairs: A Process-Supervised Approach to Training Data Curation for Agentic Systems | [Medium](https://medium.com/@shail.subscribe/why-your-agent-annotation-pipeline-is-quietly-corrupting-your-reward-model-and-what-to-do-about-5b494bac8234) |
-| WP2 | Beyond Task Success: A Trajectory-Level Evaluation Framework for Multi-Agent Enterprise AI | [Medium](https://medium.com/@shail.subscribe/beyond-task-success-a-trajectory-level-evaluation-framework-for-multi-agent-enterprise-ai-d06d0fdf7e10) |
-| WP3 | Evaluating Always-On AI: Privacy-Preserving Data Curation and Model Evaluation for Ambient Agents | [Medium](https://medium.com/@shail.subscribe/evaluating-always-on-ai-privacy-preserving-data-curation-and-model-evaluation-for-ambient-c34ba7512636) |
-| HuggingFace Dataset | `wearable-agent-trajectory-annotations` (500 records, 50 trajectories × 5 personas × 2 phases) | [finaspirant/wearable-agent-trajectory-annotations](https://huggingface.co/datasets/finaspirant/wearable-agent-trajectory-annotations) |
-| Kaggle FACTS Submission | FACTS grounding scores for 10 wearable agent trajectories (overall 0.63) | [results/facts_kaggle_submission.csv](results/facts_kaggle_submission.csv) |
+**White Paper 1 — Annotation Poisoning**
+Why Your Agent Annotation Pipeline Is Quietly Corrupting Your Reward Model
+https://medium.com/@shail.subscribe/why-your-agent-annotation-pipeline-is-quietly-corrupting-your-reward-model-and-what-to-do-about-5b494bac8234
+
+**White Paper 2 — Framework Benchmarking**
+Beyond Task Success: A Trajectory-Level Evaluation Framework for Multi-Agent Enterprise AI
+https://medium.com/@shail.subscribe/beyond-task-success-a-trajectory-level-evaluation-framework-for-multi-agent-enterprise-ai-d06d0fdf7e10
+
+**White Paper 3 — Privacy + Ambient Agents**
+Evaluating Always-On AI: Privacy-Preserving Data Curation and Model Evaluation for Ambient Agents
+https://medium.com/@shail.subscribe/evaluating-always-on-ai-privacy-preserving-data-curation-and-model-evaluation-for-ambient-c34ba7512636
+
+**NeurIPS 2026 E&D Track Paper (submitted)**
+Beyond Task Success: Path-Invariant Agreement for Trajectory-Level Evaluation of Non-Deterministic Agents
+https://openreview.net/group?id=NeurIPS.cc/2026/Evaluations_and_Datasets_Track
+
+**Dataset**
+Wearable Agent Trajectory Annotations (50 trajectories, 3-layer schema, 5 annotator personas)
+https://huggingface.co/datasets/finaspirant/wearable-agent-trajectory-annotations
 
 ---
 
