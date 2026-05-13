@@ -115,6 +115,16 @@ configs/        → YAML task configs + default settings
   consent decay, privacy-preserving assessment
   Target: OpenAI, DeepMind. Publish Day 42.
 
+## Sprint Status
+Sprint complete: May 13, 2026
+Final tag: v1.1.0 (commit 18aaad6)
+
+Published:
+- WP1, WP2, WP3 on Medium
+- NeurIPS 2026 E&D Track paper submitted (OpenReview)
+- 50-trajectory wearable dataset on HuggingFace
+- 5 LinkedIn posts · 5 X/Twitter threads · 15 DMs sent
+
 ## Current Phase
 **Phase 4 — Publish, Amplify & Apply (Days 29–45)**
 Started: Day 29 (next session)
