@@ -76,7 +76,6 @@ _TERMINAL_ACTIONS: frozenset[str] = frozenset(
         AgentAction.TRIGGER_GEOFENCE,
         AgentAction.ADJUST_NOISE_PROFILE,
         AgentAction.SURFACE_REMINDER,
-        AgentAction.ESCALATE_TO_EMERGENCY,
     }
 )
 
@@ -353,45 +352,71 @@ class TrajectoryScorer:
         )
 
     def score_recovery(self, trajectory: WearableLog) -> RecoveryScore:
-        """Score recovery behavior when an error state is detected.
+        """Score recovery behavior when an error state is detected mid-trajectory.
 
         Recovery is detected by the presence of an ``escalate_to_emergency``
-        action in any trajectory step (indicating the agent acknowledged an
-        error and delegated to a higher authority).
+        action in any *non-terminal* step (i.e. ``steps[:-1]``).  The final
+        step is excluded so that a terminal escalation cannot be claimed by
+        both this layer and the outcome layer.
 
-        If no error is detected the layer is not applicable and score=None.
-        The aggregate method will renormalize weights to exclude this layer.
+        The score is graduated: an escalation detected earlier in the trajectory
+        earns a higher score than a late one, rewarding proactive error handling.
+        Formula: ``0.70 + 0.30 * (1.0 - escalation_idx / n)`` where
+        ``escalation_idx`` is the zero-based index within the non-terminal steps
+        and ``n = len(non_terminal)``.
+
+        If no mid-trajectory escalation is found the layer returns score=None
+        and is excluded from aggregation (weights are renormalized).
 
         Args:
             trajectory: Wearable log containing the agent trajectory.
 
         Returns:
-            RecoveryScore with score=0.70 if an escalation was found (partial
-            recovery credit), score=None if no error was detected.
+            RecoveryScore with a graduated float score in [0.70, 1.0) if a
+            mid-trajectory escalation was found, or score=None if not applicable.
         """
-        had_error = any(
-            step.action == _RECOVERY_ACTION for step in trajectory.trajectory
-        )
-        if had_error:
-            score: float | None = 0.70
-            reasoning = (
-                "Escalation action detected — agent recognised an error state "
-                "and handed off appropriately (partial recovery credit)."
+        steps = trajectory.trajectory
+        non_terminal = steps[:-1]
+        n = len(non_terminal)
+
+        if n == 0:
+            return RecoveryScore(
+                score=None,
+                reasoning="No mid-trajectory escalation detected — recovery layer not applicable.",
+                had_error=False,
             )
-        else:
-            score = None
-            reasoning = "No escalation detected — recovery layer not applicable."
-        logger.debug("recovery had_error=%s score=%s", had_error, score)
-        return RecoveryScore(score=score, reasoning=reasoning, had_error=had_error)
+
+        for escalation_idx, step in enumerate(non_terminal):
+            if step.action == _RECOVERY_ACTION:
+                score: float = 0.70 + 0.30 * (1.0 - escalation_idx / n)
+                reasoning = (
+                    f"Escalation detected at non-terminal step {escalation_idx} of {n} "
+                    "— graduated recovery credit (earlier escalation scores higher)."
+                )
+                logger.debug(
+                    "recovery score=%.4f escalation_idx=%d n=%d",
+                    score,
+                    escalation_idx,
+                    n,
+                )
+                return RecoveryScore(score=score, reasoning=reasoning, had_error=True)
+
+        logger.debug("recovery score=None had_error=False")
+        return RecoveryScore(
+            score=None,
+            reasoning="No mid-trajectory escalation detected — recovery layer not applicable.",
+            had_error=False,
+        )
 
     def score_outcome(self, trajectory: WearableLog) -> OutcomeScore:
         """Score whether the agent achieved the session goal.
 
         Goal achievement is proxied by the final step's action: a decisive
         terminal action (send_alert, suppress_capture, trigger_geofence,
-        adjust_noise_profile, surface_reminder, escalate_to_emergency)
-        indicates goal completion.  Monitoring-only actions (log_and_monitor)
-        or missing actions indicate goal not yet achieved.
+        adjust_noise_profile, surface_reminder) indicates goal completion.
+        Monitoring-only actions (log_and_monitor) or missing actions indicate
+        goal not yet achieved.  Escalation (escalate_to_emergency) is handled
+        exclusively by the recovery layer to prevent double-counting.
 
         Args:
             trajectory: Wearable log containing the agent trajectory.

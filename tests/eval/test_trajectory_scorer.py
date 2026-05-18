@@ -196,12 +196,61 @@ def test_score_recovery_no_escalation(
     assert result.score is None
 
 
-def test_score_recovery_with_escalation(
+def test_score_recovery_terminal_escalation_not_double_counted(
     scorer: TrajectoryScorer, escalation_trajectory: WearableLog
 ) -> None:
+    # escalation_trajectory ends with ESCALATE_TO_EMERGENCY as the final step.
+    # score_recovery only inspects steps[:-1], so this must return score=None.
     result = scorer.score_recovery(escalation_trajectory)
+    assert result.score is None
+    assert result.had_error is False
+
+
+def test_score_recovery_midstep_escalation(scorer: TrajectoryScorer) -> None:
+    # Escalation at step index 1 of 4 non-terminal steps.
+    # idx=1, n=4  →  0.70 + 0.30 * (1 - 0.25) = 0.925
+    steps = [
+        _make_step(0, "sense"),
+        _make_step(1, "escalate", action=AgentAction.ESCALATE_TO_EMERGENCY),
+        _make_step(2, "plan"),
+        _make_step(3, "plan2"),
+        _make_step(4, "act", action=AgentAction.SEND_ALERT),
+    ]
+    log = _make_log()
+    object.__setattr__(log, "trajectory", steps)
+    result = scorer.score_recovery(log)
     assert result.had_error is True
-    assert result.score == pytest.approx(0.70)
+    assert result.score is not None
+    assert abs(result.score - 0.925) < 1e-9
+
+
+def test_score_recovery_early_beats_late(scorer: TrajectoryScorer) -> None:
+    # 5-step trajectory; n = 4 non-terminal steps.
+    # Early (idx=1): 0.70 + 0.30 * (1 - 1/4) = 0.925
+    # Late  (idx=3): 0.70 + 0.30 * (1 - 3/4) = 0.775
+    terminal = _make_step(4, "act", action=AgentAction.SEND_ALERT)
+    early_steps = [
+        _make_step(0, "sense"),
+        _make_step(1, "escalate", action=AgentAction.ESCALATE_TO_EMERGENCY),
+        _make_step(2, "plan"),
+        _make_step(3, "plan2"),
+        terminal,
+    ]
+    late_steps = [
+        _make_step(0, "sense"),
+        _make_step(1, "plan"),
+        _make_step(2, "plan2"),
+        _make_step(3, "escalate", action=AgentAction.ESCALATE_TO_EMERGENCY),
+        terminal,
+    ]
+    early_log = _make_log()
+    object.__setattr__(early_log, "trajectory", early_steps)
+    late_log = _make_log()
+    object.__setattr__(late_log, "trajectory", late_steps)
+    early = scorer.score_recovery(early_log)
+    late = scorer.score_recovery(late_log)
+    assert early.score is not None and late.score is not None
+    assert early.score > late.score
 
 
 def test_score_outcome_terminal_action(
