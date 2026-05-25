@@ -211,6 +211,86 @@ class TrajectoryScore:
 
 
 # ---------------------------------------------------------------------------
+# Quantization risk annotation
+# ---------------------------------------------------------------------------
+
+
+@dataclass
+class QuantizationRisk:
+    """Flags a PIA dimension score that may reflect inference precision degradation."""
+
+    dimension: str
+    score: float
+    threshold: float
+    warning: str
+
+
+class QuantizationRiskAnnotator:
+    """Post-processes a TrajectoryScore and emits warnings when PIA dimension
+    scores fall below thresholds derived from QE-001 (Mistral-7B FP16 vs
+    INT4 GPTQ on H100 SXM 80GB).
+
+    QE-001 findings:
+        - error_recovery:   -20.0% at INT4 GPTQ (most sensitive dimension)
+        - planning_quality: -14.9% at INT4 GPTQ
+        - goal_alignment:    0.0%  at INT4 GPTQ (robust — not annotated)
+
+    Operators should treat warnings as a signal to evaluate whether the
+    inference precision level is contributing to score degradation, not
+    as a definitive diagnosis.
+    """
+
+    # Thresholds derived from QE-001 INT4 GPTQ scores with 5% margin
+    THRESHOLDS: dict[str, float] = {
+        "error_recovery": 0.85,
+        "planning_quality": 0.85,
+    }
+
+    WARNINGS: dict[str, str] = {
+        "error_recovery": (
+            "error_recovery score is below threshold. "
+            "QE-001 found this dimension degrades -20.0% at INT4 GPTQ vs FP16. "
+            "Consider evaluating inference precision level."
+        ),
+        "planning_quality": (
+            "planning_quality score is below threshold. "
+            "QE-001 found this dimension degrades -14.9% at INT4 GPTQ vs FP16. "
+            "Consider evaluating inference precision level."
+        ),
+    }
+
+    def annotate(self, trajectory_score: TrajectoryScore) -> list[QuantizationRisk]:
+        """Return QuantizationRisk entries for sensitive PIA dimensions below threshold.
+
+        goal_alignment is intentionally excluded — QE-001 showed it is robust
+        to INT4 quantization.
+
+        Args:
+            trajectory_score: A scored trajectory containing a ``pia_dimensions``
+                attribute (dict mapping dimension name to float score).
+
+        Returns:
+            List of QuantizationRisk instances, one per flagged dimension.
+        """
+        risks: list[QuantizationRisk] = []
+        pia: dict[str, float] = trajectory_score.pia_dimensions  # type: ignore[attr-defined]
+
+        for dimension, threshold in self.THRESHOLDS.items():
+            score = pia.get(dimension)
+            if score is not None and score < threshold:
+                risks.append(
+                    QuantizationRisk(
+                        dimension=dimension,
+                        score=score,
+                        threshold=threshold,
+                        warning=self.WARNINGS[dimension],
+                    )
+                )
+
+        return risks
+
+
+# ---------------------------------------------------------------------------
 # TrajectoryScorer
 # ---------------------------------------------------------------------------
 
@@ -742,6 +822,11 @@ def main(
         bool,
         typer.Option("--verbose/--quiet"),
     ] = False,
+    annotate_quant_risk: bool = typer.Option(
+        False,
+        "--annotate-quant-risk",
+        help="Annotate PIA scores with quantization risk warnings derived from QE-001.",
+    ),
 ) -> None:
     """Score WearableLog trajectories across 5 decomposed evaluation layers."""
     logging.basicConfig(level=logging.DEBUG if verbose else logging.INFO)
@@ -757,12 +842,29 @@ def main(
     scorer = TrajectoryScorer(dry_run=dry_run)
     results = scorer.batch_score(trajectories)
 
+    quant_risks: dict[str, list[dict[str, Any]]] = {}
+    if annotate_quant_risk:
+        risk_annotator = QuantizationRiskAnnotator()
+        pia_by_id = {
+            traj.log_id: scorer.score_pia_dimensions(traj) for traj in trajectories
+        }
+        for result in results:
+            result.pia_dimensions = pia_by_id.get(result.trajectory_id, {})  # type: ignore[attr-defined]
+            risks = risk_annotator.annotate(result)
+            quant_risks[result.trajectory_id] = [asdict(r) for r in risks]
+            for risk in risks:
+                console.print(
+                    f"[yellow]QUANT RISK[/yellow] {result.trajectory_id[:8]} "
+                    f"· {risk.dimension}: {risk.warning}"
+                )
+
     output_path.parent.mkdir(parents=True, exist_ok=True)
     payload = {
         "scored_at": datetime.now(UTC).isoformat(),
         "dry_run": dry_run,
         "n_trajectories": len(results),
         "scores": [r.to_dict() for r in results],
+        "quant_risks": quant_risks,
     }
     output_path.write_text(json.dumps(payload, indent=2))
     logger.info("Wrote %d scores to %s", len(results), output_path)

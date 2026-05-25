@@ -18,7 +18,16 @@ from src.eval.agentic_eval import (
     KoraiMetrics,
     compute_overall_score,
 )
-
+from src.eval.trajectory_scorer import (
+    IntentScore,
+    OutcomeScore,
+    PlanningScore,
+    QuantizationRisk,
+    QuantizationRiskAnnotator,
+    RecoveryScore,
+    ToolCallScore,
+    TrajectoryScore,
+)
 # ---------------------------------------------------------------------------
 # Fixtures
 # ---------------------------------------------------------------------------
@@ -595,3 +604,62 @@ class TestComputeBatchNondeterminism:
         groups = {"same": [_make_wearable_log(log_id=f"s-{i}") for i in range(3)]}
         result = evaluator.compute_batch_nondeterminism(groups)
         assert result["same"]["score_std"] == pytest.approx(0.0, abs=1e-9)
+
+# --- QuantizationRiskAnnotator tests (QE-001 motivated) ---
+
+class TestQuantizationRiskAnnotator:
+    """Tests for QuantizationRiskAnnotator — thresholds derived from QE-001."""
+
+    def _make_trajectory_score(self, error_recovery: float, planning_quality: float, goal_alignment: float) -> TrajectoryScore:
+        """Helper: build a minimal TrajectoryScore with specified PIA dimension values."""
+        ts = TrajectoryScore(
+            trajectory_id="test-traj",
+            intent=IntentScore(score=0.75, reasoning="", matched_goal=True),
+            planning=PlanningScore(score=planning_quality, reasoning="", step_efficiency=1.0),
+            tool_calls=ToolCallScore(score=1.0, reasoning="", precision=1.0, false_positives=0),
+            recovery=RecoveryScore(score=error_recovery, reasoning="", had_error=True),
+            outcome=OutcomeScore(score=1.0, reasoning="", goal_achieved=True),
+            weighted_total=0.9,
+        )
+        ts.pia_dimensions = {  # type: ignore[attr-defined]
+            "error_recovery": error_recovery,
+            "planning_quality": planning_quality,
+            "goal_alignment": goal_alignment,
+        }
+        return ts
+
+    def test_no_risks_when_scores_above_threshold(self):
+        """Scores above threshold produce no quantization risk warnings."""
+        annotator = QuantizationRiskAnnotator()
+        score = self._make_trajectory_score(
+            error_recovery=0.95,
+            planning_quality=0.92,
+            goal_alignment=1.0,
+        )
+        risks = annotator.annotate(score)
+        assert risks == []
+
+    def test_risks_emitted_when_scores_below_threshold(self):
+        """Scores below threshold on sensitive dimensions emit warnings."""
+        annotator = QuantizationRiskAnnotator()
+        score = self._make_trajectory_score(
+            error_recovery=0.80,   # below 0.85 threshold
+            planning_quality=0.80, # below 0.85 threshold
+            goal_alignment=1.0,
+        )
+        risks = annotator.annotate(score)
+        dimensions = {r.dimension for r in risks}
+        assert "error_recovery" in dimensions
+        assert "planning_quality" in dimensions
+        assert len(risks) == 2
+
+    def test_goal_alignment_never_annotated(self):
+        """goal_alignment is excluded from annotation regardless of score — QE-001 showed it is robust to INT4."""
+        annotator = QuantizationRiskAnnotator()
+        score = self._make_trajectory_score(
+            error_recovery=0.95,
+            planning_quality=0.92,
+            goal_alignment=0.0,  # artificially low — should still produce no warning
+        )
+        risks = annotator.annotate(score)
+        assert not any(r.dimension == "goal_alignment" for r in risks)
