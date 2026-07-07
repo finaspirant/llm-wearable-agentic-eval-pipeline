@@ -2,7 +2,7 @@
 
 > Demonstrated on wearable health agent data · generalises to any non-deterministic multi-agent system
 
-![Python](https://img.shields.io/badge/python-3.11+-blue) ![License](https://img.shields.io/badge/license-MIT-green) ![Ruff](https://img.shields.io/badge/code%20style-ruff-orange) ![Sprint Day](https://img.shields.io/badge/sprint-Day%2039%2F45-purple) ![Papers](https://img.shields.io/badge/white%20papers-3%20published-teal)
+![Python](https://img.shields.io/badge/python-3.11+-blue) ![License](https://img.shields.io/badge/license-MIT-green) ![Ruff](https://img.shields.io/badge/code%20style-ruff-orange) ![Sprint Day](https://img.shields.io/badge/sprint-Day%2039%2F45-purple) ![Papers](https://img.shields.io/badge/white%20papers-3%20published-teal) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21230121.svg)](https://doi.org/10.5281/zenodo.21230121)
 
 **Open-source trajectory-level evaluation framework for non-deterministic agentic systems. Path-Invariant Agreement (PIA) recovers IAA κ from −0.065 → +0.743. Wearable agents used as demonstration domain.**
 
