@@ -1,0 +1,240 @@
+{
+  "generated_at": "2026-08-25T23:59:50.172990+00:00",
+  "model": "claude-sonnet-4-6",
+  "judges": [
+    "GameTheoreticRigor",
+    "LiteralGroundedness",
+    "OpponentResponsiveness"
+  ],
+  "n_clusters": 13,
+  "n_clusters_skipped": 0,
+  "unclustered_step_count": 0,
+  "models_represented": [
+    "claude-sonnet-4-6"
+  ],
+  "per_dimension_kappa": {
+    "valuation_reasoning": 0.1657,
+    "horizon_strategy_planning": -0.0012,
+    "concession_handling": 0.0436,
+    "outcome_consistency": 0.3637
+  },
+  "overall_kappa": 0.143,
+  "interpretation": "slight",
+  "per_cluster": {
+    "bargaining_021": {
+      "cluster_id": "bargaining_021",
+      "game_family": "bargaining",
+      "n_members": 12,
+      "n_judged_members": 12,
+      "kappa_per_dimension": {
+        "valuation_reasoning": -0.011709601873536353,
+        "horizon_strategy_planning": -0.1670822942643391,
+        "concession_handling": 0.16556291390728478,
+        "outcome_consistency": 0.15719063545150497
+      },
+      "kappa_overall": 0.03599041330522858,
+      "action_format_compliance_rate": null,
+      "fallback_rate": 0.0
+    },
+    "bargaining_022": {
+      "cluster_id": "bargaining_022",
+      "game_family": "bargaining",
+      "n_members": 12,
+      "n_judged_members": 12,
+      "kappa_per_dimension": {
+        "valuation_reasoning": 0.09382151029748276,
+        "horizon_strategy_planning": -0.07886435331230295,
+        "concession_handling": 0.02439024390243884,
+        "outcome_consistency": 0.21739130434782605
+      },
+      "kappa_overall": 0.06418467630886118,
+      "action_format_compliance_rate": null,
+      "fallback_rate": 0.0
+    },
+    "bargaining_009": {
+      "cluster_id": "bargaining_009",
+      "game_family": "bargaining",
+      "n_members": 11,
+      "n_judged_members": 11,
+      "kappa_per_dimension": {
+        "valuation_reasoning": 0.23611111111111108,
+        "horizon_strategy_planning": 0.3452380952380951,
+        "concession_handling": 0.07649253731343285,
+        "outcome_consistency": 0.13157894736842088
+      },
+      "kappa_overall": 0.19735517275776499,
+      "action_format_compliance_rate": null,
+      "fallback_rate": 0.0
+    },
+    "bargaining_016": {
+      "cluster_id": "bargaining_016",
+      "game_family": "bargaining",
+      "n_members": 11,
+      "n_judged_members": 11,
+      "kappa_per_dimension": {
+        "valuation_reasoning": 0.06417910447761192,
+        "horizon_strategy_planning": 0.033472803347280006,
+        "concession_handling": -0.06451612903225794,
+        "outcome_consistency": 0.17204301075268796
+      },
+      "kappa_overall": 0.05129469738633049,
+      "action_format_compliance_rate": null,
+      "fallback_rate": 0.0
+    },
+    "bargaining_004": {
+      "cluster_id": "bargaining_004",
+      "game_family": "bargaining",
+      "n_members": 14,
+      "n_judged_members": 14,
+      "kappa_per_dimension": {
+        "valuation_reasoning": -0.14411247803163435,
+        "horizon_strategy_planning": -0.1307692307692309,
+        "concession_handling": -0.14871794871794877,
+        "outcome_consistency": -0.08620689655172425
+      },
+      "kappa_overall": -0.12745163851763458,
+      "action_format_compliance_rate": null,
+      "fallback_rate": 0.0
+    },
+    "negotiation_016": {
+      "cluster_id": "negotiation_016",
+      "game_family": "negotiation",
+      "n_members": 11,
+      "n_judged_members": 11,
+      "kappa_per_dimension": {
+        "valuation_reasoning": -0.03125000000000165,
+        "horizon_strategy_planning": 0.30962343096234285,
+        "concession_handling": 0.26518218623481754,
+        "outcome_consistency": 1.0
+      },
+      "kappa_overall": 0.3858889042992897,
+      "action_format_compliance_rate": null,
+      "fallback_rate": 0.0
+    },
+    "negotiation_032": {
+      "cluster_id": "negotiation_032",
+      "game_family": "negotiation",
+      "n_members": 11,
+      "n_judged_members": 11,
+      "kappa_per_dimension": {
+        "valuation_reasoning": 0.05714285714285617,
+        "horizon_strategy_planning": -0.1000000000000001,
+        "concession_handling": -0.03432835820895515,
+        "outcome_consistency": 0.09589041095890398
+      },
+      "kappa_overall": 0.004676227473201223,
+      "action_format_compliance_rate": null,
+      "fallback_rate": 0.0
+    },
+    "negotiation_034": {
+      "cluster_id": "negotiation_034",
+      "game_family": "negotiation",
+      "n_members": 10,
+      "n_judged_members": 10,
+      "kappa_per_dimension": {
+        "valuation_reasoning": 0.2799999999999995,
+        "horizon_strategy_planning": 0.10094637223974758,
+        "concession_handling": 0.08745247148288963,
+        "outcome_consistency": 0.6078431372549016
+      },
+      "kappa_overall": 0.2690604952443846,
+      "action_format_compliance_rate": null,
+      "fallback_rate": 0.0
+    },
+    "negotiation_019": {
+      "cluster_id": "negotiation_019",
+      "game_family": "negotiation",
+      "n_members": 9,
+      "n_judged_members": 9,
+      "kappa_per_dimension": {
+        "valuation_reasoning": 1.0,
+        "horizon_strategy_planning": -0.05194805194805189,
+        "concession_handling": 0.11184210526315758,
+        "outcome_consistency": -0.08000000000000158
+      },
+      "kappa_overall": 0.24497351332877604,
+      "action_format_compliance_rate": null,
+      "fallback_rate": 0.0
+    },
+    "negotiation_030": {
+      "cluster_id": "negotiation_030",
+      "game_family": "negotiation",
+      "n_members": 13,
+      "n_judged_members": 13,
+      "kappa_per_dimension": {
+        "valuation_reasoning": 0.0823529411764707,
+        "horizon_strategy_planning": -0.17785234899328842,
+        "concession_handling": -0.04697986577181223,
+        "outcome_consistency": 0.22662889518413598
+      },
+      "kappa_overall": 0.02103740539887651,
+      "action_format_compliance_rate": null,
+      "fallback_rate": 0.0
+    },
+    "persuasion_010": {
+      "cluster_id": "persuasion_010",
+      "game_family": "persuasion",
+      "n_members": 27,
+      "n_judged_members": 12,
+      "kappa_per_dimension": {
+        "valuation_reasoning": -0.12500000000000006,
+        "horizon_strategy_planning": -0.15555555555555545,
+        "outcome_consistency": 1.0
+      },
+      "kappa_overall": 0.23981481481481484,
+      "action_format_compliance_rate": null,
+      "fallback_rate": 0.5555555555555556
+    },
+    "persuasion_069": {
+      "cluster_id": "persuasion_069",
+      "game_family": "persuasion",
+      "n_members": 27,
+      "n_judged_members": 6,
+      "kappa_per_dimension": {
+        "valuation_reasoning": 0.5,
+        "horizon_strategy_planning": -0.1250000000000001,
+        "outcome_consistency": 1.0
+      },
+      "kappa_overall": 0.4583333333333333,
+      "action_format_compliance_rate": null,
+      "fallback_rate": 0.7777777777777778
+    },
+    "persuasion_083": {
+      "cluster_id": "persuasion_083",
+      "game_family": "persuasion",
+      "n_members": 27,
+      "n_judged_members": 15,
+      "kappa_per_dimension": {
+        "valuation_reasoning": 0.15201005025125625,
+        "horizon_strategy_planning": 0.1824644549763033,
+        "outcome_consistency": 0.2857142857142851
+      },
+      "kappa_overall": 0.20672959698061488,
+      "action_format_compliance_rate": null,
+      "fallback_rate": 0.4444444444444444
+    }
+  },
+  "by_game_family": {
+    "bargaining": {
+      "game_family": "bargaining",
+      "n_clusters": 5,
+      "kappa_overall": 0.04427466424811013
+    },
+    "negotiation": {
+      "game_family": "negotiation",
+      "n_clusters": 5,
+      "kappa_overall": 0.1851273091489056
+    },
+    "persuasion": {
+      "game_family": "persuasion",
+      "n_clusters": 3,
+      "kappa_overall": 0.301625915042921
+    }
+  },
+  "action_format_compliance_overall": null,
+  "notes": [
+    "action_format_compliance is computed deterministically and is excluded from overall_kappa (see module docstring).",
+    "Judges are not calibrated to a target kappa; this is a live, uncalibrated measurement, unlike pia_calculator.py's dry-run tables.",
+    "Steps with fallback_used=True are excluded from judging (no genuine reasoning to score) and reported via fallback_rate."
+  ]
+}

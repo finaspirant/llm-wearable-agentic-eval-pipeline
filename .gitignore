@@ -241,3 +241,17 @@ data/annotations/post_calibration/
 # IDE settings
 .vscode/settings.json
 .idea/
+
+# macOS
+.DS_Store
+
+# GLEE experiment console logs + raw trajectory log (compressed .jsonl.gz is tracked instead)
+tests/experiments/glee/*_console.log
+tests/experiments/glee/trajectories.jsonl
+tests/experiments/glee/*.pid
+
+# LaTeX build artifacts
+white_papers/NeurIPS/*.aux
+white_papers/NeurIPS/*.bbl
+white_papers/NeurIPS/*.blg
+white_papers/NeurIPS/*.out

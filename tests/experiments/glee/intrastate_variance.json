@@ -1,0 +1,1505 @@
+[
+  {
+    "source_file": "tests/experiments/glee/trajectories_run2_validkey_nofix.jsonl",
+    "source_tag": "archived_run2_validkey_nofix_prefix",
+    "source_description": "archived run2 (pre poll_interval/guard fix) -- poll-race-era duplicate",
+    "game_id": "144407a0-ffb9-4488-b822-9418aa900b7c",
+    "round": 1,
+    "game_family": "negotiation",
+    "action_differs_across_calls": true,
+    "game_state": {
+      "game_family": "negotiation",
+      "round": 1,
+      "horizon_known": false,
+      "phase": "offer",
+      "current_player": "player_1",
+      "player_1_role": "seller",
+      "player_2_role": "buyer",
+      "player_1_value": 80.0,
+      "complete_information": false,
+      "messages_allowed": true,
+      "last_offer": null,
+      "history": []
+    },
+    "calls": [
+      {
+        "reasoning": "This is a negotiation game where my reservation value is $80. I should start with a high anchor to maximize my profit. Starting too high might deter the buyer, but starting at $80 would leave no room for profit above my floor. A reasonable opening anchor around $130-$150 gives room to negotiate while signaling I expect a good price.",
+        "action": {
+          "type": "offer",
+          "fields": {
+            "product_price": 135,
+            "message": "Hello! I'm offering this product at $135. It's a quality item and I believe this is a fair price reflecting its value. I'm open to discussion if you have questions."
+          }
+        }
+      },
+      {
+        "reasoning": "This is the first round of a negotiation where my reservation value is $80. I should anchor high to leave room for negotiation while remaining credible. Starting around $150 is reasonable - it's ambitious but not so extreme as to immediately drive away a buyer, and gives me significant room to concede while still achieving a good profit above my $80 floor.",
+        "action": {
+          "type": "offer",
+          "fields": {
+            "product_price": 150,
+            "message": "Hello! I'm offering this product at $150. It's a high-quality item and I believe this is a fair price for the value it provides. I'm open to discussing further."
+          }
+        }
+      },
+      {
+        "reasoning": "This is a standard bilateral negotiation. My reservation value is $80. I know nothing about the buyer's valuation. I should start with an ambitious anchor price to leave room for concessions while still ending up with a good profit. A high opening like $150 is reasonable without being absurd, signaling I expect real value from this deal.",
+        "action": {
+          "type": "offer",
+          "fields": {
+            "product_price": 150,
+            "message": "Hello! I'm offering this product at $150. It's a high-quality item and I believe this price reflects its true value. I'm open to discussing further if you have questions."
+          }
+        }
+      },
+      {
+        "reasoning": "This is round 1 with no history to model the buyer's behavior. My reservation value is $80. I should open with a high anchor to maximize my potential profit while leaving room to negotiate. A price around $150 is a reasonable aggressive opening that signals confidence but isn't so extreme as to immediately drive away the buyer.",
+        "action": {
+          "type": "offer",
+          "fields": {
+            "product_price": 150,
+            "message": "Hello! I'm offering this product at $150. It's a high-quality item and I believe this is a fair price for the value it provides. I'm open to discussing further."
+          }
+        }
+      },
+      {
+        "reasoning": "This is the opening round of a negotiation where my reservation value is $80. I should anchor high to maximize my profit, as the buyer's value is unknown but likely higher than $80. Starting with a high anchor like $150 gives room to negotiate while still being plausible, and I can come down gradually if needed.",
+        "action": {
+          "type": "offer",
+          "fields": {
+            "product_price": 150,
+            "message": "Hello! I'm offering this product at $150. It's a high-quality item and I believe this is a fair price reflecting its value. I'm open to discussing, but this is my starting point."
+          }
+        }
+      }
+    ]
+  },
+  {
+    "source_file": "tests/experiments/glee/trajectories_run2_validkey_nofix.jsonl",
+    "source_tag": "archived_run2_validkey_nofix_prefix",
+    "source_description": "archived run2 (pre poll_interval/guard fix) -- poll-race-era duplicate",
+    "game_id": "23c6996c-de0d-4473-b26a-7af3ca1aea8e",
+    "round": 1,
+    "game_family": "negotiation",
+    "action_differs_across_calls": true,
+    "game_state": {
+      "game_family": "negotiation",
+      "round": 1,
+      "horizon_known": false,
+      "phase": "decision",
+      "current_player": "player_2",
+      "player_1_role": "seller",
+      "player_2_role": "buyer",
+      "player_2_value": 1000000.0,
+      "complete_information": false,
+      "messages_allowed": true,
+      "last_offer": {
+        "price": 1510000.0,
+        "message": "My price is 1,510,000.00. Below that this is not worth selling to me, so there is no version of this where I go under it.",
+        "from_player": "player_1",
+        "round": 1
+      },
+      "history": []
+    },
+    "calls": [
+      {
+        "reasoning": "The seller is asking $1,510,000, which is already above my maximum valuation of $1,000,000. Accepting would mean paying more than the product is worth to me. The seller claims they won't go below this price, but that's a bluff/anchor strategy - no rational seller would refuse a reasonable offer. I should counter at a low price to anchor the negotiation favorably. Since no deal above $1,000,000 makes sense for me, I'll counter well below my max to leave room for negotiation.",
+        "action": {
+          "type": "decision",
+          "fields": {
+            "decision": "RejectOffer",
+            "product_price": 600000,
+            "message": "Your opening price is well above what this product is worth to me. I can offer $600,000, which is a serious offer. I'm happy to negotiate, but I cannot pay more than the product's value to me."
+          }
+        }
+      },
+      {
+        "reasoning": "The seller is asking $1,510,000, which is already above my maximum value of $1,000,000. Accepting would give me negative profit. The seller claims they won't go below $1,510,000, but this is an anchoring tactic. I should counter with a low offer to establish my position and see if the seller is willing to negotiate. Walking away immediately would be premature - there's no round limit and nothing to lose by countering.",
+        "action": {
+          "type": "decision",
+          "fields": {
+            "decision": "RejectOffer",
+            "product_price": 700000,
+            "message": "Your asking price exceeds my maximum budget for this product. I can offer $700,000, which reflects fair market value from my perspective. I'm happy to negotiate toward a mutually agreeable price."
+          }
+        }
+      },
+      {
+        "reasoning": "The seller's opening offer of $1,510,000 is above my maximum value of $1,000,000, so accepting it would give me negative profit. The seller claims they won't go below $1,510,000, but this is a classic anchoring tactic. I should counter with a low offer to signal my value range and see if the seller is willing to negotiate. Walking away immediately gives no information. I'll counter with a reasonable buyer's anchor around $700,000-$800,000 to start negotiating toward something below $1,000,000.",
+        "action": {
+          "type": "decision",
+          "fields": {
+            "decision": "RejectOffer",
+            "product_price": 750000,
+            "message": "Your price is well above my maximum budget. I can offer $750,000, which is a serious offer. I'm happy to negotiate but cannot go above $1,000,000 for this product."
+          }
+        }
+      },
+      {
+        "reasoning": "The seller is asking $1,510,000 which is above my maximum value of $1,000,000. Accepting would give me negative profit (-$510,000). The seller is anchoring high and claiming they won't go lower, but this is a bluff/negotiation tactic - if they truly won't go below $1,510,000, then no deal is possible and we both get $0. I should counter with a low offer to start negotiation and see if they'll move. Walking away immediately gives up any chance of a deal. I'll counter at $700,000 to anchor low and leave room to negotiate up to my $1,000,000 limit.",
+        "action": {
+          "type": "decision",
+          "fields": {
+            "decision": "RejectOffer",
+            "product_price": 700000,
+            "message": "Your price of $1,510,000 is well above what this product is worth to me. My maximum value is significantly lower. I can offer $700,000. If you truly won't negotiate, then we both walk away with nothing - which benefits neither of us. Let's find a price that works for both sides."
+          }
+        }
+      },
+      {
+        "reasoning": "The seller is asking $1,510,000, which is above my maximum value of $1,000,000. Accepting would give me negative profit (-$510,000). I should counter with a low offer to signal my position. The seller's \"take it or leave it\" message is a bluff/anchor - I'll counter at a low price to start negotiations, since walking away now would be premature when I can try to find a mutually beneficial deal below $1,000,000.",
+        "action": {
+          "type": "decision",
+          "fields": {
+            "decision": "RejectOffer",
+            "product_price": 500000,
+            "message": "Your price is well above what this product is worth to me. My budget for this is $500,000. I'm willing to negotiate toward a fair deal, but I cannot go above $1,000,000 under any circumstances - that's simply my maximum valuation. Let's find a price that works for both of us."
+          }
+        }
+      }
+    ]
+  },
+  {
+    "source_file": "tests/experiments/glee/trajectories_run2_validkey_nofix.jsonl",
+    "source_tag": "archived_run2_validkey_nofix_prefix",
+    "source_description": "archived run2 (pre poll_interval/guard fix) -- poll-race-era duplicate",
+    "game_id": "751ea253-8e35-464d-8b77-c5b298ec0151",
+    "round": 2,
+    "game_family": "bargaining",
+    "action_differs_across_calls": true,
+    "game_state": {
+      "game_family": "bargaining",
+      "round": 2,
+      "max_rounds": 12,
+      "horizon_known": true,
+      "phase": "offer",
+      "current_player": "player_2",
+      "proposer": "player_2",
+      "money_to_divide": 10000,
+      "delta_1": 0.8,
+      "delta_2": 1.0,
+      "complete_information": true,
+      "messages_allowed": true,
+      "last_offer": null,
+      "history": [
+        {
+          "round": 1,
+          "proposer": "player_1",
+          "offer": {
+            "player_1_gain": 2800.0,
+            "player_2_gain": 7200.0,
+            "message": "You receive 7200.00. Delay discounts the available value, so accepting now dominates waiting for a similar split.",
+            "proposer": "player_1",
+            "round": 1
+          },
+          "decision": "reject",
+          "response_time_ms": 16141
+        }
+      ]
+    },
+    "calls": [
+      {
+        "reasoning": "Alice's share faces 20% inflation per round while mine doesn't. This means Alice's effective value decreases each round she waits - if she gets $X in round N, it's worth X * 0.8^(N-1) to her from round 1's perspective. I should exploit this asymmetry. Alice offered me $7,200 in round 1, which I rejected. Now I can propose a split that's better for me. Since Alice's money deflates but mine doesn't, I have strong bargaining power. I should propose giving Alice a smaller amount - she has incentive to accept now rather than wait. Let me propose Alice=$2,000, Bob=$8,000. Alice's effective value of $2,000 now equals what she'd get from a larger nominal share later, so this is reasonable pressure.",
+        "action": {
+          "type": "offer",
+          "fields": {
+            "alice_gain": 2000,
+            "bob_gain": 8000,
+            "message": "Since your share loses 20% value each round due to inflation, accepting $2,000 now is better for you than waiting. I have no inflation pressure, so I can afford to wait all 12 rounds. Let's settle this now with a fair split given the asymmetric discounting."
+          }
+        }
+      },
+      {
+        "reasoning": "Alice faces 20% inflation per round while I (Bob) face no inflation. Alice's $2,800 offer in round 1 was actually quite generous to me, but I rejected it. Now it's my turn to propose. Since Alice's value depreciates at 0.8x per round, her effective value of any dollar she receives decreases each round. By round 2, Alice's $1 is worth $0.8 in round-1 terms. I can leverage this asymmetry to push for a better deal for myself. Alice should be willing to accept a lower nominal amount now rather than risk further depreciation. I'll propose something like Alice=$2,000, Bob=$8,000, which gives Alice $2,000 now (worth more to her than a similar amount later) and maximizes my take.",
+        "action": {
+          "alice_gain": 2000,
+          "bob_gain": 8000,
+          "message": "Since Alice faces 20% inflation per round and I face none, you should accept a smaller share now rather than risk further depreciation. $2,000 for you now is worth more than waiting."
+        }
+      }
+    ]
+  },
+  {
+    "source_file": "tests/experiments/glee/trajectories_run2_validkey_nofix.jsonl",
+    "source_tag": "archived_run2_validkey_nofix_prefix",
+    "source_description": "archived run2 (pre poll_interval/guard fix) -- poll-race-era duplicate",
+    "game_id": "751ea253-8e35-464d-8b77-c5b298ec0151",
+    "round": 6,
+    "game_family": "bargaining",
+    "action_differs_across_calls": true,
+    "game_state": {
+      "game_family": "bargaining",
+      "round": 6,
+      "max_rounds": 12,
+      "horizon_known": true,
+      "phase": "offer",
+      "current_player": "player_2",
+      "proposer": "player_2",
+      "money_to_divide": 10000,
+      "delta_1": 0.8,
+      "delta_2": 1.0,
+      "complete_information": true,
+      "messages_allowed": true,
+      "last_offer": null,
+      "history": [
+        {
+          "round": 1,
+          "proposer": "player_1",
+          "offer": {
+            "player_1_gain": 2800.0,
+            "player_2_gain": 7200.0,
+            "message": "You receive 7200.00. Delay discounts the available value, so accepting now dominates waiting for a similar split.",
+            "proposer": "player_1",
+            "round": 1
+          },
+          "decision": "reject",
+          "response_time_ms": 16141
+        },
+        {
+          "round": 2,
+          "proposer": "player_2",
+          "offer": {
+            "player_1_gain": 2000.0,
+            "player_2_gain": 8000.0,
+            "message": "Since Alice faces 20% inflation per round and I face none, you should accept a smaller share now rather than risk further depreciation. $2,000 for you now is worth more than waiting.",
+            "proposer": "player_2",
+            "round": 2
+          },
+          "decision": "reject",
+          "response_time_ms": 2663
+        },
+        {
+          "round": 3,
+          "proposer": "player_1",
+          "offer": {
+            "player_1_gain": 2800.0,
+            "player_2_gain": 7200.0,
+            "message": "You receive 7200.00. Delay discounts the available value, so accepting now dominates waiting for a similar split.",
+            "proposer": "player_1",
+            "round": 3
+          },
+          "decision": "reject",
+          "response_time_ms": 20619
+        },
+        {
+          "round": 4,
+          "proposer": "player_2",
+          "offer": {
+            "player_1_gain": 1500.0,
+            "player_2_gain": 8500.0,
+            "message": "Alice, your $2,800 is worth less each round due to 20% inflation. By round 4, your $2,800 offer is only worth ~$1,434 in effective value to you. I'm offering you $1,500 now \u2014 more than your inflation-adjusted value from your own proposals. Accept now before further depreciation erodes your share even more.",
+            "proposer": "player_2",
+            "round": 4
+          },
+          "decision": "reject",
+          "response_time_ms": 2682
+        },
+        {
+          "round": 5,
+          "proposer": "player_1",
+          "offer": {
+            "player_1_gain": 2800.0,
+            "player_2_gain": 7200.0,
+            "message": "You receive 7200.00. Delay discounts the available value, so accepting now dominates waiting for a similar split.",
+            "proposer": "player_1",
+            "round": 5
+          },
+          "decision": "reject",
+          "response_time_ms": 13020
+        }
+      ]
+    },
+    "calls": [
+      {
+        "reasoning": "Alice has been robotically proposing Alice=$2,800, Bob=$7,200 every round she proposes, and rejecting my counter-offers. By round 6, Alice's $2,800 is worth only 0.8^5 * 2800 \u2248 $917 in round-1 terms. Alice seems to be playing a stubborn strategy ignoring inflation. I face no inflation, so I can afford to wait, but we only have 6 rounds left. If Alice keeps rejecting and we hit round 12 with no deal, we both get $0. I need to make an offer Alice might actually accept. Her nominal demand is $2,800. In effective terms at round 6, $2,800 * 0.8^5 = $917. I should offer her something close to her stated $2,800 nominal but push for more for myself. Since she keeps insisting on $2,800 for herself, maybe I should offer her exactly $2,800 to finally close the deal and get $7,200 for myself - which is what she's been offering me anyway. This locks in $7,200 for me rather than risking $0.",
+        "action": {
+          "type": "offer",
+          "fields": {
+            "alice_gain": 2800,
+            "bob_gain": 7200,
+            "message": "Alice, we've been going back and forth with this same split. I'm now offering you exactly what you've been asking for - $2,800 for you, $7,200 for me. This is fair and matches your own proposals. Let's end this now before more rounds pass and we both risk getting $0. Accept this offer."
+          }
+        }
+      },
+      {
+        "reasoning": "Alice has been stubbornly anchoring at $2,800 for herself across every round she proposes, and rejecting my lower offers. We're at round 6 of 12 - Alice's $2,800 in nominal terms is now worth $2,800 \u00d7 0.8^5 = $2,800 \u00d7 0.328 = ~$918 in round-1 value to her. Alice seems irrational or is playing a fixed strategy. I face no inflation, so I can afford to wait, but we only have 6 rounds left. I should make a slightly more generous offer to try to break the deadlock - perhaps offering Alice $2,000 which in round 6 nominal terms she might accept, since her own $2,800 demand is deeply eroded. But given her pattern of always rejecting my offers regardless, I'll try a modest concession to $2,200 for Alice (still giving me $7,800) to see if there's movement, while noting the game theory pressure.",
+        "action": {
+          "type": "offer",
+          "fields": {
+            "alice_gain": 2200,
+            "bob_gain": 7800,
+            "message": "Alice, we're at round 6 of 12. Your $2,800 demand has lost over 67% of its value due to inflation \u2014 it's worth less than $920 in real terms compared to round 1. I'm offering you $2,200 now, which is far more valuable than any nominal $2,800 you'd get later. With only 6 rounds left, continued deadlock means we both get $0. This is a genuine compromise \u2014 please accept."
+          }
+        }
+      },
+      {
+        "reasoning": "Alice has rigidly proposed $2,800 for herself every round she proposes, rejecting my offers of $2,000 and $1,500. She seems to have a fixed anchor. By round 6, Alice's $2,800 nominal share is worth only $2,800 \u00d7 0.8^5 \u2248 $917 in round-1 terms to her. I face no inflation. I should make a slightly more generous offer to try to break the deadlock, but still heavily favor myself. Given we're at round 6 of 12, if she keeps refusing, we both get $0. I'll offer Alice $2,000 (which in effective value given her inflation is meaningful) and keep $8,000, emphasizing her inflation-adjusted losses.",
+        "action": {
+          "alice_gain": 2000,
+          "bob_gain": 8000,
+          "message": "Alice, we're at round 6 of 12. Your $2,800 demand has lost over 67% of its value due to inflation - in effective terms you've only been earning ~$917 per proposal. I'm offering you $2,000 now, which is worth far more than any future deal at this rate. If we reach round 12 with no agreement, we both get $0. Please accept this reasonable offer."
+        }
+      }
+    ]
+  },
+  {
+    "source_file": "tests/experiments/glee/trajectories_run3_pollfix_guard_schemabug.jsonl",
+    "source_tag": "archived_run3_pollfix_guard_schemabug",
+    "source_description": "archived run3 (poll fix + guard active, schema-echo bug not yet fixed) -- confusion-driven duplicate",
+    "game_id": "0431a21e-2326-44ee-8427-b26bd68ee190",
+    "round": 1,
+    "game_family": "negotiation",
+    "action_differs_across_calls": true,
+    "game_state": {
+      "game_family": "negotiation",
+      "round": 1,
+      "max_rounds": 1,
+      "horizon_known": true,
+      "phase": "decision",
+      "current_player": "player_2",
+      "player_1_role": "seller",
+      "player_2_role": "buyer",
+      "player_1_value": 1000000.0,
+      "player_2_value": 1500000.0,
+      "complete_information": true,
+      "messages_allowed": false,
+      "last_offer": {
+        "price": 1360000.0,
+        "message": "",
+        "from_player": "player_1",
+        "round": 1
+      },
+      "history": []
+    },
+    "calls": [
+      {
+        "reasoning": "The seller offered $1,360,000. My value is $1,500,000, so accepting gives me a profit of $140,000. Rejecting or walking away gives me $0. Since $140,000 > $0, I should accept.",
+        "action": {
+          "type": "decision",
+          "fields": {
+            "decision": "AcceptOffer",
+            "message": "Accepting the offer as it provides positive value to me."
+          }
+        }
+      },
+      {
+        "reasoning": "This is a single-round negotiation with no counteroffer possible. The seller offered $1,360,000, which is below my value of $1,500,000, giving me a profit of $140,000. Rejecting or walking away yields $0. Since $140,000 > $0, I should accept.",
+        "action": {
+          "type": "decision",
+          "fields": {
+            "decision": "AcceptOffer",
+            "message": "Accepted."
+          }
+        }
+      },
+      {
+        "reasoning": "This is a single-round take-it-or-leave-it negotiation. The seller offered $1,360,000, which gives me a profit of $1,500,000 - $1,360,000 = $140,000. Rejecting means $0 profit. Since $140,000 > $0, accepting is strictly better than walking away.",
+        "action": {
+          "type": "decision",
+          "fields": {
+            "decision": "AcceptOffer",
+            "message": "Accepting the offer."
+          }
+        }
+      },
+      {
+        "reasoning": "This is a single-round negotiation with no counteroffer possible. The offer is $1,360,000, which is below my value of $1,500,000, giving me a profit of $140,000. Rejecting or walking away gives me $0. Accepting is strictly better than rejecting since I gain $140,000 in surplus.",
+        "action": {
+          "type": "decision",
+          "fields": {
+            "decision": "AcceptOffer",
+            "message": "Accepting the offer as it provides value below my maximum valuation."
+          }
+        }
+      }
+    ]
+  },
+  {
+    "source_file": "tests/experiments/glee/trajectories_run3_pollfix_guard_schemabug.jsonl",
+    "source_tag": "archived_run3_pollfix_guard_schemabug",
+    "source_description": "archived run3 (poll fix + guard active, schema-echo bug not yet fixed) -- confusion-driven duplicate",
+    "game_id": "2244aea3-cddd-48f9-821b-edc9b7ebf86d",
+    "round": 1,
+    "game_family": "negotiation",
+    "action_differs_across_calls": true,
+    "game_state": {
+      "game_family": "negotiation",
+      "round": 1,
+      "max_rounds": 10,
+      "horizon_known": true,
+      "phase": "offer",
+      "current_player": "player_1",
+      "player_1_role": "seller",
+      "player_2_role": "buyer",
+      "player_1_value": 120.0,
+      "complete_information": false,
+      "messages_allowed": false,
+      "last_offer": null,
+      "history": []
+    },
+    "calls": [
+      {
+        "reasoning": "This is a standard bilateral negotiation game. My reservation value is $120. I should anchor high to maximize my profit, leaving room for negotiation over the remaining 9 rounds. A common strategy is to open near the high end of a reasonable range\u2014say $200\u2014which gives room to concede while still ending well above my minimum.",
+        "action": {
+          "type": "offer",
+          "fields": {
+            "product_price": 200
+          }
+        }
+      },
+      {
+        "reasoning": "This is a bilateral negotiation game where I'm the seller with a reservation value of $120. I have 10 rounds to reach a deal. Starting high gives room to concede while still landing well above my minimum. A typical buyer might have a value somewhere in the $150-$200 range, so I'll anchor high at $200 to maximize my potential profit while leaving room for negotiation.",
+        "action": {
+          "type": "offer",
+          "fields": {
+            "product_price": 200
+          }
+        }
+      },
+      {
+        "reasoning": "This is round 1 of 10 with no information about the buyer's valuation. I should anchor high to maximize my profit, while leaving room to negotiate down. A common strategy is to start at roughly 2x my reservation value or higher. I'll open at $200 to leave plenty of room for negotiation while anchoring the buyer's expectations high.",
+        "action": {
+          "type": "offer",
+          "fields": {
+            "product_price": 200
+          }
+        }
+      },
+      {
+        "reasoning": "This is a standard bilateral negotiation game. My reservation value is $120. I should anchor high in round 1 to leave room for concessions while maximizing my expected payoff. With 10 rounds available, I can start aggressive and come down if needed. A reasonable opening anchor would be around $200, which signals high value without being absurdly unrealistic.",
+        "action": {
+          "product_price": 200
+        }
+      }
+    ]
+  },
+  {
+    "source_file": "tests/experiments/glee/trajectories_run3_pollfix_guard_schemabug.jsonl",
+    "source_tag": "archived_run3_pollfix_guard_schemabug",
+    "source_description": "archived run3 (poll fix + guard active, schema-echo bug not yet fixed) -- confusion-driven duplicate",
+    "game_id": "3c7da033-83dc-4352-b100-b7dd97614979",
+    "round": 1,
+    "game_family": "negotiation",
+    "action_differs_across_calls": true,
+    "game_state": {
+      "game_family": "negotiation",
+      "round": 1,
+      "max_rounds": 10,
+      "horizon_known": true,
+      "phase": "decision",
+      "current_player": "player_2",
+      "player_1_role": "seller",
+      "player_2_role": "buyer",
+      "player_2_value": 150.0,
+      "complete_information": false,
+      "messages_allowed": true,
+      "last_offer": {
+        "price": 130.0,
+        "message": "That's the offer. I'm comfortable with it either way this goes.",
+        "from_player": "player_1",
+        "round": 1
+      },
+      "history": []
+    },
+    "calls": [
+      {
+        "reasoning": "This is round 1 of 10, and the seller opened at $130. My value is $150, so accepting gives me $20 profit. However, with 9 rounds remaining, I should negotiate down. The seller's message tries to project indifference, but they need a deal too (otherwise they get $0). I'll counter low to anchor the negotiation and work toward a middle ground around $100-$110.",
+        "action": {
+          "type": "decision",
+          "fields": {
+            "decision": "RejectOffer",
+            "product_price": 90,
+            "message": "That's too high for me. I can offer $90 - there's room for us both to benefit here."
+          }
+        }
+      },
+      {
+        "reasoning": "The seller opened at $130, which gives me $20 profit. That's not bad, but with 9 rounds remaining, I should counter lower to capture more surplus. The seller's message suggests confidence but it's round 1 - I'll start with a low anchor around $90-100 to leave room for negotiation, targeting a final price around $110-115.",
+        "action": {
+          "type": "decision",
+          "fields": {
+            "decision": "RejectOffer",
+            "product_price": 95,
+            "message": "Thanks for the offer, but $130 is too high for me. I'd be comfortable at $95 - let's find a middle ground that works for both of us."
+          }
+        }
+      },
+      {
+        "reasoning": "This is round 1 of 10. The seller opened at $130, leaving $20 of potential surplus for me (my value is $150). I should counter much lower to anchor the negotiation and extract more value. Starting around $80-90 gives room to negotiate upward while potentially landing at a much better price than $130. The seller's message suggests confidence but this is a bluff common in round 1.",
+        "action": {
+          "type": "decision",
+          "fields": {
+            "decision": "RejectOffer",
+            "product_price": 85,
+            "message": "That's too high for me. I can offer $85 - that's where I'm starting."
+          }
+        }
+      },
+      {
+        "reasoning": "This is round 1 of 10, and the seller opened at $130 with a somewhat tough message. My value is $150, so $130 gives me $20 profit. However, with 9 rounds remaining, I have plenty of room to negotiate down. I should counter with a low offer to anchor the negotiation and find the seller's true reservation price. Starting around $90-100 is reasonable to leave room for compromise.",
+        "action": {
+          "type": "decision",
+          "fields": {
+            "decision": "RejectOffer",
+            "product_price": 90,
+            "message": "Thanks for the offer, but $130 is too high for me. I'd be willing to pay $90 for it."
+          }
+        }
+      }
+    ]
+  },
+  {
+    "source_file": "tests/experiments/glee/trajectories_run3_pollfix_guard_schemabug.jsonl",
+    "source_tag": "archived_run3_pollfix_guard_schemabug",
+    "source_description": "archived run3 (poll fix + guard active, schema-echo bug not yet fixed) -- confusion-driven duplicate",
+    "game_id": "71ec39db-d9d1-4748-8543-7ebd2349f362",
+    "round": 1,
+    "game_family": "bargaining",
+    "action_differs_across_calls": true,
+    "game_state": {
+      "game_family": "bargaining",
+      "round": 1,
+      "max_rounds": 12,
+      "horizon_known": true,
+      "phase": "offer",
+      "current_player": "player_1",
+      "proposer": "player_1",
+      "money_to_divide": 1000000,
+      "delta_1": 0.9,
+      "complete_information": false,
+      "messages_allowed": false,
+      "last_offer": null,
+      "history": []
+    },
+    "calls": [
+      {
+        "reasoning": "This is a classic Rubinstein bargaining game with asymmetric discount factors (both 0.9 here) and 12 rounds. With complete symmetric discounting, the subgame perfect equilibrium in the first round gives the proposer a significant advantage. Since both players have the same discount factor (0.9), the SPE split in a finite horizon game gives the first proposer a larger share. With 12 rounds and \u03b4=0.9 for both, I should propose a split that's generous enough for Bob to accept but maximizes my share. A reasonable opening offer around 60-65% for myself is strong but not so greedy that Bob would prefer to counter. Given that delay costs both of us 10% per round, Bob should rationally accept a offer giving him ~40% now rather than risk getting less later.",
+        "action": {
+          "type": "offer",
+          "fields": {
+            "alice_gain": 600000,
+            "bob_gain": 400000
+          }
+        }
+      },
+      {
+        "reasoning": "In this Rubinstein bargaining game with 12 rounds and 10% inflation per round affecting only my (Alice's) share, I should think carefully about the equilibrium. Since only Alice faces inflation (delta_1=0.9), Bob has no time pressure from inflation. However, both face the risk of getting $0 if no deal is reached by round 12. As the first mover, I should make a strong opening offer but one that Bob might accept. Bob's discount factor isn't specified as different from 1, so Bob doesn't lose value over time - meaning Bob can afford to wait, which weakens my position. I'll propose taking a majority share (~65%) since I have first-mover advantage and need to account for the fact that my value erodes each round while Bob's doesn't.",
+        "action": {
+          "type": "offer",
+          "fields": {
+            "alice_gain": 650000,
+            "bob_gain": 350000
+          }
+        }
+      },
+      {
+        "reasoning": "In this alternating-offer bargaining game with 12 rounds and 10% per-round inflation on my share, I should think about the subgame perfect equilibrium. With complete information, the standard backward induction gives Alice a strong first-mover advantage. Each round I delay, my share loses 10% of its value. Bob faces no stated inflation, so he's patient relative to me. However, if no deal is reached, both get $0, which gives me leverage to demand more early. A reasonable opening offer that Bob would accept: I should claim a large share since I'm proposing first and the inflation hurts me. I'll offer Bob enough to make acceptance rational (~400k-450k) and keep 550k-600k for myself. Given the 12-round horizon and my discount factor, I'll go with a strong but not extreme offer of 600k for me, 400k for Bob.",
+        "action": {
+          "type": "offer",
+          "fields": {
+            "alice_gain": 600000,
+            "bob_gain": 400000
+          }
+        }
+      },
+      {
+        "reasoning": "In this Rubinstein-style bargaining game with 12 rounds and 10% per-round inflation on my share, I need to make an opening offer. Since only my payoff erodes (delta_1 = 0.9), Bob has no time pressure from inflation. However, both get $0 if no deal is reached by round 12. I should offer Bob enough to accept now rather than wait, while taking as much as possible for myself. A reasonable opening offer that's somewhat aggressive but plausible for Bob to accept would be around 60-65% for me and 35-40% for Bob. Given Bob faces no inflation pressure, I shouldn't be too greedy, but as the first mover I can anchor high.",
+        "action": {
+          "type": "offer",
+          "fields": {
+            "alice_gain": 650000,
+            "bob_gain": 350000
+          }
+        }
+      }
+    ]
+  },
+  {
+    "source_file": "tests/experiments/glee/trajectories_run3_pollfix_guard_schemabug.jsonl",
+    "source_tag": "archived_run3_pollfix_guard_schemabug",
+    "source_description": "archived run3 (poll fix + guard active, schema-echo bug not yet fixed) -- confusion-driven duplicate",
+    "game_id": "74607f90-f25a-4363-bce5-3d559308b224",
+    "round": 1,
+    "game_family": "bargaining",
+    "action_differs_across_calls": true,
+    "game_state": {
+      "game_family": "bargaining",
+      "round": 1,
+      "horizon_known": false,
+      "phase": "offer",
+      "current_player": "player_1",
+      "proposer": "player_1",
+      "money_to_divide": 1000000,
+      "delta_1": 0.95,
+      "complete_information": false,
+      "messages_allowed": false,
+      "last_offer": null,
+      "history": []
+    },
+    "calls": [
+      {
+        "reasoning": "This is an infinite-horizon bargaining game with 5% per-round inflation affecting my share. As the first proposer, I have an advantage. With discount factor \u03b4=0.95, the standard Rubinstein solution gives the first proposer a share of 1/(1+\u03b4) = 1/1.95 \u2248 51.3%. However, since only my share depreciates (not Bob's), Bob has less urgency to accept quickly, which weakens my position. To be strategically sound while still being attractive enough for Bob to accept, I'll offer Bob slightly more than half to encourage acceptance in round 1, maximizing my actual received value before inflation kicks in.",
+        "action": {
+          "type": "offer",
+          "fields": {
+            "alice_gain": 550000,
+            "bob_gain": 450000
+          }
+        }
+      },
+      {
+        "reasoning": "In a standard Rubinstein bargaining game with discount factor \u03b4=0.95 for Alice and unknown discount for Bob, the first-mover advantage suggests proposing a split where I take more. With 5% inflation per round affecting my share, waiting is costly for me. A reasonable opening offer that Bob might accept is around 60/40 in my favor, which is aggressive but not so extreme he'd reject it. Given complete information is false and Bob's discount is unknown, I'll propose a moderately aggressive split to anchor high while leaving Bob enough that rejection seems costly.",
+        "action": {
+          "type": "offer",
+          "fields": {
+            "alice_gain": 600000,
+            "bob_gain": 400000
+          }
+        }
+      },
+      {
+        "reasoning": "This is a classic Rubinstein bargaining game with 5% inflation per round affecting only my (Alice's) share. Since only my share depreciates, I have an incentive to reach agreement quickly. In the standard Rubinstein solution with asymmetric discounting, the proposer (me) gets a larger share in round 1. With \u03b4_Alice = 0.95 and assuming Bob has no discounting (or similar), a reasonable first offer would be to claim a strong majority while still giving Bob enough to accept. I'll offer Bob around 45% to make it attractive enough to accept immediately, keeping 55% for myself.",
+        "action": {
+          "type": "offer",
+          "fields": {
+            "alice_gain": 550000,
+            "bob_gain": 450000
+          }
+        }
+      },
+      {
+        "reasoning": "This is a classic alternating-offers bargaining game with one-sided discounting (only my share is eroded at 5% per round). Since only Alice's payoff is discounted, I should try to get a good deal quickly. As the first proposer, I should offer Bob enough to accept while keeping as much as possible for myself. A standard approach is to offer Bob slightly more than his outside option (which is effectively $0 if we never agree). However, Bob also knows that waiting costs me but not him, giving him some leverage. A reasonable opening offer that's slightly generous to Bob (maybe 55/45 in my favor) might get accepted, but Bob might push back hoping for more. I'll start with a strong but not extreme offer of 600k/400k for myself/Bob.",
+        "action": {
+          "type": "offer",
+          "fields": {
+            "alice_gain": 600000,
+            "bob_gain": 400000
+          }
+        }
+      }
+    ]
+  },
+  {
+    "source_file": "tests/experiments/glee/trajectories_run3_pollfix_guard_schemabug.jsonl",
+    "source_tag": "archived_run3_pollfix_guard_schemabug",
+    "source_description": "archived run3 (poll fix + guard active, schema-echo bug not yet fixed) -- confusion-driven duplicate",
+    "game_id": "7552fd1b-cb2e-4b10-8420-78c5a7c0893a",
+    "round": 1,
+    "game_family": "persuasion",
+    "action_differs_across_calls": true,
+    "game_state": {
+      "game_family": "persuasion",
+      "round": 1,
+      "total_rounds": 20,
+      "phase": "seller_message",
+      "current_player": "player_1",
+      "player_1_role": "seller",
+      "player_2_role": "buyer",
+      "product_price": 10000,
+      "p": 0.8,
+      "is_seller_know_cv": false,
+      "seller_message_type": "text",
+      "current_quality": "high",
+      "seller_message": null,
+      "history": [],
+      "seller_total_payoff": 0.0
+    },
+    "calls": [
+      {
+        "reasoning": "This is a persuasion game where I know the product is high quality. My goal is to credibly communicate quality to the buyer. Since I always know quality and want to maximize sales, I should establish credibility by being truthful - when I say it's high quality, it should be trustworthy. The buyer knows there's an 80% base rate of high quality, so I need to signal convincingly. I'll strongly assert high quality here since it's genuinely true.",
+        "action": {
+          "type": "seller_message",
+          "fields": {
+            "message": "This product is genuinely high quality - I can assure you with full confidence. With an 80% base rate of high quality products, and this being one of them, you're getting excellent value at $10,000. I stake my reputation on honest dealing throughout this game, so when I tell you something is high quality, you can trust it."
+          }
+        }
+      },
+      {
+        "reasoning": "This is a persuasion game where I know the product is high quality. The buyer faces a 80% prior probability of high quality. I need to establish credibility early - if I always claim high quality truthfully when it is high, and the buyer learns to trust my signals, I can maximize sales. I should be honest and emphatic about this being high quality to build trust over the 20 rounds.",
+        "action": {
+          "type": "seller_message",
+          "fields": {
+            "message": "This product is genuinely high quality. I have full visibility into the product's quality before you decide, and I'm telling you honestly: this is a high-quality item worth every penny of the $10,000 price. I plan to be straightforward with you throughout our 20 rounds together - my credibility matters to me, and I won't risk it by misrepresenting quality."
+          }
+        }
+      },
+      {
+        "reasoning": "This is a persuasion game where I'm the seller who knows the true quality. The product is genuinely high quality this round, so I can truthfully claim it's high quality. Since buyers know there's an 80% base rate of high quality, I need to establish credibility early. Being honest when I have high quality and potentially bluffing on low quality later is a classic strategy, but establishing a reputation for truthfulness could help sales throughout the game.",
+        "action": {
+          "type": "seller_message",
+          "fields": {
+            "message": "This product is high quality. I have full knowledge of each product's quality before you decide, and I'm telling you honestly: this one is genuinely high quality. At $10,000, you're getting real value. I encourage you to buy with confidence."
+          }
+        }
+      },
+      {
+        "reasoning": "This is a persuasion game where I know the product quality (high) but the buyer doesn't. The buyer knows there's an 80% prior probability of high quality. Since this product IS high quality, I should communicate that credibly. However, the buyer knows I have incentives to claim high quality regardless, so I need to think about what messaging strategy builds credibility over 20 rounds. Being truthful when I have high quality (and potentially honest about low quality too) could build a reputation. For now, I'll make a strong, specific claim about high quality to encourage purchase.",
+        "action": {
+          "type": "seller_message",
+          "fields": {
+            "message": "This product is high quality. I'm being straightforward with you: I know the actual quality of each product before you decide, and this one is genuinely high quality. At $10,000, you're getting full value. I plan to be honest with you throughout our 20 rounds together - if I ever have a low-quality product, I'll tell you. You can trust this claim."
+          }
+        }
+      }
+    ]
+  },
+  {
+    "source_file": "tests/experiments/glee/trajectories_run3_pollfix_guard_schemabug.jsonl",
+    "source_tag": "archived_run3_pollfix_guard_schemabug",
+    "source_description": "archived run3 (poll fix + guard active, schema-echo bug not yet fixed) -- confusion-driven duplicate",
+    "game_id": "8b44bf34-ccf8-4708-9f81-7ee1bb2433af",
+    "round": 1,
+    "game_family": "persuasion",
+    "action_differs_across_calls": true,
+    "game_state": {
+      "game_family": "persuasion",
+      "round": 1,
+      "total_rounds": 20,
+      "phase": "seller_message",
+      "current_player": "player_1",
+      "player_1_role": "seller",
+      "player_2_role": "buyer",
+      "product_price": 1000000,
+      "p": 0.5,
+      "is_seller_know_cv": false,
+      "seller_message_type": "text",
+      "current_quality": "high",
+      "seller_message": null,
+      "history": [],
+      "seller_total_payoff": 0.0
+    },
+    "calls": [
+      {
+        "reasoning": "This is a persuasion game where I know the product is high quality. The buyer faces a 50/50 prior, so they need convincing to buy. Since I genuinely have a high-quality product this round, I should communicate that credibly. However, the buyer knows I'll always claim high quality regardless of truth, so I need to think about building a reputation for honesty over 20 rounds. Being truthful when it's high quality (and potentially honest about low quality later) could establish credibility that helps me sell more high-quality products. For now, I'll make a strong, confident claim about quality.",
+        "action": {
+          "type": "seller_message",
+          "fields": {
+            "message": "I want to be straightforward with you: this product is genuinely high quality. I understand you have no way to verify this immediately, but I'm playing a long game here across 20 rounds, and building a trustworthy reputation matters more to me than any single sale. This round's product truly is high quality, and at $1,000,000 it represents real value."
+          }
+        }
+      },
+      {
+        "reasoning": "This is a persuasion game where I know the quality but the buyer doesn't. The product is genuinely high quality this round, so I can honestly signal this. My challenge is establishing credibility - if I always claim high quality, buyers will discount my claims. However, since this IS high quality, I should strongly advocate for it. Over 20 rounds, I need to build a reputation for honest signaling, but also maximize sales. Starting with an honest, enthusiastic message about the high quality product is the right move.",
+        "action": {
+          "type": "seller_message",
+          "fields": {
+            "message": "I'm excited to offer you this product today - I can tell you with full confidence that this is a HIGH QUALITY item. I have direct knowledge of the product's quality before offering it to you, and I would not mislead you on this. A high quality product at $1,000,000 gives you excellent value. I plan to be transparent throughout our 20-round relationship: when I have a high quality product, I'll tell you, and I'll be equally honest otherwise. I encourage you to buy this one - it's genuinely worth it."
+          }
+        }
+      },
+      {
+        "reasoning": "This is a persuasion game where I know quality and need to convince the buyer to purchase. The product is genuinely high quality this round, so I can honestly communicate this. The buyer faces a 50% prior of high quality, and at $1,000,000 price, they need to believe quality is sufficiently high to justify purchase. I should signal credibly that this is high quality - but since I'll also be incentivized to claim high quality on low quality rounds, I need to establish credibility. Starting with truth-telling on a genuine high-quality item is the right move.",
+        "action": {
+          "type": "seller_message",
+          "fields": {
+            "message": "This product is high quality. I want to establish a transparent relationship over our 20 rounds together - I will always tell you the true quality of each product. This round, I'm confident in telling you this is a high-quality product worth your investment. I understand you have no reason to trust me yet, but I encourage you to purchase and verify, so we can build a track record of honest communication."
+          }
+        }
+      },
+      {
+        "reasoning": "This is a persuasion game where I know quality and must convince the buyer to purchase. The product is genuinely high quality, so I can truthfully claim it's high quality. The key challenge is building credibility - the buyer knows I have incentive to claim high quality regardless. I should be persuasive and establish a reputation for honesty that will help me throughout the 20 rounds, since a buyer who trusts my signals will buy more often.",
+        "action": {
+          "type": "seller_message",
+          "fields": {
+            "message": "This product is high quality. I want to establish trust over our 20 rounds together - I will always tell you the truth about quality. A high-quality product is worth significantly more than $1,000,000 to you, making this a great deal. I encourage you to buy."
+          }
+        }
+      },
+      {
+        "reasoning": "This is a persuasion game where I know the quality but the buyer doesn't. The product is genuinely high quality this round, so I can truthfully claim it's high quality. The challenge is that the buyer knows I'll always claim high quality regardless of actual quality (cheap talk), so I need to build credibility over time. Since this is round 1, I should be straightforward and honest, establishing a reputation for truthfulness. The buyer's expected value from a random product is 50% \u00d7 high_value + 50% \u00d7 low_value. If high quality is worth >$1M to the buyer, they should buy; but they don't know. I'll make a clear, confident claim about quality to try to persuade them.",
+        "action": {
+          "type": "seller_message",
+          "fields": {
+            "message": "This product is high quality. I have direct knowledge of the product's quality before each sale, and I'm telling you truthfully that this is a high-quality item worth purchasing at the listed price of $1,000,000. I aim to build a honest track record over our 20 rounds together - you'll be able to verify my claims over time."
+          }
+        }
+      }
+    ]
+  },
+  {
+    "source_file": "tests/experiments/glee/trajectories_run3_pollfix_guard_schemabug.jsonl",
+    "source_tag": "archived_run3_pollfix_guard_schemabug",
+    "source_description": "archived run3 (poll fix + guard active, schema-echo bug not yet fixed) -- confusion-driven duplicate",
+    "game_id": "9230ea1b-42bf-4c0d-b779-8f1e6198b3c9",
+    "round": 1,
+    "game_family": "negotiation",
+    "action_differs_across_calls": true,
+    "game_state": {
+      "game_family": "negotiation",
+      "round": 1,
+      "max_rounds": 1,
+      "horizon_known": true,
+      "phase": "decision",
+      "current_player": "player_2",
+      "player_1_role": "seller",
+      "player_2_role": "buyer",
+      "player_1_value": 1200000.0,
+      "player_2_value": 1500000.0,
+      "complete_information": true,
+      "messages_allowed": true,
+      "last_offer": {
+        "price": 1416000.0,
+        "message": "This price leaves both sides positive value and reflects the remaining bargaining range.",
+        "from_player": "player_1",
+        "round": 1
+      },
+      "history": []
+    },
+    "calls": [
+      {
+        "reasoning": "The seller offered $1,416,000. My value is $1,500,000, so accepting gives me a profit of $84,000. The seller's value is $1,200,000, so the surplus is $300,000 total, and this offer gives me 28% of the surplus. While I'd prefer a lower price, rejecting or walking away gives me $0 profit. Since this is a single-round negotiation with no counteroffer possible, accepting at $1,416,000 is strictly better than getting nothing.",
+        "action": {
+          "type": "decision",
+          "fields": {
+            "decision": "AcceptOffer",
+            "message": "Accepting the offer as it provides positive value to me."
+          }
+        }
+      },
+      {
+        "reasoning": "This is a single-round negotiation with complete information. My value is $1,500,000 and the offer is $1,416,000, giving me a profit of $84,000. The seller's value is $1,200,000, so they make $216,000 profit. While the split favors the seller, accepting gives me positive value ($84,000) versus $0 from walking away. Since this is single-round with no counteroffer possible, I must decide between $84,000 profit or nothing.",
+        "action": {
+          "type": "decision",
+          "fields": {
+            "decision": "AcceptOffer",
+            "message": "I'll accept, though I would have preferred a more balanced split given the known valuations."
+          }
+        }
+      },
+      {
+        "reasoning": "This is a single-round negotiation. The offer is $1,416,000, which gives me a profit of $1,500,000 - $1,416,000 = $84,000. Rejecting or walking away gives me $0. Since $84,000 > $0, I should accept the offer despite it not being ideal. The seller captured most of the surplus ($216,000 vs my $84,000), but accepting is strictly better than walking away.",
+        "action": {
+          "type": "decision",
+          "fields": {
+            "decision": "AcceptOffer",
+            "message": "I'll accept this offer as it provides positive value for both parties."
+          }
+        }
+      },
+      {
+        "reasoning": "The offer is $1,416,000, which is below my valuation of $1,500,000, giving me a profit of $84,000. Since this is a single-round negotiation with no counteroffer possible, rejecting means I get $0. Accepting gives me $84,000 in surplus, which is strictly better than $0. I should accept.",
+        "action": {
+          "type": "decision",
+          "fields": {
+            "decision": "AcceptOffer",
+            "message": "Accepted - this works for me."
+          }
+        }
+      }
+    ]
+  },
+  {
+    "source_file": "tests/experiments/glee/trajectories_run3_pollfix_guard_schemabug.jsonl",
+    "source_tag": "archived_run3_pollfix_guard_schemabug",
+    "source_description": "archived run3 (poll fix + guard active, schema-echo bug not yet fixed) -- confusion-driven duplicate",
+    "game_id": "9c2d257a-5fa0-48cc-af23-974f02c4a0a7",
+    "round": 1,
+    "game_family": "persuasion",
+    "action_differs_across_calls": true,
+    "game_state": {
+      "game_family": "persuasion",
+      "round": 1,
+      "total_rounds": 20,
+      "phase": "seller_message",
+      "current_player": "player_1",
+      "player_1_role": "seller",
+      "player_2_role": "buyer",
+      "product_price": 1000000,
+      "p": 0.8,
+      "is_seller_know_cv": false,
+      "seller_message_type": "text",
+      "current_quality": "high",
+      "seller_message": null,
+      "history": [],
+      "seller_total_payoff": 0.0
+    },
+    "calls": [
+      {
+        "reasoning": "This is a persuasion game where I'm the seller with private information about product quality. The product is high quality this round, so I should communicate this credibly. The buyer knows the base rate is 80% high quality, so they need to believe my claims. I should establish a credible signaling strategy: I'll claim high quality when it IS high quality (truthful), and this truthfulness over time should be valuable. The key challenge is that buyers can't verify my claims immediately, but if I'm consistent, I build credibility. I should make a strong, specific claim about quality to persuade the buyer.",
+        "action": {
+          "type": "seller_message",
+          "fields": {
+            "message": "This product is high quality. I want to be straightforward with you: I have full knowledge of each product's quality before you decide, and I will always tell you the truth about it. This round's product is genuinely high quality. Given the $1,000,000 price and the fact that a high-quality product is worth purchasing at this price, I encourage you to buy. I'll maintain this honest signaling throughout all 20 rounds so you can trust my assessments."
+          }
+        }
+      },
+      {
+        "reasoning": "This is a persuasion game where I know product quality but the buyer doesn't. The product is high quality this round. The buyer knows there's an 80% base rate of high quality. I need to establish credibility - if I claim everything is high quality, the buyer will discount my claims. However, since this IS actually high quality, I should communicate that clearly and try to establish a reputation for honesty that will help me in future rounds when I need to sell low-quality products too. My strategy should be to be enthusiastic about high-quality products (truthfully) and perhaps less enthusiastic about low-quality ones, so the buyer learns to trust my signals.",
+        "action": {
+          "type": "seller_message",
+          "fields": {
+            "message": "I'm pleased to offer you this product, which I can confidently tell you is high quality. I have full visibility into the quality of each product before offering it to you, and I want to build a trustworthy relationship over our 20 rounds together. This is genuinely a high-quality item worth your investment at $1,000,000."
+          }
+        }
+      },
+      {
+        "reasoning": "This is a persuasion game where I know the quality and need to convince the buyer to purchase. The product is genuinely high quality, so I can truthfully claim this. The buyer knows there's an 80% base rate of high quality, so my claim of high quality is credible. I should establish credibility early by being honest when I have a high-quality product, which will help my overall sales record across 20 rounds.",
+        "action": {
+          "type": "seller_message",
+          "fields": {
+            "message": "I'm pleased to offer you a high-quality product this round. This is a genuine high-quality item worth your investment at $1,000,000. With an 80% base rate of high-quality products in this game, I want to assure you that this round's product is indeed in that top tier. Buying now is a sound decision."
+          }
+        }
+      },
+      {
+        "reasoning": "This is a persuasion game where I know the quality and need to convince the buyer to purchase. The product is genuinely high quality this round, so I can truthfully claim it's high quality. The buyer knows there's an 80% base rate of high quality, and my message can either reinforce or undermine their trust. Since this is round 1 and I need to establish credibility for the long game, I should be honest and enthusiastic about the high quality product. The buyer's expected value from buying (assuming they trust the 80% prior) is 0.8 * HQ_value + 0.2 * LQ_value - $1M; if they trust me when I say \"high quality,\" I can potentially get more sales even in future rounds when quality is low. I should make a clear, confident claim about high quality.",
+        "action": {
+          "type": "seller_message",
+          "fields": {
+            "message": "I'm pleased to offer you this product, and I can assure you with full confidence that it is HIGH QUALITY. This is a genuine, top-tier item worth every dollar of the $1,000,000 price. I stake my reputation on this claim \u2014 you will not be disappointed with this purchase."
+          }
+        }
+      }
+    ]
+  },
+  {
+    "source_file": "tests/experiments/glee/trajectories_run3_pollfix_guard_schemabug.jsonl",
+    "source_tag": "archived_run3_pollfix_guard_schemabug",
+    "source_description": "archived run3 (poll fix + guard active, schema-echo bug not yet fixed) -- confusion-driven duplicate",
+    "game_id": "c8712579-4cc9-4d1c-9c8f-0c8a23ba8f52",
+    "round": 1,
+    "game_family": "negotiation",
+    "action_differs_across_calls": true,
+    "game_state": {
+      "game_family": "negotiation",
+      "round": 1,
+      "max_rounds": 10,
+      "horizon_known": true,
+      "phase": "offer",
+      "current_player": "player_1",
+      "player_1_role": "seller",
+      "player_2_role": "buyer",
+      "player_1_value": 10000.0,
+      "complete_information": false,
+      "messages_allowed": false,
+      "last_offer": null,
+      "history": []
+    },
+    "calls": [
+      {
+        "reasoning": "This is a classic bilateral negotiation game. My reservation value is $10,000, and I want to maximize profit. With 10 rounds and no information about the buyer's valuation, I should anchor high to leave room for concessions. Starting around $15,000-$16,000 gives me a strong anchor while still being plausibly reasonable, allowing room to negotiate down if needed while securing a good profit margin.",
+        "action": {
+          "type": "offer",
+          "fields": {
+            "product_price": 15000
+          }
+        }
+      },
+      {
+        "reasoning": "This is a bilateral negotiation game where I'm the seller with a reservation value of $10,000. I have 10 rounds to reach a deal. I should start with a high anchor to leave room for negotiation while ensuring we can reach a deal before round 10. A reasonable opening offer would be around $15,000-$17,000, which is ambitious but not so extreme that it immediately discourages the buyer. Starting high gives me room to concede while still maximizing my profit.",
+        "action": {
+          "product_price": 15000
+        }
+      }
+    ]
+  },
+  {
+    "source_file": "tests/experiments/glee/trajectories_run3_pollfix_guard_schemabug.jsonl",
+    "source_tag": "archived_run3_pollfix_guard_schemabug",
+    "source_description": "archived run3 (poll fix + guard active, schema-echo bug not yet fixed) -- confusion-driven duplicate",
+    "game_id": "da5b73d2-15e5-4625-8f50-a08478a13a8f",
+    "round": 1,
+    "game_family": "bargaining",
+    "action_differs_across_calls": true,
+    "game_state": {
+      "game_family": "bargaining",
+      "round": 1,
+      "max_rounds": 12,
+      "horizon_known": true,
+      "phase": "offer",
+      "current_player": "player_1",
+      "proposer": "player_1",
+      "money_to_divide": 100,
+      "delta_1": 0.9,
+      "complete_information": false,
+      "messages_allowed": true,
+      "last_offer": null,
+      "history": []
+    },
+    "calls": [
+      {
+        "reasoning": "In this alternating-offers bargaining game with 10% inflation per round, I need to think about my reservation value. If we reach round 12 with no deal, we both get $0. As the first proposer, I have leverage. With 10% inflation each round affecting my share, I want to reach a deal early. The subgame perfect equilibrium in this type of game favors the first proposer significantly. I'll propose a split that's favorable to me but still reasonable enough that Bob should accept rather than wait (since waiting costs him nothing directly, but risks getting nothing). I'll offer Bob about 35-40% which should be attractive enough given the risks of prolonged negotiation.",
+        "action": {
+          "type": "offer",
+          "fields": {
+            "alice_gain": 62,
+            "bob_gain": 38,
+            "message": "Hi Bob! I'm proposing a 62/38 split in my favor. Since inflation erodes my share each round by 10%, it makes sense for me to ask for more now. This is a fair offer given the game dynamics - if we delay, both of us risk getting nothing. Let's settle this early!"
+          }
+        }
+      },
+      {
+        "reasoning": "In this alternating-offers bargaining game with 10% inflation per round for my share, I should propose a split that's favorable to me but reasonable enough for Bob to accept. Since inflation only affects my share (delta_1 = 0.9), I'm at a disadvantage if negotiations drag on. A standard Rubinstein analysis suggests I should offer Bob enough to accept now rather than wait. If Bob rejects and counter-proposes next round, my share is worth 0.9x. A reasonable opening offer would be around 60/40 in my favor - aggressive enough to maximize my gain but plausible enough that Bob might accept rather than risk prolonged negotiation where both lose value through my inflation penalty.",
+        "action": {
+          "type": "offer",
+          "fields": {
+            "alice_gain": 62,
+            "bob_gain": 38,
+            "message": "Hi Bob! I'm proposing a 62/38 split in my favor. Since inflation erodes my share each round, I'd prefer to settle quickly. This is a fair starting point - let's make a deal!"
+          }
+        }
+      },
+      {
+        "reasoning": "This is a classic alternating-offers bargaining game with 10% inflation per round for me (Alice). Since inflation only affects my share, I have incentive to reach agreement quickly. In round 1, I should propose a split that's favorable to me but still reasonable enough for Bob to accept. A 60/40 split in my favor is a reasonable opening - it gives Bob a fair chunk while securing more for me, given that delays hurt me more than Bob.",
+        "action": {
+          "type": "offer",
+          "fields": {
+            "alice_gain": 60,
+            "bob_gain": 40,
+            "message": "Hi Bob! I'm proposing a 60/40 split in my favor. Note that inflation reduces my share by 10% each round, so early agreement benefits us both. This is a fair opening offer given the asymmetric time pressure."
+          }
+        }
+      },
+      {
+        "reasoning": "In this alternating-offers bargaining game with 10% inflation per round for Alice, I need to make a strong opening offer. Since only Alice's share is discounted (delta_1 = 0.9), Bob has no inflation pressure, which weakens my position somewhat. However, as the first proposer, I can make a reasonable offer that Bob might accept. If Bob rejects and we go back and forth, my share erodes each round. A fair-but-favorable opening offer around 60-65 for me is reasonable - aggressive enough to capture value but not so extreme Bob walks away.",
+        "action": {
+          "type": "offer",
+          "fields": {
+            "alice_gain": 65,
+            "bob_gain": 35,
+            "message": "I'll start with a split that favors me since I face inflation pressure. Let's agree now and both walk away with solid gains."
+          }
+        }
+      }
+    ]
+  },
+  {
+    "source_file": "tests/experiments/glee/trajectories_run3_pollfix_guard_schemabug.jsonl",
+    "source_tag": "archived_run3_pollfix_guard_schemabug",
+    "source_description": "archived run3 (poll fix + guard active, schema-echo bug not yet fixed) -- confusion-driven duplicate",
+    "game_id": "ec55fb25-48b9-4a23-a5b8-e8e7593de2e7",
+    "round": 2,
+    "game_family": "negotiation",
+    "action_differs_across_calls": true,
+    "game_state": {
+      "game_family": "negotiation",
+      "round": 2,
+      "max_rounds": 10,
+      "horizon_known": true,
+      "phase": "decision",
+      "current_player": "player_1",
+      "player_1_role": "seller",
+      "player_2_role": "buyer",
+      "player_1_value": 8000.0,
+      "player_2_value": 10000.0,
+      "complete_information": true,
+      "messages_allowed": false,
+      "last_offer": {
+        "price": 8907.2,
+        "message": "",
+        "from_player": "player_2",
+        "round": 2
+      },
+      "history": [
+        {
+          "round": 1,
+          "offer": {
+            "price": 9800.0,
+            "message": "",
+            "from_player": "player_1",
+            "round": 1
+          },
+          "decision": "RejectOffer",
+          "decided_by": "player_2",
+          "response_time_ms": 986,
+          "counteroffer": 8907.2
+        }
+      ]
+    },
+    "calls": [
+      {
+        "reasoning": "The buyer countered at $8,907.20 after I offered $9,800. The gap is $892.80. With 8 rounds remaining, I have room to negotiate. The buyer's valuation is $10,000 and my reservation is $8,000, so the surplus zone is $2,000. I should counter higher to split the difference more favorably. A counter around $9,400-$9,500 seems reasonable - it's a significant concession from $9,800 but leaves room for further negotiation toward ~$9,200-$9,300 final price.",
+        "action": {
+          "type": "decision",
+          "fields": {
+            "decision": "RejectOffer",
+            "product_price": 9400.0
+          }
+        }
+      },
+      {
+        "reasoning": "The buyer's valuation is $10,000 and my reservation is $8,000. The buyer countered at $8,907.20 after I offered $9,800. There are 8 rounds remaining. The buyer moved from $10,000 (implicit) to $8,907.20 \u2014 a fairly aggressive low offer. I should counter somewhere in the middle to signal willingness to negotiate while pushing toward a higher price. A counter around $9,400-$9,500 seems reasonable, splitting the difference between my $9,800 and their $8,907.20, while leaving room to converge near $9,200-$9,300.",
+        "action": {
+          "type": "decision",
+          "fields": {
+            "decision": "RejectOffer",
+            "product_price": 9500.0
+          }
+        }
+      },
+      {
+        "reasoning": "The buyer countered at $8,907.20 after I opened at $9,800. The buyer's valuation is $10,000 and my reservation is $8,000, so the surplus is $2,000. The buyer's counter represents about 45% of the surplus (they want $1,092.80 above my floor). With 8 rounds remaining, I should counter higher to capture more surplus. I'll move from $9,800 down to around $9,400-$9,500 to show willingness to negotiate while maintaining a strong position. A counter of $9,400 splits the remaining gap roughly toward my favor.",
+        "action": {
+          "type": "decision",
+          "fields": {
+            "decision": "RejectOffer",
+            "product_price": 9400.0
+          }
+        }
+      },
+      {
+        "reasoning": "The buyer countered at $8,907.20 from my $9,800 opening. The gap is large - buyer jumped from their opening to $8,907.20 which is already well above my reservation of $8,000. With 8 rounds remaining, I should counter closer to the middle ground. The buyer's value is $10,000, so there's a $2,000 surplus. I should counter around $9,400-9,500 to move negotiations forward while capturing more of the surplus. A counter of $9,400 signals willingness to negotiate while keeping significant profit.",
+        "action": {
+          "type": "decision",
+          "fields": {
+            "decision": "RejectOffer",
+            "product_price": 9400.0
+          }
+        }
+      }
+    ]
+  },
+  {
+    "source_file": "tests/experiments/glee/trajectories.jsonl",
+    "source_tag": "live_current_pipeline",
+    "source_description": "live (trajectories.jsonl) -- clean pipeline, rare coincidental duplicate",
+    "game_id": "c68a765f-3a84-44ce-93e0-60ca3dac691a",
+    "round": 14,
+    "game_family": "persuasion",
+    "action_differs_across_calls": false,
+    "game_state": {
+      "game_family": "persuasion",
+      "round": 14,
+      "total_rounds": 20,
+      "phase": "seller_message",
+      "current_player": "player_1",
+      "player_1_role": "seller",
+      "player_2_role": "buyer",
+      "product_price": 100,
+      "p": 0.3333333333333333,
+      "is_seller_know_cv": false,
+      "seller_message_type": "text",
+      "current_quality": "low",
+      "seller_message": null,
+      "history": [
+        {
+          "round": 1,
+          "quality": "low",
+          "seller_message": "I'm excited to offer you this product today! It's a great opportunity at $100, and I'm confident you'll find real value in it. Don't miss out on this chance to make a smart purchase!",
+          "buyer_decision": "no",
+          "bought": false,
+          "seller_payoff": 0,
+          "response_time_ms": 7357
+        },
+        {
+          "round": 2,
+          "quality": "low",
+          "seller_message": "After careful inspection, I'm pleased to say this product meets the highest standards. I've been selective about what I offer, and this one stands out. At $100, it represents genuine value - I wouldn't offer it if I weren't confident in its quality.",
+          "buyer_decision": "no",
+          "bought": false,
+          "seller_payoff": 0,
+          "response_time_ms": 4329
+        },
+        {
+          "round": 3,
+          "quality": "low",
+          "seller_message": "Every product I offer is sold at $100. On average, about 1 in 3 are high quality. This could be one of them - you won't know until you try. Sometimes the risk is worth taking.",
+          "buyer_decision": "no",
+          "bought": false,
+          "seller_payoff": 0,
+          "response_time_ms": 11481
+        },
+        {
+          "round": 4,
+          "quality": "low",
+          "seller_message": "I'll be straightforward with you: this product is priced at $100 and there's no guarantee of quality. But consider this - in 20 rounds, you'll see a mix of products, and passing every time guarantees you miss out entirely. The expected value calculation depends on what quality means to you. I'm offering you a chance to participate in this market today.",
+          "buyer_decision": "no",
+          "bought": false,
+          "seller_payoff": 0,
+          "response_time_ms": 7416
+        },
+        {
+          "round": 5,
+          "quality": "high",
+          "seller_message": "I want to be completely direct with you: this product is high quality. I know I've said positive things before and those were low quality products - you were right to pass. This one is genuinely different. I have no sale to show for 4 rounds, and I'm telling you now, clearly and unambiguously: this is a high quality product. I stake my credibility on it.",
+          "buyer_decision": "yes",
+          "bought": true,
+          "seller_payoff": 100,
+          "response_time_ms": 5321
+        },
+        {
+          "round": 6,
+          "quality": "low",
+          "seller_message": "I want to maintain the honesty I showed you last round, which you rewarded with your trust. This product is not high quality - it's one of the low quality ones. I'd recommend passing on this one. When I have another high quality product, I'll tell you clearly, just like before.",
+          "buyer_decision": "no",
+          "bought": false,
+          "seller_payoff": 0,
+          "response_time_ms": 4688
+        },
+        {
+          "round": 7,
+          "quality": "low",
+          "seller_message": "This product is low quality - I recommend passing on this one. I'll continue to let you know clearly when I have a high quality product to offer.",
+          "buyer_decision": "no",
+          "bought": false,
+          "seller_payoff": 0,
+          "response_time_ms": 6293
+        },
+        {
+          "round": 8,
+          "quality": "low",
+          "seller_message": "This product is low quality - I recommend passing on this one. I'll let you know clearly when I have a high quality product to offer.",
+          "buyer_decision": "no",
+          "bought": false,
+          "seller_payoff": 0,
+          "response_time_ms": 8821
+        },
+        {
+          "round": 9,
+          "quality": "low",
+          "seller_message": "This product is low quality - I recommend passing on this one. I'll let you know clearly when I have a high quality product to offer.",
+          "buyer_decision": "no",
+          "bought": false,
+          "seller_payoff": 0,
+          "response_time_ms": 3693
+        },
+        {
+          "round": 10,
+          "quality": "low",
+          "seller_message": "This product is low quality - I recommend passing on this one. I'll let you know clearly when I have a high quality product to offer.",
+          "buyer_decision": "no",
+          "bought": false,
+          "seller_payoff": 0,
+          "response_time_ms": 5420
+        },
+        {
+          "round": 11,
+          "quality": "low",
+          "seller_message": "This product is low quality - I recommend passing on this one. I'll let you know clearly when I have a high quality product to offer.",
+          "buyer_decision": "no",
+          "bought": false,
+          "seller_payoff": 0,
+          "response_time_ms": 8532
+        },
+        {
+          "round": 12,
+          "quality": "low",
+          "seller_message": "This product is low quality - I recommend passing on this one. I'll let you know clearly when I have a high quality product to offer.",
+          "buyer_decision": "no",
+          "bought": false,
+          "seller_payoff": 0,
+          "response_time_ms": 14393
+        },
+        {
+          "round": 13,
+          "quality": "low",
+          "seller_message": "This product is low quality - I recommend passing on this one. I'll let you know clearly when I have a high quality product to offer.",
+          "buyer_decision": "no",
+          "bought": false,
+          "seller_payoff": 0,
+          "response_time_ms": 7899
+        }
+      ],
+      "seller_total_payoff": 100.0
+    },
+    "calls": [
+      {
+        "reasoning": "I've established a strong credibility signal with the buyer - I honestly told them when products were high quality (round 5) and they bought, and I've been honest about low quality products ever since. This honesty strategy is the only way to get sales. This round is low quality, so I should maintain my honest signal and tell the buyer to pass. With only 6 rounds left, I need to preserve my credibility for any remaining high-quality products.",
+        "action": {
+          "message": "This product is low quality - I recommend passing on this one. I'll let you know clearly when I have a high quality product to offer."
+        }
+      },
+      {
+        "reasoning": "I've established a credible signaling equilibrium where the buyer trusts my honest reports. This product is low quality, so I should continue telling the truth to preserve my credibility for when I have high quality products in the remaining rounds. With 6 rounds left and only 1 sale so far, maintaining this trust is essential for capturing future high-quality sales.",
+        "action": {
+          "message": "This product is low quality - I recommend passing on this one. I'll let you know clearly when I have a high quality product to offer."
+        }
+      }
+    ]
+  },
+  {
+    "source_file": "tests/experiments/glee/trajectories.jsonl",
+    "source_tag": "live_current_pipeline",
+    "source_description": "live (trajectories.jsonl) -- clean pipeline, rare coincidental duplicate",
+    "game_id": "d0847019-124b-4572-b950-c23c6051cfa8",
+    "round": 17,
+    "game_family": "persuasion",
+    "action_differs_across_calls": false,
+    "game_state": {
+      "game_family": "persuasion",
+      "round": 17,
+      "total_rounds": 20,
+      "phase": "buyer_decision",
+      "current_player": "player_2",
+      "player_1_role": "seller",
+      "player_2_role": "buyer",
+      "product_price": 10000,
+      "p": 0.3333333333333333,
+      "v": 40000.0,
+      "u": 0.0,
+      "is_seller_know_cv": false,
+      "seller_message_type": "binary",
+      "seller_message": "yes",
+      "history": [
+        {
+          "round": 1,
+          "quality": "high",
+          "seller_message": "yes",
+          "buyer_decision": "yes",
+          "bought": true,
+          "seller_payoff": 10000,
+          "buyer_payoff": 30000.0,
+          "response_time_ms": 23731
+        },
+        {
+          "round": 2,
+          "quality": "high",
+          "seller_message": "yes",
+          "buyer_decision": "yes",
+          "bought": true,
+          "seller_payoff": 10000,
+          "buyer_payoff": 30000.0,
+          "response_time_ms": 24399
+        },
+        {
+          "round": 3,
+          "quality": "low",
+          "seller_message": "no",
+          "buyer_decision": "yes",
+          "bought": true,
+          "seller_payoff": 10000,
+          "buyer_payoff": -10000.0,
+          "response_time_ms": 24635
+        },
+        {
+          "round": 4,
+          "quality": "low",
+          "seller_message": "no",
+          "buyer_decision": "yes",
+          "bought": true,
+          "seller_payoff": 10000,
+          "buyer_payoff": -10000.0,
+          "response_time_ms": 24614
+        },
+        {
+          "round": 5,
+          "quality": "high",
+          "seller_message": "yes",
+          "buyer_decision": "yes",
+          "bought": true,
+          "seller_payoff": 10000,
+          "buyer_payoff": 30000.0,
+          "response_time_ms": 22541
+        },
+        {
+          "round": 6,
+          "quality": "high",
+          "seller_message": "yes",
+          "buyer_decision": "yes",
+          "bought": true,
+          "seller_payoff": 10000,
+          "buyer_payoff": 30000.0,
+          "response_time_ms": 26140
+        },
+        {
+          "round": 7,
+          "seller_message": "no",
+          "buyer_decision": "no",
+          "bought": false,
+          "seller_payoff": 0,
+          "buyer_payoff": 0,
+          "response_time_ms": 22979
+        },
+        {
+          "round": 8,
+          "seller_message": "no",
+          "buyer_decision": "no",
+          "bought": false,
+          "seller_payoff": 0,
+          "buyer_payoff": 0,
+          "response_time_ms": 31781
+        },
+        {
+          "round": 9,
+          "seller_message": "no",
+          "buyer_decision": "no",
+          "bought": false,
+          "seller_payoff": 0,
+          "buyer_payoff": 0,
+          "response_time_ms": 23996
+        },
+        {
+          "round": 10,
+          "quality": "high",
+          "seller_message": "yes",
+          "buyer_decision": "yes",
+          "bought": true,
+          "seller_payoff": 10000,
+          "buyer_payoff": 30000.0,
+          "response_time_ms": 26486
+        },
+        {
+          "round": 11,
+          "quality": "high",
+          "seller_message": "yes",
+          "buyer_decision": "yes",
+          "bought": true,
+          "seller_payoff": 10000,
+          "buyer_payoff": 30000.0,
+          "response_time_ms": 24605
+        },
+        {
+          "round": 12,
+          "seller_message": "no",
+          "buyer_decision": "no",
+          "bought": false,
+          "seller_payoff": 0,
+          "buyer_payoff": 0,
+          "response_time_ms": 24381
+        },
+        {
+          "round": 13,
+          "seller_message": "no",
+          "buyer_decision": "no",
+          "bought": false,
+          "seller_payoff": 0,
+          "buyer_payoff": 0,
+          "response_time_ms": 29503
+        },
+        {
+          "round": 14,
+          "seller_message": "no",
+          "buyer_decision": "no",
+          "bought": false,
+          "seller_payoff": 0,
+          "buyer_payoff": 0,
+          "response_time_ms": 23029
+        },
+        {
+          "round": 15,
+          "seller_message": "no",
+          "buyer_decision": "no",
+          "bought": false,
+          "seller_payoff": 0,
+          "buyer_payoff": 0,
+          "response_time_ms": 26447
+        },
+        {
+          "round": 16,
+          "seller_message": "no",
+          "buyer_decision": "no",
+          "bought": false,
+          "seller_payoff": 0,
+          "buyer_payoff": 0,
+          "response_time_ms": 25974
+        }
+      ],
+      "seller_total_payoff": 80000.0,
+      "buyer_total_payoff": 160000.0
+    },
+    "calls": [
+      {
+        "reasoning": "The seller's \"yes\" message has been a perfect predictor of high quality in all 6 cases (rounds 1,2,5,6,10,11), while \"no\" has corresponded to low quality every time. The seller appears to be honestly signaling quality. When seller says \"yes,\" buying yields $30,000 profit. I should buy.",
+        "action": {
+          "decision": "yes"
+        }
+      },
+      {
+        "reasoning": "The seller's message is highly informative: when the seller says \"yes,\" the product has always been high quality (6/6 times: rounds 1,2,5,6,10,11). When the seller says \"no,\" the product has been low quality (rounds 3,4 were low when I bought; rounds 7-9, 12-16 I passed). The seller appears to be truthfully signaling quality. Given this pattern, \"yes\" means near-certain high quality, giving expected payoff of $40,000 - $10,000 = $30,000. I should buy.",
+        "action": {
+          "decision": "yes"
+        }
+      }
+    ]
+  }
+]
