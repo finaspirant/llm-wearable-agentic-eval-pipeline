@@ -479,6 +479,16 @@ Started: Day 29 (next session)
     300 rows × 23 cols; 30 trajectories × 5 personas × 2 phases; loads
     directly via datasets.Dataset.from_pandas()
     src/data/build_hf_dataset.py — CLI: uv run python -m src.data.build_hf_dataset
+  - **SUPERSEDED (Day 25): the persona-annotation study ("source B") was
+    re-expanded from 30 → 50 trajectories. Current on-disk scale is
+    50 trajectories × 5 personas = 250 records per calibration phase, and
+    500 records across both phases (data/processed/wearable_annotated_50.parquet;
+    pre_calibration/day12_annotations.jsonl now holds 250 records / 50 log_ids;
+    post_calibration/annotations_round2.json metadata n_logs=50, n_records=250).
+    pre_fleiss_kappa=-0.0355 is unchanged (recomputed at 50-traj scale).
+    Use 50 / 250 / 500 — NOT 30 / 150 — in any paper or dataset-card text.
+    This is distinct from the PIA pilot ("source A", pia_results.json):
+    10 pairs / 20 agents / 75 steps / 3 dims.**
   - Authored data/annotations/README.md — HuggingFace dataset card with
     YAML frontmatter, 3-layer schema description, IAA results table
     (pre/post for Fleiss κ, Cohen κ, Krippendorff α), dry-run caveat,
