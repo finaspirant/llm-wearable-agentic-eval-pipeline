@@ -4,7 +4,7 @@
 
 ![Python](https://img.shields.io/badge/python-3.11+-blue) ![License](https://img.shields.io/badge/license-MIT-green) ![Ruff](https://img.shields.io/badge/code%20style-ruff-orange) ![Sprint Day](https://img.shields.io/badge/sprint-Day%2039%2F45-purple) ![Papers](https://img.shields.io/badge/white%20papers-3%20published-teal) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21230121.svg)](https://doi.org/10.5281/zenodo.21230121)
 
-**Open-source trajectory-level evaluation framework for non-deterministic agentic systems. Path-Invariant Agreement (PIA) recovers IAA κ from −0.065 → +0.743. Wearable agents used as demonstration domain.**
+**Open-source trajectory-level evaluation framework for non-deterministic agentic systems. In a 5-annotator Prolific human study on 10 trajectories, Path-Invariant Agreement (PIA) moves inter-rater κ from ≈ −0.2 (poor) to ≈ +0.2 (fair) where step-level path comparison breaks down. Wearable agents used as demonstration domain.**
 
 ---
 
@@ -56,12 +56,8 @@ Run identical tasks across LangGraph, CrewAI, AutoGen (AG2), and OpenAI Agents S
 
 | Metric | Value | Source |
 |--------|-------|--------|
-| Tool invocation accuracy lift (curation) | +177.8% (0.36 → 1.00) | `ab_experiment.py` Day 21 |
-| Trajectory success rate lift (curation) | 0.12 → 0.33 (+177.8%) | `ab_experiment.py` Day 21 |
-| IAA before calibration (Cohen's κ) | 0.55 | `irr_calculator.py` + `calibration_protocol.py` |
-| IAA after calibration (Cohen's κ) | 0.82 | `calibration_protocol.py` Day 13 |
-| PIA kappa — standard path-comparison baseline | −0.065 (poor) | `pia_calculator.py` Day 14 |
-| PIA kappa — rubric-based (PIA method) | +0.743 (Δ = +0.808) | `pia_calculator.py` Day 14 |
+| PIA κ — standard path-comparison baseline | −0.208 (poor; −0.14 to −0.23 across step-count assumptions) | Prolific human study — 5 annotators, 10 trajectories |
+| PIA κ — rubric method (planning / error recovery / goal) | +0.219 (fair; Δ = +0.427) | `scripts/analyze_human_pia_study.py` |
 | Framework benchmark coverage | 120 runs (10 tasks × 4 frameworks × 3 runs) | `benchmark_runner.py` Day 22 |
 | Framework benchmark winner (token efficiency) | LangGraph (519 tokens avg) | `benchmark_runner.py` Day 22 |
 | Framework benchmark winner (latency) | OpenAI Agents SDK | `benchmark_runner.py` Day 22 |
@@ -69,7 +65,7 @@ Run identical tasks across LangGraph, CrewAI, AutoGen (AG2), and OpenAI Agents S
 | FACTS overall score (10 trajectories) | 0.63 (parametric 0.70, search 0.43, grounding 0.75) | `kaggle_facts_submission.py` Day 41 |
 | Gradient conflict rate | 100% of failed trajectories (synthetic) | `prm_annotator.py` Day 16 |
 
-*Full results assembled in the [Agentic Eval Flywheel notebook](notebooks/agentic_eval_flywheel.html). Building in public — [follow the journey](https://linkedin.com).*
+*PIA figures come from a 5-annotator [Prolific human study](data/human_study/) (`analyze_human_pia_study.py`). The lift is directionally robust but modest and uneven — goal alignment shows no agreement above chance (κ = −0.003), and the magnitude is sensitive to one internally-inconsistent participant. Full analysis: [`neurips2026_main.tex`](white_papers/NeurIPS/neurips2026_main.tex) §3. Framework-benchmark and FACTS rows below are synthetic runs.*
 
 ---
 
@@ -218,9 +214,7 @@ cp .env.example .env
 ### Coming in Phase 2
 
 - `poisoning_detector.py` — perplexity differential, count-based detection
-- Full IAA pipeline targeting κ > 0.8
 - FACTS grounding extension to ambient/wearable context
-- A/B experiment: curated vs raw trajectories
 
 ---
 
@@ -270,7 +264,7 @@ Live API annotation expected to yield Cohen's κ ≈ 0.78–0.85 post-calibratio
 | Notebook | Description | HTML |
 |----------|-------------|------|
 | `curation_pipeline_e2e.ipynb` | End-to-end data curation pipeline (Days 1–18) | — |
-| `agentic_eval_flywheel.ipynb` | **Agentic Eval Flywheel** — all Phase 3 results assembled: A/B experiment, PIA lift, framework benchmark, FACTS grounding, multi-agent comparison, WP2 anchor table | [View HTML](notebooks/agentic_eval_flywheel.html) |
+| `agentic_eval_flywheel.ipynb` | **Agentic Eval Flywheel** — Phase 3 results: framework benchmark, FACTS grounding, multi-agent comparison, WP2 anchor table. Note: the PIA-lift and A/B-curation cells predate the human-study correction — see the paper for current PIA figures. | [View HTML](notebooks/agentic_eval_flywheel.html) |
 
 Both notebooks execute clean via `uv run jupyter nbconvert --to notebook --execute --inplace <notebook>`.
 
