@@ -1082,3 +1082,131 @@ Started: Day 29 (next session)
 | Multi-agent pipeline + role attribution scorer | ✅ Day 26 |
 | Flywheel notebook | ✅ Day 27 |
 | WP1 complete + submitted | ✅ Day 28 |
+
+---
+
+## 2026-08-31 — POST-SPRINT CORRECTION: fabricated results identified and removed
+
+> **Read this before citing any empirical number from this repo or its published
+> artifacts.** The sprint was marked complete in May 2026. Between then and this
+> date, a review of the NeurIPS paper's empirical claims found that the headline
+> result was fabricated. This entry records what was traced, what survived, what
+> still needs re-checking, and the numbers to use from now on. Prior sprint-log
+> entries above are left intact as historical record — several of them cite the
+> fabricated figures and should NOT be used as a source.
+
+### Fabricated — confirmed by direct code/data trace (not merely "known errors")
+
+1. **Original Table 1 headline result: standard κ = −0.065 → PIA κ = +0.743
+   (Δ = +0.808, "poor → substantial").**
+   Traced to `src/annotation/pia_calculator.py`. There is no live/real mode —
+   `_StandardStepAnnotator` and `_PIADimensionAnnotator` both
+   `raise NotImplementedError` unless `dry_run=True`. In dry-run, every score
+   comes from the hardcoded `_PIA_SCORES` / `_DETOUR_SCORES` / `_STANDARD_STEP_BIAS`
+   constant dicts, keyed only by `(scenario, path_style, dimension, persona)` —
+   the actual trajectory content loaded from `data/trajectories/pia_pairs/*.json`
+   is never read by the scorer. The comment block at `pia_calculator.py:111-129`
+   explicitly documents reverse-engineering the table to hit a target κ: the
+   earlier table gave "κ ≈ −0.04 (wrong direction)", so scores were "varied by
+   scenario" until "overall mean ≈ 0.743". `data/annotations/pia_results.json`
+   (`standard_overall_kappa: -0.0654`, `delta: 0.8081`) is the saved output of
+   that dry-run. Every occurrence of −0.065 / +0.743 / +0.808 across the repo,
+   white papers, notebooks, RELEASE_NOTES, and outreach docs traces back to this
+   one file.
+
+2. **"QE-001 construct-validity experiment" (120 trajectory pairs × 4 frameworks
+   — LangGraph, CrewAI, AutoGen, OpenAI Agents SDK — scored with Cohen's κ),
+   as referenced in the Zenodo preprint.**
+   No corresponding data or code exists anywhere in the repo. `grep` for
+   "construct validity" → nothing. The only "QE-001" in the codebase is an
+   unrelated (and also undocumented) quantization threshold constant in
+   `src/eval/trajectory_scorer.py`. The "120 runs" that do exist are the Day 22
+   framework benchmark (10 tasks × 4 frameworks × 3 runs →
+   `data/processed/benchmark_results.jsonl`), which records tokens/latency/steps
+   and contains zero κ values of any kind. There is no cross-framework IRR
+   experiment.
+
+3. **Quantization degradation claim (−11.6% / −11.9% trajectory-quality
+   degradation, Mistral-7B, INT4 GPTQ).**
+   No real inference run behind it. Values are hardcoded literals
+   (`QuantizationRiskAnnotator` thresholds/warning strings in
+   `src/eval/trajectory_scorer.py`), with no run log and no scored-data file.
+   Methodology details are mutually contradictory across documents (AWQ vs GPTQ,
+   inconsistent vLLM versions). Fabricated.
+
+### Confirmed real — the paper's sole headline empirical result now
+
+- **Human Prolific study.** 5 annotators recruited via Prolific, 10 wearable
+  agentic trajectories, both instruments (binary "which steps are wrong" +
+  PIA rubric 1–4). Raw export: `data/human_study/annotation-responses.csv`.
+  Analysis: `scripts/analyze_human_pia_study.py` → `data/human_study/human_pia_results.json`.
+  Result: standard path-comparison Fleiss' κ ≈ **−0.208** (range −0.14 to −0.23
+  across step-count assumptions the export didn't record) → PIA rubric Fleiss' κ
+  ≈ **+0.219** (Δ ≈ **+0.427**), poor → fair. Per-dimension: planning quality
+  κ = +0.296, error recovery κ = +0.363, goal alignment κ = −0.003 (no agreement
+  above chance — reported as an honest limitation, not smoothed over). Sensitive
+  to one internally-inconsistent participant (retained under a
+  disclose-don't-cherry-pick policy; dropping them → n=4, std. κ ≈ −0.03,
+  PIA κ ≈ +0.15).
+  Committed in `564a0c9`; paper, bibliography, PDF, and README all synced
+  (`564a0c9`, `37f9b1a`, `2822ef2`, `dc60a87`, `67eb6cc`, `9d45808`).
+
+### Unverified — NOT yet independently re-traced post-fabrication-discovery
+
+Treat all three with appropriate caution until re-checked with the same rigor
+applied to Table 1:
+
+- **Indian HBB variant Evo2 / ESMFold pLDDT results** (QE-002/003 pipeline,
+  commit `dd0e4f4`).
+- **Gradient-conflict-rate finding: 100%** of outcome-failed trajectories
+  contain a majority of positively-rewarded steps (`prm_annotator.py`,
+  `data/annotations/prm_summary_stats.json`).
+- **MAD poisoning-detection F1 = 0.0** blind-spot finding for 3 colluding
+  identical poisoners (`poisoning_detector.py`, `data/processed/day17_detection_results.json`).
+
+These may well be sound — the point is that nobody has re-run the trace since the
+fabrication was found, so they carry no more presumptive weight than Table 1 did.
+
+### Canonical numbers — use these everywhere from now on
+
+| Quantity | Value |
+|---|---|
+| Standard path-comparison Fleiss' κ | ≈ −0.16 to −0.21 (poor); paper uses −0.208 |
+| PIA rubric Fleiss' κ | ≈ +0.20 to +0.22 (fair); paper uses +0.219 |
+| Δ | ≈ +0.43 (paper: +0.427) |
+| Rubric dimensions | 3 — planning quality, error recovery, goal alignment |
+| Annotators | 5, recruited via Prolific |
+| Trajectories | 10 |
+
+### Explicit warnings for future sessions
+
+- **Do NOT cite** the old +0.743 / +0.808 (or −0.065) figures. They are
+  dry-run table artifacts, not measurements.
+- **Do NOT treat "QE-001" as a real experiment.** No construct-validity /
+  cross-framework-κ study was ever run.
+- **Do NOT cite the Zenodo DOI** (10.5281/zenodo.21230121) as evidence of
+  anything — that record still contains uncorrected fabricated content as of
+  this date (the QE-001 claim among others).
+- **Do NOT cite the "30 Hours of LLM Inference Engineering" Medium post** as
+  evidence of anything — it still contains the uncorrected fabricated
+  quantization results as of this date.
+- The README DOI badge, OpenReview submission line, quantization claims, and
+  curation-A/B ("+177.8%") claims have already been removed from this repo
+  (`dc60a87`, `67eb6cc`, `9d45808`). The `pia_calculator.py` dry-run tables and
+  the `trajectory_scorer.py` QE-001 constants still exist in the code but are no
+  longer cited as findings anywhere in the paper.
+
+### Outstanding remediation — NOT yet done
+
+- [ ] Correct the Zenodo preprint source and publish a new version (manual, via
+      the Zenodo web UI "New version" flow — no GitHub-release or API-token
+      automation is configured for this record; concept DOI is
+      10.5281/zenodo.21230120).
+- [ ] Correct the live "30 Hours of LLM Inference Engineering" Medium post.
+- [ ] Correct the HuggingFace Space source files (playground, benchmark-dashboard,
+      quant-pia-visualizer).
+- [ ] Consider removing the **Quant × PIA Visualizer** Space
+      (`agentrace-quant-pia-visualizer`) entirely — it renders the fabricated
+      quantization result live and has no real content behind it.
+- [ ] **Rotate the exposed `HF_TOKEN` / NVIDIA API key** found in
+      `hf-agentrace-playground/.env` (credential exposure — do this first).
