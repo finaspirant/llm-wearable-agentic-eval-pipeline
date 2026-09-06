@@ -2,7 +2,7 @@
 
 > Demonstrated on wearable health agent data · generalises to any non-deterministic multi-agent system
 
-![Python](https://img.shields.io/badge/python-3.11+-blue) ![License](https://img.shields.io/badge/license-MIT-green) ![Ruff](https://img.shields.io/badge/code%20style-ruff-orange) ![Sprint Day](https://img.shields.io/badge/sprint-Day%2039%2F45-purple) ![Papers](https://img.shields.io/badge/white%20papers-3%20published-teal) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21230121.svg)](https://doi.org/10.5281/zenodo.21230121)
+![Python](https://img.shields.io/badge/python-3.11+-blue) ![License](https://img.shields.io/badge/license-MIT-green) ![Ruff](https://img.shields.io/badge/code%20style-ruff-orange) ![Sprint Day](https://img.shields.io/badge/sprint-Day%2039%2F45-purple) ![Papers](https://img.shields.io/badge/white%20papers-3%20published-teal)
 
 **Open-source trajectory-level evaluation framework for non-deterministic agentic systems. In a 5-annotator Prolific human study on 10 trajectories, Path-Invariant Agreement (PIA) moves inter-rater κ from ≈ −0.2 (poor) to ≈ +0.2 (fair) where step-level path comparison breaks down. Wearable agents used as demonstration domain.**
 
@@ -264,7 +264,7 @@ Live API annotation expected to yield Cohen's κ ≈ 0.78–0.85 post-calibratio
 | Notebook | Description | HTML |
 |----------|-------------|------|
 | `curation_pipeline_e2e.ipynb` | End-to-end data curation pipeline (Days 1–18) | — |
-| `agentic_eval_flywheel.ipynb` | **Agentic Eval Flywheel** — Phase 3 results: framework benchmark, FACTS grounding, multi-agent comparison, WP2 anchor table. Note: the PIA-lift and A/B-curation cells predate the human-study correction — see the paper for current PIA figures. | [View HTML](notebooks/agentic_eval_flywheel.html) |
+| `agentic_eval_flywheel.ipynb` | **Agentic Eval Flywheel** — Phase 3 results: framework benchmark, FACTS grounding, multi-agent comparison, WP2 anchor table. Note: some cells predate the human-study correction — see the paper for current PIA figures. | [View HTML](notebooks/agentic_eval_flywheel.html) |
 
 Both notebooks execute clean via `uv run jupyter nbconvert --to notebook --execute --inplace <notebook>`.
 
