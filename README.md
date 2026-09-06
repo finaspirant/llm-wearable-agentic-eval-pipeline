@@ -292,9 +292,9 @@ https://medium.com/@shail.subscribe/beyond-task-success-a-trajectory-level-evalu
 Evaluating Always-On AI: Privacy-Preserving Data Curation and Model Evaluation for Ambient Agents
 https://medium.com/@shail.subscribe/evaluating-always-on-ai-privacy-preserving-data-curation-and-model-evaluation-for-ambient-c34ba7512636
 
-**NeurIPS 2026 E&D Track Paper (submitted)**
+**Paper**
 Beyond Task Success: Path-Invariant Agreement for Trajectory-Level Evaluation of Non-Deterministic Agents
-https://openreview.net/group?id=NeurIPS.cc/2026/Evaluations_and_Datasets_Track
+[white_papers/NeurIPS/neurips2026_main.pdf](white_papers/NeurIPS/neurips2026_main.pdf)
 
 **Dataset**
 Wearable Agent Trajectory Annotations (50 trajectories, 3-layer schema, 5 annotator personas)
