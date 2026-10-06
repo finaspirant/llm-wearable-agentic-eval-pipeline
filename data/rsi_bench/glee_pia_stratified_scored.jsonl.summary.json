@@ -1,0 +1,18 @@
+{
+  "n_clusters_scored": 8,
+  "total_score_member_calls": 240,
+  "token_usage": {
+    "n_calls": 242,
+    "input_tokens": 327955,
+    "output_tokens": 31457,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0
+  },
+  "estimated_cost_usd": 1.4557,
+  "cost_capturable": true,
+  "max_calls": 2700,
+  "max_cost_usd": 5.0,
+  "stopped_reason": null,
+  "model": "claude-sonnet-4-6",
+  "updated_at": "2026-10-06T16:53:52.834432+00:00"
+}
