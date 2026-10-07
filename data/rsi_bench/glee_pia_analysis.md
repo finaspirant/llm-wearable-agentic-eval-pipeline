@@ -449,3 +449,145 @@ remaining_judges=['GameTheoreticRigor', 'OpponentResponsiveness']
 | outcome_consistency | bargaining | 0.1624 | 0.1484 | 0.0841 | 0.2441 | 1000/1000 | 234 | 35 |
 | outcome_consistency | negotiation | 0.2380 | 0.1556 | 0.0930 | 0.2313 | 1000/1000 | 221 | 35 |
 | outcome_consistency | persuasion | 0.1701 | 0.0967 | 0.0593 | 0.1484 | 1000/1000 | 350 | 35 |
+
+## 15. Action-only within-cluster baseline (no judge scores)
+
+| cluster_id | family | n_sampled | n_resolved | n_continuous | continuous_sd | n_categorical | n_distinct_labels | modal_label | modal_share | action_spread | spread_source |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| bargaining_001 | bargaining | 10 | 10 | 7 | 0.1748 | 3 | 2 | decision:accept | 0.6667 | 0.1748 | continuous_sd |
+| bargaining_003 | bargaining | 10 | 10 | 4 | 0.1325 | 6 | 2 | decision:reject | 0.6667 | 0.1325 | continuous_sd |
+| bargaining_005 | bargaining | 10 | 10 | 6 | 0.1633 | 4 | 2 | decision:reject | 0.5000 | 0.1633 | continuous_sd |
+| bargaining_008 | bargaining | 10 | 10 | 4 | 0.0768 | 6 | 2 | decision:reject | 0.6667 | 0.0768 | continuous_sd |
+| bargaining_009 | bargaining | 10 | 10 | 7 | 0.0809 | 3 | 2 | decision:reject | 0.6667 | 0.0809 | continuous_sd |
+| bargaining_010 | bargaining | 10 | 10 | 2 | 0.1273 | 8 | 2 | decision:accept | 0.5000 | 0.1273 | continuous_sd |
+| bargaining_013 | bargaining | 6 | 6 | 4 | 0.2398 | 2 | 1 | decision:reject | 1.0000 | 0.2398 | continuous_sd |
+| bargaining_016 | bargaining | 10 | 10 | 7 | 0.1016 | 3 | 2 | decision:reject | 0.6667 | 0.1016 | continuous_sd |
+| bargaining_018 | bargaining | 10 | 10 | 2 | 0.0212 | 8 | 2 | decision:reject | 0.8750 | 0.0212 | continuous_sd |
+| bargaining_019 | bargaining | 10 | 10 | 4 | 0.2273 | 6 | 2 | decision:reject | 0.6667 | 0.2273 | continuous_sd |
+| bargaining_020 | bargaining | 10 | 10 | 8 | 0.0443 | 2 | 1 | decision:reject | 1.0000 | 0.0443 | continuous_sd |
+| bargaining_021 | bargaining | 10 | 10 | 4 | 0.0968 | 6 | 2 | decision:reject | 0.6667 | 0.0968 | continuous_sd |
+| bargaining_024 | bargaining | 10 | 10 | 6 | 0.0581 | 4 | 2 | decision:reject | 0.7500 | 0.0581 | continuous_sd |
+| bargaining_026 | bargaining | 8 | 8 | 5 | 0.0365 | 3 | 2 | decision:reject | 0.6667 | 0.0365 | continuous_sd |
+| bargaining_027 | bargaining | 6 | 6 | 2 | 0.0424 | 4 | 2 | decision:reject | 0.7500 | 0.0424 | continuous_sd |
+| bargaining_028 | bargaining | 3 | 3 | 3 | 0.0404 | 0 | 0 | None | n/a | 0.0404 | continuous_sd |
+| bargaining_029 | bargaining | 10 | 10 | 7 | 0.0970 | 3 | 2 | decision:reject | 0.6667 | 0.0970 | continuous_sd |
+| bargaining_030 | bargaining | 10 | 10 | 4 | 0.0250 | 6 | 2 | decision:reject | 0.6667 | 0.0250 | continuous_sd |
+| bargaining_031 | bargaining | 10 | 10 | 4 | 0.0718 | 6 | 2 | decision:reject | 0.8333 | 0.0718 | continuous_sd |
+| bargaining_033 | bargaining | 10 | 10 | 4 | 0.1327 | 6 | 2 | decision:reject | 0.8333 | 0.1327 | continuous_sd |
+| bargaining_034 | bargaining | 10 | 10 | 6 | 0.1503 | 4 | 1 | decision:reject | 1.0000 | 0.1503 | continuous_sd |
+| bargaining_037 | bargaining | 10 | 10 | 6 | 0.0679 | 4 | 1 | decision:reject | 1.0000 | 0.0679 | continuous_sd |
+| bargaining_042 | bargaining | 2 | 2 | 0 | n/a | 2 | 1 | decision:reject | 1.0000 | 0.0000 | categorical_1_minus_modal_share |
+| bargaining_046 | bargaining | 4 | 4 | 2 | 0.3536 | 2 | 2 | decision:accept | 0.5000 | 0.3536 | continuous_sd |
+| bargaining_047 | bargaining | 2 | 2 | 2 | 0.0000 | 0 | 0 | None | n/a | 0.0000 | continuous_sd |
+| bargaining_056 | bargaining | 5 | 5 | 3 | 0.1155 | 2 | 1 | decision:accept | 1.0000 | 0.1155 | continuous_sd |
+| bargaining_058 | bargaining | 2 | 2 | 1 | n/a | 1 | 1 | decision:reject | 1.0000 | n/a | None |
+| bargaining_060 | bargaining | 2 | 2 | 1 | n/a | 1 | 1 | decision:reject | 1.0000 | n/a | None |
+| bargaining_061 | bargaining | 2 | 2 | 1 | n/a | 1 | 1 | decision:reject | 1.0000 | n/a | None |
+| bargaining_062 | bargaining | 2 | 2 | 1 | n/a | 1 | 1 | decision:reject | 1.0000 | n/a | None |
+| bargaining_064 | bargaining | 2 | 2 | 1 | n/a | 1 | 1 | decision:reject | 1.0000 | n/a | None |
+| bargaining_066 | bargaining | 2 | 2 | 1 | n/a | 1 | 1 | decision:reject | 1.0000 | n/a | None |
+| bargaining_068 | bargaining | 2 | 2 | 1 | n/a | 1 | 1 | decision:reject | 1.0000 | n/a | None |
+| bargaining_069 | bargaining | 2 | 2 | 1 | n/a | 1 | 1 | decision:reject | 1.0000 | n/a | None |
+| bargaining_070 | bargaining | 2 | 2 | 1 | n/a | 1 | 1 | decision:reject | 1.0000 | n/a | None |
+| negotiation_002 | negotiation | 10 | 10 | 0 | n/a | 10 | 2 | decision:rejectoffer | 0.9000 | 0.1000 | categorical_1_minus_modal_share |
+| negotiation_005 | negotiation | 10 | 10 | 0 | n/a | 10 | 1 | decision:rejectoffer | 1.0000 | 0.0000 | categorical_1_minus_modal_share |
+| negotiation_007 | negotiation | 10 | 10 | 0 | n/a | 10 | 1 | decision:rejectoffer | 1.0000 | 0.0000 | categorical_1_minus_modal_share |
+| negotiation_008 | negotiation | 10 | 10 | 0 | n/a | 10 | 1 | decision:rejectoffer | 1.0000 | 0.0000 | categorical_1_minus_modal_share |
+| negotiation_012 | negotiation | 10 | 10 | 0 | n/a | 10 | 1 | decision:rejectoffer | 1.0000 | 0.0000 | categorical_1_minus_modal_share |
+| negotiation_014 | negotiation | 10 | 10 | 0 | n/a | 10 | 1 | decision:rejectoffer | 1.0000 | 0.0000 | categorical_1_minus_modal_share |
+| negotiation_015 | negotiation | 10 | 10 | 0 | n/a | 10 | 1 | decision:rejectoffer | 1.0000 | 0.0000 | categorical_1_minus_modal_share |
+| negotiation_016 | negotiation | 10 | 10 | 0 | n/a | 10 | 2 | decision:rejectoffer | 0.9000 | 0.1000 | categorical_1_minus_modal_share |
+| negotiation_017 | negotiation | 10 | 10 | 0 | n/a | 10 | 1 | decision:rejectoffer | 1.0000 | 0.0000 | categorical_1_minus_modal_share |
+| negotiation_020 | negotiation | 10 | 10 | 0 | n/a | 10 | 2 | decision:rejectoffer | 0.8000 | 0.2000 | categorical_1_minus_modal_share |
+| negotiation_022 | negotiation | 10 | 10 | 0 | n/a | 10 | 1 | decision:rejectoffer | 1.0000 | 0.0000 | categorical_1_minus_modal_share |
+| negotiation_024 | negotiation | 10 | 10 | 0 | n/a | 10 | 2 | decision:rejectoffer | 0.9000 | 0.1000 | categorical_1_minus_modal_share |
+| negotiation_028 | negotiation | 10 | 10 | 0 | n/a | 10 | 1 | decision:rejectoffer | 1.0000 | 0.0000 | categorical_1_minus_modal_share |
+| negotiation_029 | negotiation | 9 | 9 | 0 | n/a | 9 | 2 | decision:rejectoffer | 0.8889 | 0.1111 | categorical_1_minus_modal_share |
+| negotiation_030 | negotiation | 10 | 10 | 0 | n/a | 10 | 2 | decision:rejectoffer | 0.8000 | 0.2000 | categorical_1_minus_modal_share |
+| negotiation_033 | negotiation | 7 | 7 | 0 | n/a | 7 | 2 | decision:rejectoffer | 0.7143 | 0.2857 | categorical_1_minus_modal_share |
+| negotiation_034 | negotiation | 10 | 10 | 0 | n/a | 10 | 2 | decision:rejectoffer | 0.7000 | 0.3000 | categorical_1_minus_modal_share |
+| negotiation_040 | negotiation | 5 | 5 | 0 | n/a | 5 | 1 | decision:rejectoffer | 1.0000 | 0.0000 | categorical_1_minus_modal_share |
+| negotiation_041 | negotiation | 5 | 5 | 0 | n/a | 5 | 2 | decision:rejectoffer | 0.8000 | 0.2000 | categorical_1_minus_modal_share |
+| negotiation_044 | negotiation | 4 | 4 | 0 | n/a | 4 | 1 | decision:rejectoffer | 1.0000 | 0.0000 | categorical_1_minus_modal_share |
+| negotiation_051 | negotiation | 3 | 3 | 0 | n/a | 3 | 1 | decision:rejectoffer | 1.0000 | 0.0000 | categorical_1_minus_modal_share |
+| negotiation_054 | negotiation | 3 | 3 | 0 | n/a | 3 | 1 | decision:rejectoffer | 1.0000 | 0.0000 | categorical_1_minus_modal_share |
+| negotiation_055 | negotiation | 3 | 3 | 0 | n/a | 3 | 1 | decision:rejectoffer | 1.0000 | 0.0000 | categorical_1_minus_modal_share |
+| negotiation_062 | negotiation | 3 | 3 | 0 | n/a | 3 | 1 | decision:rejectoffer | 1.0000 | 0.0000 | categorical_1_minus_modal_share |
+| negotiation_063 | negotiation | 3 | 3 | 0 | n/a | 3 | 1 | decision:rejectoffer | 1.0000 | 0.0000 | categorical_1_minus_modal_share |
+| negotiation_064 | negotiation | 3 | 3 | 0 | n/a | 3 | 1 | decision:rejectoffer | 1.0000 | 0.0000 | categorical_1_minus_modal_share |
+| negotiation_065 | negotiation | 3 | 3 | 0 | n/a | 3 | 1 | decision:rejectoffer | 1.0000 | 0.0000 | categorical_1_minus_modal_share |
+| negotiation_067 | negotiation | 3 | 3 | 0 | n/a | 3 | 1 | decision:rejectoffer | 1.0000 | 0.0000 | categorical_1_minus_modal_share |
+| negotiation_069 | negotiation | 3 | 3 | 0 | n/a | 3 | 1 | decision:rejectoffer | 1.0000 | 0.0000 | categorical_1_minus_modal_share |
+| negotiation_070 | negotiation | 3 | 3 | 0 | n/a | 3 | 1 | decision:rejectoffer | 1.0000 | 0.0000 | categorical_1_minus_modal_share |
+| negotiation_072 | negotiation | 3 | 3 | 0 | n/a | 3 | 1 | decision:rejectoffer | 1.0000 | 0.0000 | categorical_1_minus_modal_share |
+| negotiation_076 | negotiation | 2 | 2 | 0 | n/a | 2 | 1 | decision:rejectoffer | 1.0000 | 0.0000 | categorical_1_minus_modal_share |
+| negotiation_077 | negotiation | 2 | 2 | 0 | n/a | 2 | 1 | decision:rejectoffer | 1.0000 | 0.0000 | categorical_1_minus_modal_share |
+| negotiation_079 | negotiation | 2 | 2 | 0 | n/a | 2 | 1 | decision:rejectoffer | 1.0000 | 0.0000 | categorical_1_minus_modal_share |
+| negotiation_081 | negotiation | 2 | 2 | 0 | n/a | 2 | 2 | decision:walkaway | 0.5000 | 0.5000 | categorical_1_minus_modal_share |
+| persuasion_011 | persuasion | 10 | 10 | 0 | n/a | 10 | 2 | decision:yes | 0.9000 | 0.1000 | categorical_1_minus_modal_share |
+| persuasion_015 | persuasion | 10 | 10 | 0 | n/a | 10 | 2 | decision:yes | 0.7000 | 0.3000 | categorical_1_minus_modal_share |
+| persuasion_016 | persuasion | 10 | 10 | 0 | n/a | 10 | 3 | decision:no | 0.8000 | 0.2000 | categorical_1_minus_modal_share |
+| persuasion_025 | persuasion | 10 | 10 | 0 | n/a | 10 | 3 | decision:yes | 0.5000 | 0.5000 | categorical_1_minus_modal_share |
+| persuasion_030 | persuasion | 10 | 10 | 0 | n/a | 10 | 3 | message:present | 0.7000 | 0.3000 | categorical_1_minus_modal_share |
+| persuasion_042 | persuasion | 10 | 10 | 0 | n/a | 10 | 3 | decision:no | 0.7000 | 0.3000 | categorical_1_minus_modal_share |
+| persuasion_052 | persuasion | 10 | 10 | 0 | n/a | 10 | 2 | decision:yes | 0.5000 | 0.5000 | categorical_1_minus_modal_share |
+| persuasion_058 | persuasion | 10 | 10 | 0 | n/a | 10 | 1 | decision:yes | 1.0000 | 0.0000 | categorical_1_minus_modal_share |
+| persuasion_065 | persuasion | 10 | 10 | 0 | n/a | 10 | 2 | decision:yes | 0.6000 | 0.4000 | categorical_1_minus_modal_share |
+| persuasion_067 | persuasion | 10 | 10 | 0 | n/a | 10 | 3 | decision:no | 0.6000 | 0.4000 | categorical_1_minus_modal_share |
+| persuasion_075 | persuasion | 10 | 10 | 0 | n/a | 10 | 3 | decision:yes | 0.6000 | 0.4000 | categorical_1_minus_modal_share |
+| persuasion_076 | persuasion | 10 | 10 | 0 | n/a | 10 | 3 | decision:no | 0.6000 | 0.4000 | categorical_1_minus_modal_share |
+| persuasion_084 | persuasion | 10 | 10 | 0 | n/a | 10 | 3 | decision:no | 0.8000 | 0.2000 | categorical_1_minus_modal_share |
+| persuasion_103 | persuasion | 10 | 10 | 0 | n/a | 10 | 2 | decision:yes | 0.9000 | 0.1000 | categorical_1_minus_modal_share |
+| persuasion_111 | persuasion | 10 | 10 | 0 | n/a | 10 | 3 | decision:yes | 0.7000 | 0.3000 | categorical_1_minus_modal_share |
+| persuasion_113 | persuasion | 10 | 10 | 0 | n/a | 10 | 2 | decision:yes | 0.7000 | 0.3000 | categorical_1_minus_modal_share |
+| persuasion_114 | persuasion | 10 | 10 | 0 | n/a | 10 | 2 | decision:yes | 0.9000 | 0.1000 | categorical_1_minus_modal_share |
+| persuasion_126 | persuasion | 10 | 10 | 0 | n/a | 10 | 2 | decision:no | 0.6000 | 0.4000 | categorical_1_minus_modal_share |
+| persuasion_130 | persuasion | 10 | 10 | 0 | n/a | 10 | 3 | decision:no | 0.5000 | 0.5000 | categorical_1_minus_modal_share |
+| persuasion_138 | persuasion | 10 | 10 | 0 | n/a | 10 | 3 | decision:no | 0.7000 | 0.3000 | categorical_1_minus_modal_share |
+| persuasion_149 | persuasion | 10 | 10 | 0 | n/a | 10 | 3 | decision:yes | 0.7000 | 0.3000 | categorical_1_minus_modal_share |
+| persuasion_156 | persuasion | 10 | 10 | 0 | n/a | 10 | 3 | decision:yes | 0.4000 | 0.6000 | categorical_1_minus_modal_share |
+| persuasion_171 | persuasion | 10 | 10 | 0 | n/a | 10 | 3 | decision:no | 0.5000 | 0.5000 | categorical_1_minus_modal_share |
+| persuasion_184 | persuasion | 10 | 10 | 0 | n/a | 10 | 2 | decision:yes | 0.9000 | 0.1000 | categorical_1_minus_modal_share |
+| persuasion_188 | persuasion | 10 | 10 | 0 | n/a | 10 | 3 | decision:yes | 0.7000 | 0.3000 | categorical_1_minus_modal_share |
+| persuasion_194 | persuasion | 10 | 10 | 0 | n/a | 10 | 3 | decision:yes | 0.6000 | 0.4000 | categorical_1_minus_modal_share |
+| persuasion_196 | persuasion | 10 | 10 | 0 | n/a | 10 | 3 | decision:no | 0.5000 | 0.5000 | categorical_1_minus_modal_share |
+| persuasion_204 | persuasion | 10 | 10 | 0 | n/a | 10 | 3 | decision:yes | 0.6000 | 0.4000 | categorical_1_minus_modal_share |
+| persuasion_207 | persuasion | 10 | 10 | 0 | n/a | 10 | 3 | decision:no | 0.6000 | 0.4000 | categorical_1_minus_modal_share |
+| persuasion_213 | persuasion | 10 | 10 | 0 | n/a | 10 | 3 | decision:yes | 0.5000 | 0.5000 | categorical_1_minus_modal_share |
+| persuasion_216 | persuasion | 10 | 10 | 0 | n/a | 10 | 3 | decision:yes | 0.5000 | 0.5000 | categorical_1_minus_modal_share |
+| persuasion_219 | persuasion | 10 | 10 | 0 | n/a | 10 | 3 | message:present | 0.4000 | 0.6000 | categorical_1_minus_modal_share |
+| persuasion_227 | persuasion | 10 | 10 | 0 | n/a | 10 | 2 | decision:no | 0.6000 | 0.4000 | categorical_1_minus_modal_share |
+| persuasion_233 | persuasion | 10 | 10 | 0 | n/a | 10 | 3 | decision:no | 0.7000 | 0.3000 | categorical_1_minus_modal_share |
+| persuasion_236 | persuasion | 10 | 10 | 0 | n/a | 10 | 3 | decision:no | 0.6000 | 0.4000 | categorical_1_minus_modal_share |
+
+### Family summary
+
+| family | n_clusters | n_clusters_with_action_spread | mean_action_spread |
+|---|---|---|---|
+| bargaining | 35 | 26 | 0.1030 |
+| negotiation | 35 | 35 | 0.0599 |
+| persuasion | 35 | 35 | 0.3486 |
+
+### Shuffled-cluster floor for action_spread (1000 perms)
+
+| family | real | shuffled_mean | ci_low | ci_high | n_valid_perms |
+|---|---|---|---|---|---|
+| bargaining | 0.1030 | 0.1220 | 0.0919 | 0.1565 | 1000/1000 |
+| negotiation | 0.0599 | 0.0659 | 0.0475 | 0.0876 | 1000/1000 |
+| persuasion | 0.3486 | 0.4669 | 0.4371 | 0.4914 | 1000/1000 |
+
+## 16. Cluster-membership homogeneity (round / phase / history length)
+
+| family | n_clusters | n_clusters_mixed_phase | mean_round_modal_share | mean_phase_modal_share | mean_history_length_modal_share | mean_history_length_sd |
+|---|---|---|---|---|---|---|
+| bargaining | 35 | 32 | 0.9200 | 0.6388 | 0.9200 | 0.1340 |
+| negotiation | 35 | 0 | 0.9914 | 1.0000 | 0.9914 | 0.0276 |
+| persuasion | 35 | 30 | 0.4314 | 0.7343 | 0.4314 | 1.1238 |
+
+## 17. Action spread vs. judge-mean spread (Spearman, per family)
+
+| family | n_clusters_used | spearman_rho | spearman_p |
+|---|---|---|---|
+| bargaining | 26 | 0.0431 | 0.8345 |
+| negotiation | 35 | -0.0130 | 0.9409 |
+| persuasion | 35 | 0.5147 | 0.0016 |

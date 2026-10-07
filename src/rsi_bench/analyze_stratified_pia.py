@@ -68,9 +68,11 @@ Bootstrap
 from __future__ import annotations
 
 import copy
+import gzip
 import json
 import logging
 import random
+from collections import Counter
 from itertools import combinations
 from pathlib import Path
 from typing import Any
@@ -98,6 +100,7 @@ app = typer.Typer(
 
 _DEFAULT_SCORED_INPUT = Path("data/rsi_bench/glee_pia_stratified_scored.jsonl")
 _DEFAULT_MANIFEST_INPUT = Path("data/rsi_bench/glee_pia_manifest.json")
+_DEFAULT_RAW_TRAJECTORIES = Path("tests/experiments/glee/trajectories.jsonl.gz")
 _DEFAULT_JSON_OUTPUT = Path("data/rsi_bench/glee_pia_analysis.json")
 _DEFAULT_MARKDOWN_OUTPUT = Path("data/rsi_bench/glee_pia_analysis.md")
 _DEFAULT_SEED = 20261002
@@ -1746,6 +1749,669 @@ def variance_decomposition(
 
 
 # ---------------------------------------------------------------------------
+# Action-only within-cluster baseline (no judge scores anywhere below)
+# ---------------------------------------------------------------------------
+#
+# Everything in this section reads only ``member_id`` (to recover
+# game_id/round/phase) and the raw GLEE step it resolves to via
+# :func:`load_raw_steps_index` -- ``game_state``/``action``/``your_player``.
+# It never reads ``raw_scores``, ``kappa_per_dimension``, or any other
+# judge-produced field (the one exception is :func:`_cluster_judge_mean_spread`,
+# used only for the task-3 correlation check, which is explicitly about
+# relating the two).
+
+
+def load_raw_steps_index(
+    path: Path = _DEFAULT_RAW_TRAJECTORIES,
+) -> dict[tuple[str, int, str], dict[str, Any]]:
+    """Load the frozen raw GLEE trajectory log into a lookup index.
+
+    Pure local file read (gzip + json) -- no network I/O, no Anthropic
+    import, same zero-API-call guarantee as the rest of this module.
+
+    Args:
+        path: Path to the gzipped JSONL trajectory log.
+
+    Returns:
+        ``(game_id, round, phase) -> raw step dict``. Malformed lines are
+        skipped (logged, not raised). Two keys in the frozen log
+        (``tests/experiments/glee/trajectories.jsonl.gz``) collide on
+        ``(game_id, round, phase)``; both confirmed byte-identical
+        duplicates by direct inspection, so first-occurrence-wins is safe
+        and does not silently drop a genuinely different record.
+    """
+    index: dict[tuple[str, int, str], dict[str, Any]] = {}
+    n_lines = 0
+    n_malformed = 0
+    n_duplicate_keys = 0
+    with gzip.open(path, "rt") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            n_lines += 1
+            try:
+                raw = json.loads(line)
+                key = (raw["game_id"], int(raw["round"]), raw["phase"])
+            except (json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
+                n_malformed += 1
+                logger.warning("Skipping malformed raw trajectory line: %s", exc)
+                continue
+            if key in index:
+                n_duplicate_keys += 1
+                continue
+            index[key] = raw
+    logger.info(
+        "Loaded %d raw GLEE steps (%d lines, %d malformed, %d duplicate keys) from %s.",
+        len(index),
+        n_lines,
+        n_malformed,
+        n_duplicate_keys,
+        path,
+    )
+    return index
+
+
+def _parse_member_id(member_id: str) -> tuple[str, int, str] | None:
+    """Split ``"<game_id>:<round>:<phase>"`` into its 3 parts.
+
+    Returns ``None`` (not a raised error) if ``member_id`` does not have
+    exactly 3 colon-separated parts or ``round`` is not an integer.
+    """
+    parts = member_id.split(":", 2)
+    if len(parts) != 3:
+        return None
+    game_id, round_str, phase = parts
+    try:
+        round_num = int(round_str)
+    except ValueError:
+        return None
+    return (game_id, round_num, phase)
+
+
+def _history_length(raw_step: dict[str, Any]) -> int | None:
+    """Length of ``game_state["history"]``, or ``None`` if absent/not a list."""
+    history = raw_step.get("game_state", {}).get("history")
+    return len(history) if isinstance(history, list) else None
+
+
+def extract_action_feature(
+    raw_step: dict[str, Any], game_family: str
+) -> dict[str, Any]:
+    """Classify one raw step's logged ``action`` into a single comparable feature.
+
+    Family-specific mapping (see module docstring for the task-2 request
+    this implements):
+
+    - bargaining ``offer``: continuous -- ``action["alice_gain"] /
+      money_to_divide`` (Alice's proposed share of the pie). ``alice_gain``/
+      ``bob_gain`` are fixed action-field names regardless of who is
+      proposing (confirmed: every bargaining offer action across the
+      frozen log uses exactly these two keys); there is no confirmed
+      mapping from ``your_player`` (``"player_1"``/``"player_2"``) to
+      ``alice``/``bob`` anywhere in ``game_state`` (same unresolved
+      dynamic-key gap documented for ``role``/``valuation`` in
+      :data:`~src.rsi_bench.glee_pia_baseline._STATE_KEY_CANDIDATES`), so
+      "the acting player's own share" cannot be computed without
+      guessing -- Alice's share is used instead as a fixed, consistently
+      defined reference that is directly comparable across every member
+      of a cluster regardless of who proposed.
+    - bargaining ``decision``: categorical -- ``"decision:<accept|reject|
+      walkaway>"`` (lowercased).
+    - negotiation ``offer``: continuous -- ``action["product_price"] /
+      game_state[f"{current_player}_value"]`` (price relative to the
+      acting player's own valuation).
+    - negotiation ``decision``: categorical -- ``"decision:<...>"``
+      (lowercased ``AcceptOffer``/``RejectOffer``/``WalkAway``).
+    - persuasion, any phase with an ``action["decision"]`` (covers both
+      ``buyer_decision`` and the binary variant of ``seller_message``):
+      categorical -- ``"decision:<yes|no>"``.
+    - persuasion ``seller_message`` with no ``"decision"`` key but a
+      ``"message"`` key (the free-text ``seller_message_type == "text"``
+      variant): categorical -- ``"message:present"`` / ``"message:absent"``
+      (whether the message is a non-empty string), implementing the
+      task's "message presence" feature.
+
+    Any step whose ``action`` is not a dict, or that has none of the
+    expected fields for its family/phase, yields ``feature_type=None`` --
+    excluded from both the spread statistic and the shuffled floor, never
+    imputed.
+
+    Returns:
+        ``{"feature_type": "continuous" | "categorical" | None, "value":
+        float | None, "label": str | None}``.
+    """
+    action = raw_step.get("action")
+    phase = raw_step.get("phase")
+    game_state = raw_step.get("game_state") or {}
+    none_result = {"feature_type": None, "value": None, "label": None}
+    if not isinstance(action, dict):
+        return none_result
+
+    if game_family == "bargaining":
+        if phase == "offer":
+            money = game_state.get("money_to_divide")
+            alice_gain = action.get("alice_gain")
+            if (
+                isinstance(alice_gain, (int, float))
+                and isinstance(money, (int, float))
+                and money != 0
+            ):
+                return {
+                    "feature_type": "continuous",
+                    "value": alice_gain / money,
+                    "label": None,
+                }
+            return none_result
+        if phase == "decision":
+            decision = action.get("decision")
+            if isinstance(decision, str):
+                return {
+                    "feature_type": "categorical",
+                    "value": None,
+                    "label": f"decision:{decision.strip().lower()}",
+                }
+            return none_result
+        return none_result
+
+    if game_family == "negotiation":
+        if phase == "offer":
+            price = action.get("product_price")
+            current_player = game_state.get("current_player")
+            own_value = (
+                game_state.get(f"{current_player}_value") if current_player else None
+            )
+            if (
+                isinstance(price, (int, float))
+                and isinstance(own_value, (int, float))
+                and own_value != 0
+            ):
+                return {
+                    "feature_type": "continuous",
+                    "value": price / own_value,
+                    "label": None,
+                }
+            return none_result
+        if phase == "decision":
+            decision = action.get("decision")
+            if isinstance(decision, str):
+                return {
+                    "feature_type": "categorical",
+                    "value": None,
+                    "label": f"decision:{decision.strip().lower()}",
+                }
+            return none_result
+        return none_result
+
+    if game_family == "persuasion":
+        decision = action.get("decision")
+        if isinstance(decision, str):
+            return {
+                "feature_type": "categorical",
+                "value": None,
+                "label": f"decision:{decision.strip().lower()}",
+            }
+        if "message" in action:
+            message = action.get("message")
+            present = isinstance(message, str) and message.strip() != ""
+            return {
+                "feature_type": "categorical",
+                "value": None,
+                "label": "message:present" if present else "message:absent",
+            }
+        return none_result
+
+    return none_result
+
+
+def _resolve_member(
+    member_id: str,
+    game_family: str,
+    raw_index: dict[tuple[str, int, str], dict[str, Any]],
+) -> dict[str, Any] | None:
+    """Resolve one scored ``member_id`` to round/phase/history-length/action feature.
+
+    Returns ``None`` (reported as unresolved, never fabricated) if the
+    member_id cannot be parsed or has no matching entry in ``raw_index``.
+    """
+    parsed = _parse_member_id(member_id)
+    if parsed is None:
+        return None
+    raw_step = raw_index.get(parsed)
+    if raw_step is None:
+        return None
+    feature = extract_action_feature(raw_step, game_family)
+    return {
+        "round": parsed[1],
+        "phase": parsed[2],
+        "history_length": _history_length(raw_step),
+        "feature_type": feature["feature_type"],
+        "value": feature["value"],
+        "label": feature["label"],
+    }
+
+
+def _cluster_membership_features(
+    cluster_record: dict[str, Any],
+    raw_index: dict[tuple[str, int, str], dict[str, Any]],
+) -> dict[str, Any]:
+    """Resolve every one of a cluster's ``sampled_member_ids`` (the exact
+    scored members) to its membership/action feature.
+
+    Returns:
+        ``{"cluster_id", "game_family", "n_sampled_members", "n_resolved",
+        "n_unresolved", "members"}`` where ``members`` is the list of
+        per-member dicts from :func:`_resolve_member` (unresolved members
+        omitted).
+    """
+    member_ids = cluster_record["sampled_member_ids"]
+    game_family = cluster_record["game_family"]
+    resolved: list[dict[str, Any]] = []
+    n_unresolved = 0
+    for member_id in member_ids:
+        member = _resolve_member(member_id, game_family, raw_index)
+        if member is None:
+            n_unresolved += 1
+        else:
+            resolved.append(member)
+    return {
+        "cluster_id": cluster_record["cluster_id"],
+        "game_family": game_family,
+        "n_sampled_members": len(member_ids),
+        "n_resolved": len(resolved),
+        "n_unresolved": n_unresolved,
+        "members": resolved,
+    }
+
+
+def _sd(values: list[float]) -> float | None:
+    """Sample standard deviation (``ddof=1``), or ``None`` if ``len(values) < 2``."""
+    return float(np.std(values, ddof=1)) if len(values) >= 2 else None
+
+
+def _modal_share(labels: list[str]) -> tuple[float | None, str | None, int]:
+    """``(modal_share, modal_label, n_distinct_labels)`` for a list of category labels.
+
+    Returns ``(None, None, 0)`` for an empty list.
+    """
+    if not labels:
+        return None, None, 0
+    counts = Counter(labels)
+    modal_label, modal_count = counts.most_common(1)[0]
+    return modal_count / len(labels), modal_label, len(counts)
+
+
+def _split_features(
+    members: list[dict[str, Any]],
+) -> tuple[list[float], list[str]]:
+    """Split resolved members into ``(continuous_values, categorical_labels)``."""
+    continuous_values = [
+        m["value"] for m in members if m["feature_type"] == "continuous"
+    ]
+    categorical_labels = [
+        m["label"] for m in members if m["feature_type"] == "categorical"
+    ]
+    return continuous_values, categorical_labels
+
+
+def _action_spread(members: list[dict[str, Any]]) -> tuple[float | None, str | None]:
+    """Unified action-only spread scalar for one set of resolved members.
+
+    Documented, non-tunable preference rule (see task-2 request: "use a
+    family-appropriate statistic"): if >= 2 members carry a continuous
+    action feature (offer-share / price-ratio), the spread is the sample
+    SD of that continuous feature -- any categorical (decision-phase)
+    members in the same (phase-mixed) cluster are reported separately
+    but do not enter this scalar, since there is no principled common
+    scale between a continuous SD and a categorical disagreement rate.
+    Otherwise, if >= 2 members carry a categorical label, the spread is
+    ``1 - modal_share`` (0 = unanimous, approaching 1 = maximally split).
+    Fewer than 2 usable members of either type yields ``(None, None)`` --
+    never a fabricated 0.0.
+
+    Returns:
+        ``(spread, spread_source)`` where ``spread_source`` is
+        ``"continuous_sd"``, ``"categorical_1_minus_modal_share"``, or
+        ``None``.
+    """
+    continuous_values, categorical_labels = _split_features(members)
+    if len(continuous_values) >= 2:
+        return _sd(continuous_values), "continuous_sd"
+    if len(categorical_labels) >= 2:
+        modal_share, _label, _n = _modal_share(categorical_labels)
+        spread = (1.0 - modal_share) if modal_share is not None else None
+        return spread, "categorical_1_minus_modal_share"
+    return None, None
+
+
+def action_only_baseline_report(
+    records: list[dict[str, Any]],
+    raw_index: dict[tuple[str, int, str], dict[str, Any]],
+) -> dict[str, Any]:
+    """Per-cluster and per-family action-only within-cluster consistency.
+
+    Computed entirely from each cluster's exact scored members'
+    (``sampled_member_ids``) raw logged actions -- no judge score is read
+    anywhere in this function.
+
+    Args:
+        records: Parsed scored-cluster records (full dataset; degenerate
+            status, a judge-kappa artifact, has no bearing on this
+            action-only computation, so no records are excluded here).
+        raw_index: Output of :func:`load_raw_steps_index`.
+
+    Returns:
+        ``{"per_cluster": {cluster_id -> row}, "family_summary":
+        {family -> {"n_clusters", "n_clusters_with_action_spread",
+        "mean_action_spread"}}}`` where each ``row`` carries
+        ``n_sampled_members``, ``n_resolved``, ``n_continuous``,
+        ``continuous_sd``, ``n_categorical``, ``categorical_n_distinct_labels``,
+        ``categorical_modal_label``, ``categorical_modal_share``,
+        ``action_spread``, ``action_spread_source``.
+    """
+    per_cluster: dict[str, dict[str, Any]] = {}
+    family_rows: dict[str, list[dict[str, Any]]] = {
+        family: [] for family in _GAME_FAMILIES
+    }
+
+    for record in records:
+        feats = _cluster_membership_features(record, raw_index)
+        continuous_values, categorical_labels = _split_features(feats["members"])
+        spread, spread_source = _action_spread(feats["members"])
+        modal_share, modal_label, n_distinct = _modal_share(categorical_labels)
+        row = {
+            "cluster_id": feats["cluster_id"],
+            "game_family": feats["game_family"],
+            "n_sampled_members": feats["n_sampled_members"],
+            "n_resolved": feats["n_resolved"],
+            "n_continuous": len(continuous_values),
+            "continuous_sd": _sd(continuous_values),
+            "n_categorical": len(categorical_labels),
+            "categorical_n_distinct_labels": n_distinct,
+            "categorical_modal_label": modal_label,
+            "categorical_modal_share": modal_share,
+            "action_spread": spread,
+            "action_spread_source": spread_source,
+        }
+        per_cluster[feats["cluster_id"]] = row
+        family_rows[feats["game_family"]].append(row)
+
+    family_summary: dict[str, dict[str, Any]] = {}
+    for family in _GAME_FAMILIES:
+        rows = family_rows[family]
+        spreads = [r["action_spread"] for r in rows if r["action_spread"] is not None]
+        family_summary[family] = {
+            "n_clusters": len(rows),
+            "n_clusters_with_action_spread": len(spreads),
+            "mean_action_spread": _mean(spreads),
+        }
+
+    return {"per_cluster": per_cluster, "family_summary": family_summary}
+
+
+def _action_pool(
+    records: list[dict[str, Any]],
+    raw_index: dict[tuple[str, int, str], dict[str, Any]],
+) -> tuple[list[int], list[dict[str, Any]]]:
+    """Flatten one family's clusters into (resolved cluster sizes, member pool).
+
+    Mirrors :func:`_cluster_pool`'s role in :func:`shuffled_cluster_floor`,
+    but pools resolved action/membership feature dicts (never judge
+    scores) and sizes each cluster by its *resolved* member count (the
+    same count :func:`action_only_baseline_report` computes its real
+    statistic from), so shuffled chunks are directly comparable to it.
+    """
+    cluster_sizes: list[int] = []
+    pool: list[dict[str, Any]] = []
+    for record in records:
+        feats = _cluster_membership_features(record, raw_index)
+        cluster_sizes.append(feats["n_resolved"])
+        pool.extend(feats["members"])
+    return cluster_sizes, pool
+
+
+def _chunk_action_spread(chunk: list[dict[str, Any]]) -> float | None:
+    """:func:`_action_spread`, applied to one shuffled chunk."""
+    spread, _source = _action_spread(chunk)
+    return spread
+
+
+def action_shuffled_cluster_floor(
+    records: list[dict[str, Any]],
+    raw_index: dict[tuple[str, int, str], dict[str, Any]],
+    action_baseline: dict[str, Any],
+    seed: int = _DEFAULT_SEED,
+    n_permutations: int = _DEFAULT_N_PERMUTATIONS,
+) -> dict[str, dict[str, Any]]:
+    """Null floor for the action-only spread statistic.
+
+    Same mechanism as :func:`shuffled_cluster_floor`: within each family,
+    the pool of resolved members' raw action/membership features (never
+    judge scores -- this function never reads ``raw_scores``) is
+    repeatedly reshuffled into same-sized chunks and the mean
+    :func:`_action_spread` across chunks is recomputed each time. One
+    ``random.Random(seed)`` instance is consumed in fixed family order,
+    so two runs with the same seed/data/``n_permutations`` are
+    byte-identical.
+
+    Args:
+        records: Parsed scored-cluster records (full dataset).
+        raw_index: Output of :func:`load_raw_steps_index`.
+        action_baseline: Output of :func:`action_only_baseline_report` --
+            used only to read off the real ``mean_action_spread`` per
+            family to report alongside the floor.
+        seed: RNG seed.
+        n_permutations: Number of reshuffles per family.
+
+    Returns:
+        ``family -> {"real", "shuffled_mean", "ci_low", "ci_high",
+        "n_valid_perms", "n_total_perms"}``.
+    """
+    rng = random.Random(seed)
+    result: dict[str, dict[str, Any]] = {}
+
+    for family in _GAME_FAMILIES:
+        family_records = [r for r in records if r["game_family"] == family]
+        cluster_sizes, pool = _action_pool(family_records, raw_index)
+        n_total = len(pool)
+
+        series: list[float | None] = []
+        for _ in range(n_permutations):
+            order = list(range(n_total))
+            rng.shuffle(order)
+            shuffled = [pool[i] for i in order]
+            start = 0
+            chunk_spreads: list[float] = []
+            for size in cluster_sizes:
+                chunk = shuffled[start : start + size]
+                start += size
+                spread = _chunk_action_spread(chunk)
+                if spread is not None:
+                    chunk_spreads.append(spread)
+            series.append(_mean(chunk_spreads) if chunk_spreads else None)
+
+        valid = [v for v in series if v is not None]
+        if valid:
+            low, high = np.percentile(np.array(valid), [2.5, 97.5])
+            shuffled_mean = _mean(valid)
+        else:
+            low = high = shuffled_mean = None
+        result[family] = {
+            "real": action_baseline["family_summary"][family]["mean_action_spread"],
+            "shuffled_mean": shuffled_mean,
+            "ci_low": None if low is None else float(low),
+            "ci_high": None if high is None else float(high),
+            "n_valid_perms": len(valid),
+            "n_total_perms": n_permutations,
+        }
+    return result
+
+
+def membership_homogeneity_report(
+    records: list[dict[str, Any]],
+    raw_index: dict[tuple[str, int, str], dict[str, Any]],
+) -> dict[str, dict[str, Any]]:
+    """Per-family round/phase/history-length homogeneity on the exact scored members.
+
+    For each cluster, "modal share" of a feature is the fraction of
+    resolved members sharing that feature's single most common value
+    (1.0 = fully homogeneous). This is reported, not interpreted: a
+    cluster is formed on a coarse *state* signature (see
+    :func:`~src.rsi_bench.glee_pia_baseline.cluster_decisions`), which
+    does not itself constrain round, phase, or history length to match
+    across members, so less-than-1.0 values here are an expected
+    structural property of the clustering, not a defect being flagged.
+
+    Args:
+        records: Parsed scored-cluster records (full dataset).
+        raw_index: Output of :func:`load_raw_steps_index`.
+
+    Returns:
+        ``family -> {"n_clusters", "n_clusters_mixed_phase",
+        "mean_round_modal_share", "mean_phase_modal_share",
+        "mean_history_length_modal_share", "mean_history_length_sd"}``.
+    """
+    result: dict[str, dict[str, Any]] = {}
+    for family in _GAME_FAMILIES:
+        family_records = [r for r in records if r["game_family"] == family]
+        round_modal_shares: list[float] = []
+        phase_modal_shares: list[float] = []
+        history_modal_shares: list[float] = []
+        history_sds: list[float] = []
+        n_clusters_mixed_phase = 0
+
+        for record in family_records:
+            feats = _cluster_membership_features(record, raw_index)
+            members = feats["members"]
+            if not members:
+                continue
+
+            phase_labels = [m["phase"] for m in members]
+            phase_share, _pl, phase_distinct = _modal_share(phase_labels)
+            if phase_share is not None:
+                phase_modal_shares.append(phase_share)
+            if phase_distinct > 1:
+                n_clusters_mixed_phase += 1
+
+            round_labels = [str(m["round"]) for m in members]
+            round_share, _rl, _rd = _modal_share(round_labels)
+            if round_share is not None:
+                round_modal_shares.append(round_share)
+
+            history_values = [
+                m["history_length"] for m in members if m["history_length"] is not None
+            ]
+            if history_values:
+                history_labels = [str(h) for h in history_values]
+                history_share, _hl, _hd = _modal_share(history_labels)
+                if history_share is not None:
+                    history_modal_shares.append(history_share)
+                history_sd = _sd([float(h) for h in history_values])
+                if history_sd is not None:
+                    history_sds.append(history_sd)
+
+        result[family] = {
+            "n_clusters": len(family_records),
+            "n_clusters_mixed_phase": n_clusters_mixed_phase,
+            "mean_round_modal_share": _mean(round_modal_shares),
+            "mean_phase_modal_share": _mean(phase_modal_shares),
+            "mean_history_length_modal_share": _mean(history_modal_shares),
+            "mean_history_length_sd": _mean(history_sds),
+        }
+    return result
+
+
+def _cluster_judge_mean_spread(
+    record: dict[str, Any], dimensions: list[str], judges: list[str]
+) -> float | None:
+    """Within-cluster SD of judge-mean score, averaged over defined dimensions.
+
+    For each dimension, computes the sample SD (across this cluster's
+    judged members) of each member's judge-mean score (mean of whatever
+    non-null judge scores it has for that dimension -- see
+    :func:`_judge_mean_score`), then averages the per-dimension SDs that
+    are defined (>= 2 members with a non-null judge-mean), mirroring
+    ``kappa_overall``'s "mean of defined per-dimension values" convention
+    (see the module docstring's "With and without" aggregates note).
+
+    Returns:
+        The averaged SD, or ``None`` if no dimension has >= 2 usable
+        members.
+    """
+    by_member: dict[str, dict[str, dict[str, int | None]]] = {}
+    for rs in record["raw_scores"]:
+        by_member.setdefault(rs["member_id"], {})[rs["judge_name"]] = {
+            dim: rs.get(dim) for dim in dimensions
+        }
+    per_dim_sds: list[float] = []
+    for dim in dimensions:
+        values = [
+            v
+            for v in (
+                _judge_mean_score(member, dim, judges) for member in by_member.values()
+            )
+            if v is not None
+        ]
+        sd = _sd(values)
+        if sd is not None:
+            per_dim_sds.append(sd)
+    return _mean(per_dim_sds) if per_dim_sds else None
+
+
+def action_judge_spread_correlation(
+    records: list[dict[str, Any]],
+    action_baseline: dict[str, Any],
+    dimensions: list[str],
+    judges: list[str],
+) -> dict[str, dict[str, Any]]:
+    """Per-family Spearman correlation: action spread vs. judge-mean spread.
+
+    Correlates, over clusters where both are defined, each cluster's
+    action-only spread (:func:`action_only_baseline_report`'s
+    ``action_spread``, built with no judge scores) against its
+    within-cluster judge-mean spread (:func:`_cluster_judge_mean_spread`,
+    built with no action data). The two inputs do not share a data
+    source other than "which cluster".
+
+    Args:
+        records: Parsed scored-cluster records (full dataset).
+        action_baseline: Output of :func:`action_only_baseline_report`.
+        dimensions: Judge-scored dimension names.
+        judges: Judge names.
+
+    Returns:
+        ``family -> {"n_clusters_used", "spearman_rho", "spearman_p"}``,
+        both ``None`` when fewer than 2 clusters qualify or either series
+        is constant.
+    """
+    result: dict[str, dict[str, Any]] = {}
+    for family in _GAME_FAMILIES:
+        family_records = [r for r in records if r["game_family"] == family]
+        xs: list[float] = []
+        ys: list[float] = []
+        for record in family_records:
+            cluster_id = record["cluster_id"]
+            action_spread = action_baseline["per_cluster"][cluster_id]["action_spread"]
+            judge_spread = _cluster_judge_mean_spread(record, dimensions, judges)
+            if action_spread is not None and judge_spread is not None:
+                xs.append(action_spread)
+                ys.append(judge_spread)
+
+        if len(xs) >= 2 and len(set(xs)) > 1 and len(set(ys)) > 1:
+            rho, p_value = spearmanr(xs, ys)
+            rho = float(rho)
+            p_value = float(p_value)
+        else:
+            rho, p_value = None, None
+        result[family] = {
+            "n_clusters_used": len(xs),
+            "spearman_rho": rho,
+            "spearman_p": p_value,
+        }
+    return result
+
+
+# ---------------------------------------------------------------------------
 # Output
 # ---------------------------------------------------------------------------
 
@@ -2058,6 +2724,94 @@ def render_markdown(analysis: dict[str, Any], dimensions: list[str]) -> str:
             )
     lines.append("")
 
+    if analysis.get("action_only_baseline") is not None:
+        lines.append("## 15. Action-only within-cluster baseline (no judge scores)")
+        lines.append("")
+        lines.append(
+            "| cluster_id | family | n_sampled | n_resolved | n_continuous "
+            "| continuous_sd | n_categorical | n_distinct_labels | modal_label "
+            "| modal_share | action_spread | spread_source |"
+        )
+        lines.append("|---|---|---|---|---|---|---|---|---|---|---|---|")
+        for row in analysis["action_only_baseline"]["per_cluster"].values():
+            lines.append(
+                f"| {row['cluster_id']} | {row['game_family']} "
+                f"| {row['n_sampled_members']} | {row['n_resolved']} "
+                f"| {row['n_continuous']} | {_fmt(row['continuous_sd'])} "
+                f"| {row['n_categorical']} | {row['categorical_n_distinct_labels']} "
+                f"| {row['categorical_modal_label']} "
+                f"| {_fmt(row['categorical_modal_share'])} "
+                f"| {_fmt(row['action_spread'])} | {row['action_spread_source']} |"
+            )
+        lines.append("")
+        lines.append("### Family summary")
+        lines.append("")
+        lines.append(
+            "| family | n_clusters | n_clusters_with_action_spread "
+            "| mean_action_spread |"
+        )
+        lines.append("|---|---|---|---|")
+        for family in _GAME_FAMILIES:
+            cell = analysis["action_only_baseline"]["family_summary"][family]
+            lines.append(
+                f"| {family} | {cell['n_clusters']} "
+                f"| {cell['n_clusters_with_action_spread']} "
+                f"| {_fmt(cell['mean_action_spread'])} |"
+            )
+        lines.append("")
+        n_perms = analysis["action_shuffled_cluster_floor"][_GAME_FAMILIES[0]][
+            "n_total_perms"
+        ]
+        lines.append(f"### Shuffled-cluster floor for action_spread ({n_perms} perms)")
+        lines.append("")
+        lines.append(
+            "| family | real | shuffled_mean | ci_low | ci_high | n_valid_perms |"
+        )
+        lines.append("|---|---|---|---|---|---|")
+        for family in _GAME_FAMILIES:
+            cell = analysis["action_shuffled_cluster_floor"][family]
+            lines.append(
+                f"| {family} | {_fmt(cell['real'])} | {_fmt(cell['shuffled_mean'])} "
+                f"| {_fmt(cell['ci_low'])} | {_fmt(cell['ci_high'])} "
+                f"| {cell['n_valid_perms']}/{cell['n_total_perms']} |"
+            )
+        lines.append("")
+
+        lines.append(
+            "## 16. Cluster-membership homogeneity (round / phase / history length)"
+        )
+        lines.append("")
+        lines.append(
+            "| family | n_clusters | n_clusters_mixed_phase | mean_round_modal_share "
+            "| mean_phase_modal_share | mean_history_length_modal_share "
+            "| mean_history_length_sd |"
+        )
+        lines.append("|---|---|---|---|---|---|---|")
+        for family in _GAME_FAMILIES:
+            cell = analysis["membership_homogeneity"][family]
+            lines.append(
+                f"| {family} | {cell['n_clusters']} | {cell['n_clusters_mixed_phase']} "
+                f"| {_fmt(cell['mean_round_modal_share'])} "
+                f"| {_fmt(cell['mean_phase_modal_share'])} "
+                f"| {_fmt(cell['mean_history_length_modal_share'])} "
+                f"| {_fmt(cell['mean_history_length_sd'])} |"
+            )
+        lines.append("")
+
+        lines.append(
+            "## 17. Action spread vs. judge-mean spread (Spearman, per family)"
+        )
+        lines.append("")
+        lines.append("| family | n_clusters_used | spearman_rho | spearman_p |")
+        lines.append("|---|---|---|---|")
+        for family in _GAME_FAMILIES:
+            cell = analysis["action_judge_spread_correlation"][family]
+            lines.append(
+                f"| {family} | {cell['n_clusters_used']} "
+                f"| {_fmt(cell['spearman_rho'])} | {_fmt(cell['spearman_p'])} |"
+            )
+        lines.append("")
+
     return "\n".join(lines)
 
 
@@ -2069,6 +2823,7 @@ def render_markdown(analysis: dict[str, Any], dimensions: list[str]) -> str:
 def run_analysis(
     scored_records: list[dict[str, Any]],
     manifest: dict[str, Any],
+    raw_index: dict[tuple[str, int, str], dict[str, Any]] | None = None,
     seed: int = _DEFAULT_SEED,
     n_resamples: int = _DEFAULT_N_RESAMPLES,
     n_permutations: int = _DEFAULT_N_PERMUTATIONS,
@@ -2079,6 +2834,10 @@ def run_analysis(
         scored_records: Parsed scored-cluster records.
         manifest: Parsed selection manifest (source of truth for the
             dimension and judge name lists).
+        raw_index: Output of :func:`load_raw_steps_index`, or ``None`` to
+            skip the action-only baseline / membership-homogeneity /
+            action-vs-judge-spread sections entirely (e.g. when the raw
+            trajectory log is unavailable).
         seed: Bootstrap/permutation RNG seed.
         n_resamples: Number of bootstrap repetitions.
         n_permutations: Number of shuffled-cluster-floor repetitions.
@@ -2089,6 +2848,8 @@ def run_analysis(
         "judge_agreement", "shuffled_cluster_floor", "dependence",
         "game_level_bootstrap", "offset_robust_agreement",
         "leave_one_judge_out", "variance_decomposition",
+        "action_only_baseline", "action_shuffled_cluster_floor",
+        "membership_homogeneity", "action_judge_spread_correlation",
         "by_family_n_clusters"}``.
     """
     dimensions = list(manifest["config"]["dimensions"])
@@ -2141,6 +2902,26 @@ def run_analysis(
         scored_records, dimensions, judges, seed=seed, n_permutations=n_permutations
     )
 
+    action_baseline: dict[str, Any] | None = None
+    action_floor: dict[str, Any] | None = None
+    membership_homogeneity: dict[str, Any] | None = None
+    action_judge_correlation: dict[str, Any] | None = None
+    if raw_index is not None:
+        action_baseline = action_only_baseline_report(scored_records, raw_index)
+        action_floor = action_shuffled_cluster_floor(
+            scored_records,
+            raw_index,
+            action_baseline,
+            seed=seed,
+            n_permutations=n_permutations,
+        )
+        membership_homogeneity = membership_homogeneity_report(
+            scored_records, raw_index
+        )
+        action_judge_correlation = action_judge_spread_correlation(
+            scored_records, action_baseline, dimensions, judges
+        )
+
     by_family_n_clusters = {
         family: sum(1 for r in scored_records if r["game_family"] == family)
         for family in _GAME_FAMILIES
@@ -2166,6 +2947,10 @@ def run_analysis(
         "offset_robust_agreement": offset_robust,
         "leave_one_judge_out": loo,
         "variance_decomposition": variance_decomp,
+        "action_only_baseline": action_baseline,
+        "action_shuffled_cluster_floor": action_floor,
+        "membership_homogeneity": membership_homogeneity,
+        "action_judge_spread_correlation": action_judge_correlation,
     }
 
 
@@ -2178,11 +2963,15 @@ def run_analysis(
 def main(
     scored_input: Path = typer.Option(_DEFAULT_SCORED_INPUT, "--scored-input"),
     manifest_input: Path = typer.Option(_DEFAULT_MANIFEST_INPUT, "--manifest-input"),
+    raw_trajectories_input: Path = typer.Option(
+        _DEFAULT_RAW_TRAJECTORIES, "--raw-trajectories-input"
+    ),
     json_output: Path = typer.Option(_DEFAULT_JSON_OUTPUT, "--json-output"),
     markdown_output: Path = typer.Option(_DEFAULT_MARKDOWN_OUTPUT, "--markdown-output"),
     seed: int = typer.Option(_DEFAULT_SEED, "--seed"),
     n_resamples: int = typer.Option(_DEFAULT_N_RESAMPLES, "--n-resamples"),
     n_permutations: int = typer.Option(_DEFAULT_N_PERMUTATIONS, "--n-permutations"),
+    skip_action_baseline: bool = typer.Option(False, "--skip-action-baseline"),
     verbose: bool = typer.Option(False, "--verbose", "-v"),
 ) -> None:
     """Analyze an already-scored stratified GLEE PIA run. Makes zero API calls."""
@@ -2193,9 +2982,13 @@ def main(
 
     records = load_scored_records(scored_input)
     manifest = load_manifest(manifest_input)
+    raw_index = (
+        None if skip_action_baseline else load_raw_steps_index(raw_trajectories_input)
+    )
     analysis = run_analysis(
         records,
         manifest,
+        raw_index=raw_index,
         seed=seed,
         n_resamples=n_resamples,
         n_permutations=n_permutations,

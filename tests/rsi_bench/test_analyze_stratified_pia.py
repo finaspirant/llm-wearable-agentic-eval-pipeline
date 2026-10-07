@@ -28,11 +28,22 @@ Test inventory:
   TestOffsetRobustAgreement     -- centered ICC(3,1) + Krippendorff alpha
   TestLeaveOneJudgeOut          -- 2-judge kappa recompute + matching floor
   TestVarianceDecomposition     -- real vs shuffled eta-squared
+  TestExtractActionFeature      -- per-family/phase action classification
+  TestParseMemberIdAndHistoryLength -- member_id parsing, history length
+  TestLoadRawStepsIndex         -- gz JSONL load, dedup, malformed-line skip
+  TestResolveMemberAndClusterFeatures -- raw-step resolution, unresolved count
+  TestActionSpreadAndHelpers    -- _sd/_modal_share/_action_spread arithmetic
+  TestActionOnlyBaselineReport  -- per-cluster rows + family summary, no judge scores
+  TestActionShuffledClusterFloor -- determinism, cluster-size preservation
+  TestMembershipHomogeneityReport -- round/phase/history-length modal shares
+  TestClusterJudgeMeanSpread    -- SD of judge-mean score, averaged over dims
+  TestActionJudgeSpreadCorrelation -- Spearman rho sign/None-on-insufficient-data
 """
 
 from __future__ import annotations
 
 import copy
+import gzip
 import json
 import random
 from pathlib import Path
@@ -44,15 +55,28 @@ from scipy.stats import spearmanr
 
 from src.annotation.irr_calculator import IRRCalculator
 from src.rsi_bench.analyze_stratified_pia import (
+    _action_pool,
+    _action_spread,
     _chunk_kappa,
     _cluster_components,
+    _cluster_judge_mean_spread,
+    _cluster_membership_features,
     _cluster_pool,
     _complete_panel_scores,
     _eta_squared,
     _family_judge_means,
+    _history_length,
     _icc_3_1,
     _judge_mean_score,
+    _modal_share,
+    _parse_member_id,
     _recompute_kappa_for_judge_subset,
+    _resolve_member,
+    _sd,
+    _split_features,
+    action_judge_spread_correlation,
+    action_only_baseline_report,
+    action_shuffled_cluster_floor,
     audit_game_level_bootstrap,
     bootstrap_primary_aggregate,
     build_aggregates,
@@ -60,12 +84,15 @@ from src.rsi_bench.analyze_stratified_pia import (
     check_integrity,
     cluster_components_report,
     dependence_report,
+    extract_action_feature,
     find_degenerate_entries,
     game_level_bootstrap,
     judge_agreement_report,
     leave_one_judge_out_report,
     load_manifest,
+    load_raw_steps_index,
     load_scored_records,
+    membership_homogeneity_report,
     offset_robust_agreement_report,
     pooled_dimension_kappa,
     recompute_cluster_kappa,
@@ -1301,3 +1328,642 @@ class TestAuditGameLevelBootstrap:
         assert cell["point_estimate_in_cluster_ci"] is None
         assert cell["point_estimate_in_game_ci"] is None
         assert cell["game_ci_at_least_as_wide_as_cluster_ci"] is None
+
+
+# ---------------------------------------------------------------------------
+# Action-only within-cluster baseline (no judge scores)
+# ---------------------------------------------------------------------------
+
+
+def _raw_step(
+    game_id: str,
+    round_num: int,
+    phase: str,
+    game_family: str,
+    action: dict[str, Any] | str,
+    game_state: dict[str, Any] | None = None,
+    your_player: str = "player_1",
+) -> dict[str, Any]:
+    """A minimal raw GLEE trajectory record, shaped as
+    :func:`~src.rsi_bench.analyze_stratified_pia.load_raw_steps_index` would
+    parse from the gzipped JSONL log."""
+    fields = list(action.keys()) if isinstance(action, dict) else []
+    return {
+        "game_id": game_id,
+        "game_family": game_family,
+        "your_player": your_player,
+        "phase": phase,
+        "round": round_num,
+        "game_state": game_state or {},
+        "valid_actions": {"type": phase, "fields": {k: "n/a" for k in fields}},
+        "reasoning": "synthetic",
+        "action": action,
+        "fallback_used": False,
+        "model": "test-model",
+    }
+
+
+def _raw_index_from_steps(
+    steps: list[dict[str, Any]],
+) -> dict[tuple[str, int, str], dict[str, Any]]:
+    return {(s["game_id"], s["round"], s["phase"]): s for s in steps}
+
+
+def _action_cluster_record(
+    cluster_id: str, family: str, member_ids: list[str]
+) -> dict[str, Any]:
+    """A minimal scored-cluster record carrying only what the action-only
+    baseline reads (``cluster_id``, ``game_family``, ``sampled_member_ids``)
+    -- no ``raw_scores`` key at all, so any accidental judge-score read
+    would raise ``KeyError`` rather than silently pass."""
+    return {
+        "cluster_id": cluster_id,
+        "game_family": family,
+        "sampled_member_ids": member_ids,
+    }
+
+
+class TestExtractActionFeature:
+    def test_bargaining_offer_is_continuous_alice_share(self) -> None:
+        step = _raw_step(
+            "g1",
+            1,
+            "offer",
+            "bargaining",
+            {"alice_gain": 600, "bob_gain": 400},
+            {"money_to_divide": 1000},
+        )
+        feature = extract_action_feature(step, "bargaining")
+        assert feature["feature_type"] == "continuous"
+        assert feature["value"] == pytest.approx(0.6)
+
+    def test_bargaining_decision_is_categorical(self) -> None:
+        step = _raw_step("g1", 1, "decision", "bargaining", {"decision": "Reject"})
+        feature = extract_action_feature(step, "bargaining")
+        assert feature["feature_type"] == "categorical"
+        assert feature["label"] == "decision:reject"
+
+    def test_bargaining_offer_missing_money_is_none(self) -> None:
+        step = _raw_step("g1", 1, "offer", "bargaining", {"alice_gain": 600}, {})
+        feature = extract_action_feature(step, "bargaining")
+        assert feature["feature_type"] is None
+
+    def test_negotiation_offer_is_continuous_price_ratio(self) -> None:
+        step = _raw_step(
+            "g1",
+            1,
+            "offer",
+            "negotiation",
+            {"product_price": 150},
+            {"current_player": "player_1", "player_1_value": 75},
+        )
+        feature = extract_action_feature(step, "negotiation")
+        assert feature["feature_type"] == "continuous"
+        assert feature["value"] == pytest.approx(2.0)
+
+    def test_negotiation_decision_is_categorical(self) -> None:
+        step = _raw_step(
+            "g1", 1, "decision", "negotiation", {"decision": "RejectOffer"}
+        )
+        feature = extract_action_feature(step, "negotiation")
+        assert feature["feature_type"] == "categorical"
+        assert feature["label"] == "decision:rejectoffer"
+
+    def test_negotiation_offer_missing_value_is_none(self) -> None:
+        step = _raw_step("g1", 1, "offer", "negotiation", {"product_price": 150}, {})
+        feature = extract_action_feature(step, "negotiation")
+        assert feature["feature_type"] is None
+
+    def test_persuasion_buyer_decision_is_categorical(self) -> None:
+        step = _raw_step("g1", 1, "buyer_decision", "persuasion", {"decision": "yes"})
+        feature = extract_action_feature(step, "persuasion")
+        assert feature["feature_type"] == "categorical"
+        assert feature["label"] == "decision:yes"
+
+    def test_persuasion_seller_message_binary_decision(self) -> None:
+        step = _raw_step("g1", 1, "seller_message", "persuasion", {"decision": "no"})
+        feature = extract_action_feature(step, "persuasion")
+        assert feature["label"] == "decision:no"
+
+    def test_persuasion_message_present(self) -> None:
+        step = _raw_step(
+            "g1", 1, "seller_message", "persuasion", {"message": "hello there"}
+        )
+        feature = extract_action_feature(step, "persuasion")
+        assert feature["feature_type"] == "categorical"
+        assert feature["label"] == "message:present"
+
+    def test_persuasion_message_absent_for_empty_string(self) -> None:
+        step = _raw_step("g1", 1, "seller_message", "persuasion", {"message": ""})
+        feature = extract_action_feature(step, "persuasion")
+        assert feature["label"] == "message:absent"
+
+    def test_non_dict_action_is_none(self) -> None:
+        step = _raw_step("g1", 1, "offer", "bargaining", "not-a-dict")
+        feature = extract_action_feature(step, "bargaining")
+        assert feature["feature_type"] is None
+
+    def test_unknown_family_is_none(self) -> None:
+        step = _raw_step("g1", 1, "offer", "mystery", {"decision": "yes"})
+        feature = extract_action_feature(step, "mystery")
+        assert feature["feature_type"] is None
+
+
+class TestParseMemberIdAndHistoryLength:
+    def test_parses_three_colon_parts(self) -> None:
+        assert _parse_member_id("game-1:3:offer") == ("game-1", 3, "offer")
+
+    def test_rejects_wrong_part_count(self) -> None:
+        assert _parse_member_id("game-1-offer") is None
+
+    def test_rejects_non_integer_round(self) -> None:
+        assert _parse_member_id("game-1:x:offer") is None
+
+    def test_history_length_counts_list(self) -> None:
+        step = _raw_step("g1", 1, "decision", "bargaining", {}, {"history": [{}, {}]})
+        assert _history_length(step) == 2
+
+    def test_history_length_none_when_missing(self) -> None:
+        step = _raw_step("g1", 1, "decision", "bargaining", {}, {})
+        assert _history_length(step) is None
+
+
+class TestLoadRawStepsIndex:
+    def test_loads_and_dedupes(self, tmp_path: Path) -> None:
+        path = tmp_path / "trajectories.jsonl.gz"
+        step1 = _raw_step(
+            "g1", 1, "offer", "bargaining", {"alice_gain": 1, "bob_gain": 1}
+        )
+        step2 = _raw_step("g2", 1, "decision", "bargaining", {"decision": "accept"})
+        lines = [json.dumps(step1), json.dumps(step2), json.dumps(step2)]
+        with gzip.open(path, "wt") as f:
+            f.write("\n".join(lines) + "\n")
+        index = load_raw_steps_index(path)
+        assert len(index) == 2
+        assert index[("g1", 1, "offer")]["action"]["alice_gain"] == 1
+        assert index[("g2", 1, "decision")]["action"]["decision"] == "accept"
+
+    def test_skips_malformed_lines(self, tmp_path: Path) -> None:
+        path = tmp_path / "trajectories.jsonl.gz"
+        step1 = _raw_step(
+            "g1", 1, "offer", "bargaining", {"alice_gain": 1, "bob_gain": 1}
+        )
+        with gzip.open(path, "wt") as f:
+            f.write(json.dumps(step1) + "\n")
+            f.write("{not valid json\n")
+            f.write(json.dumps({"game_id": "g2"}) + "\n")
+        index = load_raw_steps_index(path)
+        assert len(index) == 1
+
+
+class TestResolveMemberAndClusterFeatures:
+    def test_resolve_member_returns_none_for_unresolvable_id(self) -> None:
+        assert _resolve_member("not-colon-formatted", "bargaining", {}) is None
+        assert _resolve_member("g1:1:offer", "bargaining", {}) is None
+
+    def test_resolve_member_extracts_round_phase_history_feature(self) -> None:
+        step = _raw_step(
+            "g1",
+            2,
+            "offer",
+            "bargaining",
+            {"alice_gain": 300, "bob_gain": 700},
+            {"money_to_divide": 1000, "history": [{"decision": "reject"}]},
+        )
+        index = {("g1", 2, "offer"): step}
+        resolved = _resolve_member("g1:2:offer", "bargaining", index)
+        assert resolved is not None
+        assert resolved["round"] == 2
+        assert resolved["phase"] == "offer"
+        assert resolved["history_length"] == 1
+        assert resolved["feature_type"] == "continuous"
+        assert resolved["value"] == pytest.approx(0.3)
+
+    def test_cluster_membership_features_counts_unresolved(self) -> None:
+        step = _raw_step("g1", 1, "decision", "bargaining", {"decision": "accept"})
+        index = {("g1", 1, "decision"): step}
+        record = _action_cluster_record(
+            "bargaining_001", "bargaining", ["g1:1:decision", "g2:1:decision"]
+        )
+        feats = _cluster_membership_features(record, index)
+        assert feats["n_sampled_members"] == 2
+        assert feats["n_resolved"] == 1
+        assert feats["n_unresolved"] == 1
+        assert len(feats["members"]) == 1
+
+
+class TestActionSpreadAndHelpers:
+    def test_sd_requires_two_values(self) -> None:
+        assert _sd([1.0]) is None
+        assert _sd([1.0, 3.0]) == pytest.approx(float(np.std([1.0, 3.0], ddof=1)))
+
+    def test_modal_share_empty(self) -> None:
+        assert _modal_share([]) == (None, None, 0)
+
+    def test_modal_share_basic(self) -> None:
+        share, label, n_distinct = _modal_share(["a", "a", "b"])
+        assert share == pytest.approx(2 / 3)
+        assert label == "a"
+        assert n_distinct == 2
+
+    def test_split_features(self) -> None:
+        members = [
+            {"feature_type": "continuous", "value": 0.5, "label": None},
+            {"feature_type": "categorical", "value": None, "label": "decision:yes"},
+        ]
+        continuous, categorical = _split_features(members)
+        assert continuous == [0.5]
+        assert categorical == ["decision:yes"]
+
+    def test_action_spread_prefers_continuous_when_available(self) -> None:
+        members = [
+            {"feature_type": "continuous", "value": 0.2, "label": None},
+            {"feature_type": "continuous", "value": 0.8, "label": None},
+            {"feature_type": "categorical", "value": None, "label": "decision:yes"},
+            {"feature_type": "categorical", "value": None, "label": "decision:no"},
+        ]
+        spread, source = _action_spread(members)
+        assert source == "continuous_sd"
+        assert spread == pytest.approx(float(np.std([0.2, 0.8], ddof=1)))
+
+    def test_action_spread_falls_back_to_categorical(self) -> None:
+        members = [
+            {"feature_type": "categorical", "value": None, "label": "decision:yes"},
+            {"feature_type": "categorical", "value": None, "label": "decision:yes"},
+            {"feature_type": "categorical", "value": None, "label": "decision:no"},
+        ]
+        spread, source = _action_spread(members)
+        assert source == "categorical_1_minus_modal_share"
+        assert spread == pytest.approx(1 - 2 / 3)
+
+    def test_action_spread_none_when_insufficient(self) -> None:
+        members = [{"feature_type": "continuous", "value": 0.5, "label": None}]
+        spread, source = _action_spread(members)
+        assert spread is None
+        assert source is None
+
+
+class TestActionOnlyBaselineReport:
+    def _bargaining_fixture(
+        self,
+    ) -> tuple[list[dict[str, Any]], dict[tuple[str, int, str], dict[str, Any]]]:
+        steps = [
+            _raw_step(
+                "g1",
+                1,
+                "offer",
+                "bargaining",
+                {"alice_gain": 200, "bob_gain": 800},
+                {"money_to_divide": 1000},
+            ),
+            _raw_step(
+                "g2",
+                1,
+                "offer",
+                "bargaining",
+                {"alice_gain": 800, "bob_gain": 200},
+                {"money_to_divide": 1000},
+            ),
+            _raw_step("g3", 1, "decision", "bargaining", {"decision": "accept"}),
+            _raw_step("g4", 1, "decision", "bargaining", {"decision": "reject"}),
+        ]
+        index = _raw_index_from_steps(steps)
+        record = _action_cluster_record(
+            "bargaining_001",
+            "bargaining",
+            ["g1:1:offer", "g2:1:offer", "g3:1:decision", "g4:1:decision"],
+        )
+        return [record], index
+
+    def test_per_cluster_row_prefers_continuous(self) -> None:
+        records, index = self._bargaining_fixture()
+        report = action_only_baseline_report(records, index)
+        row = report["per_cluster"]["bargaining_001"]
+        assert row["n_continuous"] == 2
+        assert row["n_categorical"] == 2
+        assert row["action_spread_source"] == "continuous_sd"
+        assert row["continuous_sd"] == pytest.approx(float(np.std([0.2, 0.8], ddof=1)))
+        assert row["action_spread"] == row["continuous_sd"]
+
+    def test_family_summary_means_over_defined_clusters_only(self) -> None:
+        records, index = self._bargaining_fixture()
+        lone_step = _raw_step("g5", 1, "decision", "bargaining", {"decision": "accept"})
+        index[("g5", 1, "decision")] = lone_step
+        records.append(
+            _action_cluster_record("bargaining_002", "bargaining", ["g5:1:decision"])
+        )
+        report = action_only_baseline_report(records, index)
+        summary = report["family_summary"]["bargaining"]
+        assert summary["n_clusters"] == 2
+        assert summary["n_clusters_with_action_spread"] == 1
+        assert summary["mean_action_spread"] == pytest.approx(
+            report["per_cluster"]["bargaining_001"]["action_spread"]
+        )
+
+    def test_never_reads_judge_scores(self) -> None:
+        records, index = self._bargaining_fixture()
+        assert "raw_scores" not in records[0]
+        action_only_baseline_report(records, index)  # must not raise KeyError
+
+
+class TestActionShuffledClusterFloor:
+    def _fixture(
+        self,
+    ) -> tuple[list[dict[str, Any]], dict[tuple[str, int, str], dict[str, Any]]]:
+        steps = []
+        member_ids = []
+        for i in range(10):
+            gid = f"g{i}"
+            decision = "accept" if i % 3 else "reject"
+            steps.append(
+                _raw_step(gid, 1, "decision", "bargaining", {"decision": decision})
+            )
+            member_ids.append(f"{gid}:1:decision")
+        index = _raw_index_from_steps(steps)
+        records = [
+            _action_cluster_record("bargaining_001", "bargaining", member_ids[:5]),
+            _action_cluster_record("bargaining_002", "bargaining", member_ids[5:]),
+        ]
+        return records, index
+
+    def test_deterministic_same_seed(self) -> None:
+        records, index = self._fixture()
+        baseline = action_only_baseline_report(records, index)
+        floor1 = action_shuffled_cluster_floor(
+            records, index, baseline, seed=42, n_permutations=25
+        )
+        floor2 = action_shuffled_cluster_floor(
+            records, index, baseline, seed=42, n_permutations=25
+        )
+        assert floor1 == floor2
+
+    def test_preserves_cluster_sizes_pool(self) -> None:
+        records, index = self._fixture()
+        sizes, pool = _action_pool(records, index)
+        assert sizes == [5, 5]
+        assert len(pool) == 10
+
+    def test_real_value_matches_baseline(self) -> None:
+        records, index = self._fixture()
+        baseline = action_only_baseline_report(records, index)
+        floor = action_shuffled_cluster_floor(
+            records, index, baseline, seed=1, n_permutations=10
+        )
+        assert floor["bargaining"]["real"] == pytest.approx(
+            baseline["family_summary"]["bargaining"]["mean_action_spread"]
+        )
+
+    def test_no_value_fabricated_for_empty_family(self) -> None:
+        records, index = self._fixture()
+        baseline = action_only_baseline_report(records, index)
+        floor = action_shuffled_cluster_floor(
+            records, index, baseline, seed=1, n_permutations=5
+        )
+        assert floor["negotiation"]["real"] is None
+        assert floor["negotiation"]["shuffled_mean"] is None
+        assert floor["negotiation"]["n_valid_perms"] == 0
+
+
+class TestMembershipHomogeneityReport:
+    def test_detects_mixed_phase_cluster(self) -> None:
+        steps = [
+            _raw_step(
+                "g1",
+                1,
+                "offer",
+                "bargaining",
+                {"alice_gain": 1, "bob_gain": 1},
+                {"money_to_divide": 2},
+            ),
+            _raw_step("g2", 1, "decision", "bargaining", {"decision": "accept"}),
+        ]
+        index = _raw_index_from_steps(steps)
+        records = [
+            _action_cluster_record(
+                "bargaining_001", "bargaining", ["g1:1:offer", "g2:1:decision"]
+            )
+        ]
+        report = membership_homogeneity_report(records, index)
+        assert report["bargaining"]["n_clusters_mixed_phase"] == 1
+        assert report["bargaining"]["mean_phase_modal_share"] == pytest.approx(0.5)
+
+    def test_homogeneous_cluster_has_full_modal_share(self) -> None:
+        steps = [
+            _raw_step(
+                "g1",
+                1,
+                "decision",
+                "bargaining",
+                {"decision": "accept"},
+                {"history": []},
+            ),
+            _raw_step(
+                "g2",
+                1,
+                "decision",
+                "bargaining",
+                {"decision": "reject"},
+                {"history": []},
+            ),
+        ]
+        index = _raw_index_from_steps(steps)
+        records = [
+            _action_cluster_record(
+                "bargaining_001", "bargaining", ["g1:1:decision", "g2:1:decision"]
+            )
+        ]
+        report = membership_homogeneity_report(records, index)
+        assert report["bargaining"]["n_clusters_mixed_phase"] == 0
+        assert report["bargaining"]["mean_phase_modal_share"] == pytest.approx(1.0)
+        assert report["bargaining"]["mean_round_modal_share"] == pytest.approx(1.0)
+        assert report["bargaining"]["mean_history_length_sd"] == pytest.approx(0.0)
+
+    def test_empty_family_gives_none_not_fabricated(self) -> None:
+        report = membership_homogeneity_report([], {})
+        assert report["bargaining"]["mean_phase_modal_share"] is None
+        assert report["bargaining"]["n_clusters"] == 0
+
+
+def _judge_score_record(
+    cluster_id: str, family: str, member_scores: dict[str, dict[str, float]]
+) -> dict[str, Any]:
+    """A minimal scored-cluster record carrying only ``raw_scores`` for
+    ``valuation_reasoning`` -- enough for :func:`_cluster_judge_mean_spread`
+    without needing a full kappa setup. ``member_scores``: member_id ->
+    ``{judge_name: score}``."""
+    raw_scores = []
+    for member_id, by_judge in member_scores.items():
+        for judge, score in by_judge.items():
+            raw_scores.append(
+                {
+                    "member_id": member_id,
+                    "judge_name": judge,
+                    "valuation_reasoning": score,
+                    "horizon_strategy_planning": None,
+                    "concession_handling": None,
+                    "outcome_consistency": None,
+                    "rationale": "synthetic",
+                    "judge_failed_dimensions": [],
+                }
+            )
+    return {"cluster_id": cluster_id, "game_family": family, "raw_scores": raw_scores}
+
+
+class TestClusterJudgeMeanSpread:
+    def test_sd_of_judge_mean_scores(self) -> None:
+        record = _judge_score_record(
+            "bargaining_001",
+            "bargaining",
+            {
+                "m1": {"GameTheoreticRigor": 1, "LiteralGroundedness": 1},
+                "m2": {"GameTheoreticRigor": 5, "LiteralGroundedness": 5},
+            },
+        )
+        spread = _cluster_judge_mean_spread(
+            record, ["valuation_reasoning"], list(_JUDGES)
+        )
+        assert spread == pytest.approx(float(np.std([1.0, 5.0], ddof=1)))
+
+    def test_none_when_fewer_than_two_members(self) -> None:
+        record = _judge_score_record(
+            "bargaining_001", "bargaining", {"m1": {"GameTheoreticRigor": 3}}
+        )
+        spread = _cluster_judge_mean_spread(
+            record, ["valuation_reasoning"], list(_JUDGES)
+        )
+        assert spread is None
+
+    def test_averages_across_defined_dimensions(self) -> None:
+        raw_scores = [
+            {
+                "member_id": "m1",
+                "judge_name": "GameTheoreticRigor",
+                "valuation_reasoning": 1,
+                "horizon_strategy_planning": 2,
+                "concession_handling": None,
+                "outcome_consistency": None,
+                "rationale": "x",
+                "judge_failed_dimensions": [],
+            },
+            {
+                "member_id": "m2",
+                "judge_name": "GameTheoreticRigor",
+                "valuation_reasoning": 5,
+                "horizon_strategy_planning": 2,
+                "concession_handling": None,
+                "outcome_consistency": None,
+                "rationale": "x",
+                "judge_failed_dimensions": [],
+            },
+        ]
+        record = {
+            "cluster_id": "c1",
+            "game_family": "bargaining",
+            "raw_scores": raw_scores,
+        }
+        spread = _cluster_judge_mean_spread(
+            record, ["valuation_reasoning", "horizon_strategy_planning"], list(_JUDGES)
+        )
+        expected = (float(np.std([1.0, 5.0], ddof=1)) + 0.0) / 2
+        assert spread == pytest.approx(expected)
+
+
+class TestActionJudgeSpreadCorrelation:
+    """Builds 4 bargaining clusters whose action spread and judge-mean
+    spread both increase strictly cluster-over-cluster (by construction,
+    not by chance), so Spearman rho is exactly 1.0 -- an unambiguous
+    rank-correlation check rather than a fuzzy sign assertion. Negotiation
+    and persuasion are left with zero clusters to exercise the
+    insufficient-data -> None branch."""
+
+    def _build(
+        self,
+    ) -> tuple[list[dict[str, Any]], dict[tuple[str, int, str], dict[str, Any]]]:
+        # Cluster A: 4x "accept" -> modal_share=1.0 -> action_spread=0.0
+        # Cluster B: 3x "accept" + 1x "reject" -> modal_share=0.75 -> spread=0.25
+        # Cluster C: 2x "accept" + 2x "reject" -> modal_share=0.5 -> spread=0.5
+        # Cluster D: "accept"/"reject"/"walkaway" (3 distinct, 3 members)
+        #   -> modal_share=1/3 -> spread=2/3
+        decision_plan = {
+            "bargaining_A": ["accept"] * 4,
+            "bargaining_B": ["accept", "accept", "accept", "reject"],
+            "bargaining_C": ["accept", "accept", "reject", "reject"],
+            "bargaining_D": ["accept", "reject", "walkaway"],
+        }
+        # Judge-mean values chosen so their SD is strictly increasing in the
+        # same cluster order as the action spread above.
+        judge_plan = {
+            "bargaining_A": [3, 3, 3, 3],
+            "bargaining_B": [3, 3, 3, 4],
+            "bargaining_C": [2, 3, 4, 5],
+            "bargaining_D": [1, 2, 5],
+        }
+        steps: list[dict[str, Any]] = []
+        records: list[dict[str, Any]] = []
+        game_counter = 0
+        for cluster_id, decisions in decision_plan.items():
+            member_ids = []
+            raw_scores = []
+            judge_values = judge_plan[cluster_id]
+            for decision, judge_value in zip(decisions, judge_values, strict=True):
+                game_counter += 1
+                game_id = f"g{game_counter}"
+                steps.append(
+                    _raw_step(
+                        game_id, 1, "decision", "bargaining", {"decision": decision}
+                    )
+                )
+                member_id = f"{game_id}:1:decision"
+                member_ids.append(member_id)
+                raw_scores.append(
+                    {
+                        "member_id": member_id,
+                        "judge_name": "GameTheoreticRigor",
+                        "valuation_reasoning": judge_value,
+                        "horizon_strategy_planning": None,
+                        "concession_handling": None,
+                        "outcome_consistency": None,
+                        "rationale": "x",
+                        "judge_failed_dimensions": [],
+                    }
+                )
+            records.append(
+                {
+                    "cluster_id": cluster_id,
+                    "game_family": "bargaining",
+                    "sampled_member_ids": member_ids,
+                    "raw_scores": raw_scores,
+                }
+            )
+        index = _raw_index_from_steps(steps)
+        return records, index
+
+    def test_perfect_rank_correlation_detected(self) -> None:
+        records, index = self._build()
+        baseline = action_only_baseline_report(records, index)
+        # Sanity-check the designed monotonic action spreads before
+        # trusting the correlation result.
+        spreads = [
+            baseline["per_cluster"][cid]["action_spread"]
+            for cid in ("bargaining_A", "bargaining_B", "bargaining_C", "bargaining_D")
+        ]
+        assert spreads == sorted(spreads)
+        assert len(set(spreads)) == 4
+
+        result = action_judge_spread_correlation(
+            records, baseline, ["valuation_reasoning"], ["GameTheoreticRigor"]
+        )
+        assert result["bargaining"]["n_clusters_used"] == 4
+        assert result["bargaining"]["spearman_rho"] == pytest.approx(1.0)
+        assert result["bargaining"]["spearman_p"] is not None
+
+    def test_none_when_family_has_no_clusters(self) -> None:
+        records, index = self._build()
+        baseline = action_only_baseline_report(records, index)
+        result = action_judge_spread_correlation(
+            records, baseline, ["valuation_reasoning"], ["GameTheoreticRigor"]
+        )
+        for family in ("negotiation", "persuasion"):
+            assert result[family]["n_clusters_used"] == 0
+            assert result[family]["spearman_rho"] is None
+            assert result[family]["spearman_p"] is None
