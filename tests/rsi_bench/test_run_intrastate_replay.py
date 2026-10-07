@@ -40,6 +40,7 @@ from src.rsi_bench.run_intrastate_replay import (
     _sample_once,
     aggregate_replay,
     build_per_state_temp_reports,
+    build_per_state_temp_reports_with_failures_as_category,
     build_prompt_for_state,
     build_valid_actions,
     compare_with_observational_baseline,
@@ -47,6 +48,7 @@ from src.rsi_bench.run_intrastate_replay import (
     infer_action_type,
     load_intrastate_states,
     per_state_temp_report,
+    per_state_temp_report_with_failures_as_category,
     run_replay,
     unwrap_schema_echo,
 )
@@ -631,6 +633,108 @@ class TestPerStateTempReport:
         reports = build_per_state_temp_reports([state], records)
         assert ("s1", "api_default") in reports
         assert ("s1", "t0") in reports
+        assert reports[("s1", "t0")]["n_samples_total"] == 0
+
+
+class TestPerStateTempReportWithFailuresAsCategory:
+    def _samples(
+        self, actions: list[Any | None], ok_flags: list[bool]
+    ) -> list[dict[str, Any]]:
+        return [
+            {
+                "state_id": "s",
+                "temp_label": "t0",
+                "sample_idx": i,
+                "ok": ok,
+                "api_error": None,
+                "parse_error": None if ok else "bad",
+                "action": a,
+            }
+            for i, (a, ok) in enumerate(zip(actions, ok_flags, strict=True))
+        ]
+
+    def test_failures_pool_into_one_shared_category(self) -> None:
+        state = _make_state(game_family="bargaining", phase="decision")
+        samples = self._samples(
+            actions=[{"decision": "accept"}, None, None, None],
+            ok_flags=[True, False, False, False],
+        )
+        report = per_state_temp_report_with_failures_as_category(state, samples)
+        assert report["n_samples_total"] == 4
+        assert report["n_distinct_labels"] == 2  # "decision:accept" + "parse_failure"
+        assert report["modal_label"] == "parse_failure"
+        assert report["modal_share"] == pytest.approx(3 / 4)
+        assert report["action_spread"] == pytest.approx(1 / 4)
+
+    def test_never_excludes_a_sample_unlike_per_state_temp_report(self) -> None:
+        state = _make_state(game_family="bargaining", phase="decision")
+        samples = self._samples(
+            actions=[{"decision": "accept"}, None],
+            ok_flags=[True, False],
+        )
+        with_failures = per_state_temp_report_with_failures_as_category(state, samples)
+        without_failures = per_state_temp_report(state, samples)
+        assert with_failures["n_samples_total"] == 2
+        # the exclusion-based report's categorical pool has only 1 member
+        # (the failure is dropped, not counted in n_categorical)
+        assert without_failures["n_categorical"] == 1
+        assert without_failures["n_parse_failures"] == 1
+
+    def test_continuous_feature_values_collapse_only_when_identical(self) -> None:
+        state = _make_state(
+            game_family="bargaining",
+            phase="offer",
+            game_state={"phase": "offer", "money_to_divide": 1000},
+        )
+        samples = self._samples(
+            actions=[
+                {"alice_gain": 500, "bob_gain": 500},
+                {"alice_gain": 500, "bob_gain": 500},
+                {"alice_gain": 700, "bob_gain": 300},
+            ],
+            ok_flags=[True, True, True],
+        )
+        report = per_state_temp_report_with_failures_as_category(state, samples)
+        assert report["n_distinct_labels"] == 2  # "value:0.5" twice, "value:0.7" once
+        assert report["modal_share"] == pytest.approx(2 / 3)
+        assert report["action_spread"] == pytest.approx(1 / 3)
+
+    def test_empty_samples_gives_none_not_fabricated(self) -> None:
+        state = _make_state(game_family="bargaining", phase="decision")
+        report = per_state_temp_report_with_failures_as_category(state, [])
+        assert report["modal_share"] is None
+        assert report["action_spread"] is None
+        assert report["n_distinct_labels"] == 0
+
+    def test_build_per_state_temp_reports_with_failures_matches_single_call(
+        self,
+    ) -> None:
+        state = _make_state(state_id="s1", game_family="bargaining", phase="decision")
+        records = [
+            {
+                "state_id": "s1",
+                "temp_label": "api_default",
+                "sample_idx": 0,
+                "ok": True,
+                "api_error": None,
+                "parse_error": None,
+                "action": {"decision": "accept"},
+            },
+            {
+                "state_id": "s1",
+                "temp_label": "api_default",
+                "sample_idx": 1,
+                "ok": False,
+                "api_error": None,
+                "parse_error": "bad",
+                "action": None,
+            },
+        ]
+        reports = build_per_state_temp_reports_with_failures_as_category(
+            [state], records
+        )
+        expected = per_state_temp_report_with_failures_as_category(state, records)
+        assert reports[("s1", "api_default")] == expected
         assert reports[("s1", "t0")]["n_samples_total"] == 0
 
 

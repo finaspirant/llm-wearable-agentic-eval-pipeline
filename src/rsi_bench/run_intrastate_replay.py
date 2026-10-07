@@ -731,6 +731,96 @@ def build_per_state_temp_reports(
     return result
 
 
+def per_state_temp_report_with_failures_as_category(
+    state: dict[str, Any], samples: list[dict[str, Any]]
+) -> dict[str, Any]:
+    """Failure-handling variant of :func:`per_state_temp_report`.
+
+    :func:`per_state_temp_report` EXCLUDES every non-``ok`` sample from the
+    spread/modal-share computation (they are counted separately as
+    ``n_parse_failures``/``n_api_failures``, never folded into the
+    statistic itself). This variant does the opposite: every sample --
+    ok or not -- contributes exactly one label to a single shared
+    categorical label space, so a state/temperature where several samples
+    failed to parse is not silently treated as if it had fewer, cleaner
+    observations.
+
+    Label assignment:
+      - an ``ok`` sample with a ``"categorical"`` action feature
+        contributes that feature's label verbatim.
+      - an ``ok`` sample with a ``"continuous"`` action feature
+        contributes ``f"value:{value}"`` -- two samples that proposed the
+        IDENTICAL numeric value collapse into the same category; two
+        different values do not (this is what lets a continuous-feature
+        state still have a well-defined "modal share" here, at the cost
+        of almost every real-valued sample being its own singleton
+        category in practice).
+      - an ``ok`` sample whose action feature is unextractable
+        (``feature_type is None``) contributes ``"unextractable"``.
+      - every non-``ok`` sample (parse failure OR API failure) --
+        REGARDLESS of its specific error message -- contributes the one
+        single shared label ``"parse_failure"``. This is "each parse
+        failure counted as its own distinct failure category" in the
+        sense of being its own category DISTINCT FROM any real action
+        label, not one category per failure instance.
+
+    ``action_spread`` here is always ``1 - modal_share`` (never the
+    continuous-SD path from :func:`_action_spread`), since every sample
+    now lives in one unified categorical space by construction.
+
+    Returns:
+        ``{"state_id", "game_family", "n_samples_total",
+        "n_distinct_labels", "modal_label", "modal_share",
+        "action_spread"}``.
+    """
+    labels: list[str] = []
+    for sample in samples:
+        if not sample["ok"]:
+            labels.append("parse_failure")
+            continue
+        feature = extract_sample_feature(sample["action"], state)
+        if feature["feature_type"] == "categorical":
+            labels.append(feature["label"])
+        elif feature["feature_type"] == "continuous":
+            labels.append(f"value:{feature['value']}")
+        else:
+            labels.append("unextractable")
+
+    modal_share, modal_label, n_distinct = _modal_share(labels)
+    spread = (1.0 - modal_share) if modal_share is not None else None
+
+    return {
+        "state_id": state["state_id"],
+        "game_family": state["game_family"],
+        "n_samples_total": len(samples),
+        "n_distinct_labels": n_distinct,
+        "modal_label": modal_label,
+        "modal_share": modal_share,
+        "action_spread": spread,
+    }
+
+
+def build_per_state_temp_reports_with_failures_as_category(
+    states: list[dict[str, Any]], scored_records: list[dict[str, Any]]
+) -> dict[tuple[str, str], dict[str, Any]]:
+    """``(state_id, temp_label) -> `` per-state report with failures folded
+    into the label space -- same grouping as
+    :func:`build_per_state_temp_reports`, using
+    :func:`per_state_temp_report_with_failures_as_category` instead."""
+    grouped: dict[tuple[str, str], list[dict[str, Any]]] = {}
+    for rec in scored_records:
+        grouped.setdefault((rec["state_id"], rec["temp_label"]), []).append(rec)
+
+    result: dict[tuple[str, str], dict[str, Any]] = {}
+    for state in states:
+        for temp_label, _ in _TEMPERATURES:
+            samples = grouped.get((state["state_id"], temp_label), [])
+            result[(state["state_id"], temp_label)] = (
+                per_state_temp_report_with_failures_as_category(state, samples)
+            )
+    return result
+
+
 def aggregate_replay(
     states: list[dict[str, Any]],
     per_state_temp: dict[tuple[str, str], dict[str, Any]],
