@@ -1,0 +1,3083 @@
+{
+  "seed": 20261002,
+  "n_clusters": 105,
+  "by_family_n_clusters": {
+    "bargaining": 35,
+    "negotiation": 35,
+    "persuasion": 35
+  },
+  "dimensions": [
+    "valuation_reasoning",
+    "horizon_strategy_planning",
+    "concession_handling",
+    "outcome_consistency"
+  ],
+  "judges": [
+    "GameTheoreticRigor",
+    "LiteralGroundedness",
+    "OpponentResponsiveness"
+  ],
+  "integrity": {
+    "n_mismatches": 0,
+    "mismatches": []
+  },
+  "degenerate_entries": [
+    {
+      "cluster_id": "bargaining_062",
+      "game_family": "bargaining",
+      "dimension": "outcome_consistency",
+      "n_judged_members": 2,
+      "n_items_used_in_kappa": 2,
+      "uniform_score_value": 5,
+      "member_ids": [
+        "2ac5aa78-a88d-4f99-bf32-b712663f284f:14:offer",
+        "e65f5641-4d64-4123-a00a-60209f021435:14:decision"
+      ]
+    },
+    {
+      "cluster_id": "negotiation_002",
+      "game_family": "negotiation",
+      "dimension": "valuation_reasoning",
+      "n_judged_members": 10,
+      "n_items_used_in_kappa": 10,
+      "uniform_score_value": 5,
+      "member_ids": [
+        "0591524e-b28e-4db8-ae98-35aab8ba6e79:1:decision",
+        "0ede95d8-9514-409e-aae5-18792c0e5dea:1:decision",
+        "27e624c7-f6e8-4df3-9d16-7675e1315c94:1:decision",
+        "44a65e44-37f5-4a2b-b80e-e6d570849161:1:decision",
+        "5e836391-1533-4228-a315-c9fe5cbd7b32:1:decision",
+        "709544c2-e304-4a08-8adc-f56ecf553f09:1:decision",
+        "a50f30af-ed0a-4919-8d52-defce2288864:1:decision",
+        "a54c2624-f0f9-4642-a0be-9908a55f9255:1:decision",
+        "ec3d62bb-05f2-4357-88f1-4803b008f70b:1:decision",
+        "ef655db7-c240-4d97-8298-ea50e72ef4e2:1:decision"
+      ]
+    },
+    {
+      "cluster_id": "negotiation_002",
+      "game_family": "negotiation",
+      "dimension": "outcome_consistency",
+      "n_judged_members": 10,
+      "n_items_used_in_kappa": 10,
+      "uniform_score_value": 5,
+      "member_ids": [
+        "0591524e-b28e-4db8-ae98-35aab8ba6e79:1:decision",
+        "0ede95d8-9514-409e-aae5-18792c0e5dea:1:decision",
+        "27e624c7-f6e8-4df3-9d16-7675e1315c94:1:decision",
+        "44a65e44-37f5-4a2b-b80e-e6d570849161:1:decision",
+        "5e836391-1533-4228-a315-c9fe5cbd7b32:1:decision",
+        "709544c2-e304-4a08-8adc-f56ecf553f09:1:decision",
+        "a50f30af-ed0a-4919-8d52-defce2288864:1:decision",
+        "a54c2624-f0f9-4642-a0be-9908a55f9255:1:decision",
+        "ec3d62bb-05f2-4357-88f1-4803b008f70b:1:decision",
+        "ef655db7-c240-4d97-8298-ea50e72ef4e2:1:decision"
+      ]
+    },
+    {
+      "cluster_id": "negotiation_064",
+      "game_family": "negotiation",
+      "dimension": "valuation_reasoning",
+      "n_judged_members": 3,
+      "n_items_used_in_kappa": 3,
+      "uniform_score_value": 5,
+      "member_ids": [
+        "19d2a6ae-f629-40dd-881b-941e377799c0:80:decision",
+        "c2b5c205-1fbb-41ce-a0af-f843cc421095:80:decision",
+        "e249a62b-2382-4e3e-9bb1-9ed3db0058c5:80:decision"
+      ]
+    },
+    {
+      "cluster_id": "negotiation_081",
+      "game_family": "negotiation",
+      "dimension": "valuation_reasoning",
+      "n_judged_members": 2,
+      "n_items_used_in_kappa": 2,
+      "uniform_score_value": 5,
+      "member_ids": [
+        "33df744d-20f8-48b0-80f2-06c2c84e8a6f:41:decision",
+        "65e124c0-5675-4784-afb2-f80cca83f727:41:decision"
+      ]
+    },
+    {
+      "cluster_id": "negotiation_081",
+      "game_family": "negotiation",
+      "dimension": "outcome_consistency",
+      "n_judged_members": 2,
+      "n_items_used_in_kappa": 2,
+      "uniform_score_value": 5,
+      "member_ids": [
+        "33df744d-20f8-48b0-80f2-06c2c84e8a6f:41:decision",
+        "65e124c0-5675-4784-afb2-f80cca83f727:41:decision"
+      ]
+    },
+    {
+      "cluster_id": "persuasion_011",
+      "game_family": "persuasion",
+      "dimension": "outcome_consistency",
+      "n_judged_members": 10,
+      "n_items_used_in_kappa": 10,
+      "uniform_score_value": 5,
+      "member_ids": [
+        "1647669b-f340-40bd-bd75-7cf2a24c710f:1:buyer_decision",
+        "1647669b-f340-40bd-bd75-7cf2a24c710f:2:buyer_decision",
+        "4dd7eb7a-8dfc-4dc6-be93-7b29657ce2c8:1:buyer_decision",
+        "5da60396-e39c-429d-971a-d8b5c10d4fdb:1:buyer_decision",
+        "a0c6a448-a93e-4ec5-a531-a28b0cdda6d1:1:buyer_decision",
+        "b55b97d8-890b-4a23-bf7f-21b5197f7034:1:buyer_decision",
+        "e56b7f08-e0aa-43cd-a226-7e0627ef303e:1:buyer_decision",
+        "e56b7f08-e0aa-43cd-a226-7e0627ef303e:2:buyer_decision",
+        "f307c80f-4299-4aa8-b973-1eb7b6b1297b:1:buyer_decision",
+        "f307c80f-4299-4aa8-b973-1eb7b6b1297b:2:buyer_decision"
+      ]
+    },
+    {
+      "cluster_id": "persuasion_015",
+      "game_family": "persuasion",
+      "dimension": "outcome_consistency",
+      "n_judged_members": 10,
+      "n_items_used_in_kappa": 10,
+      "uniform_score_value": 5,
+      "member_ids": [
+        "1647669b-f340-40bd-bd75-7cf2a24c710f:8:buyer_decision",
+        "1647669b-f340-40bd-bd75-7cf2a24c710f:9:buyer_decision",
+        "3b017a42-61c5-470c-8dfa-b13bce332125:10:buyer_decision",
+        "4dd7eb7a-8dfc-4dc6-be93-7b29657ce2c8:11:buyer_decision",
+        "5da60396-e39c-429d-971a-d8b5c10d4fdb:10:buyer_decision",
+        "5da60396-e39c-429d-971a-d8b5c10d4fdb:8:buyer_decision",
+        "a0c6a448-a93e-4ec5-a531-a28b0cdda6d1:10:buyer_decision",
+        "a0c6a448-a93e-4ec5-a531-a28b0cdda6d1:11:buyer_decision",
+        "b55b97d8-890b-4a23-bf7f-21b5197f7034:10:buyer_decision",
+        "f307c80f-4299-4aa8-b973-1eb7b6b1297b:9:buyer_decision"
+      ]
+    },
+    {
+      "cluster_id": "persuasion_103",
+      "game_family": "persuasion",
+      "dimension": "outcome_consistency",
+      "n_judged_members": 10,
+      "n_items_used_in_kappa": 10,
+      "uniform_score_value": 5,
+      "member_ids": [
+        "0e902e6c-e79d-4e41-aefc-d3a9b3783d21:18:seller_message",
+        "0e902e6c-e79d-4e41-aefc-d3a9b3783d21:19:seller_message",
+        "0e902e6c-e79d-4e41-aefc-d3a9b3783d21:20:seller_message",
+        "26e91cdc-f422-4293-a02d-7efae61bb7f4:18:buyer_decision",
+        "26e91cdc-f422-4293-a02d-7efae61bb7f4:20:buyer_decision",
+        "36b1ed17-4476-4bcf-9266-68ad4645827a:18:seller_message",
+        "36ea5ec9-95c1-482e-81ff-8036537e7d9f:19:buyer_decision",
+        "36ea5ec9-95c1-482e-81ff-8036537e7d9f:20:buyer_decision",
+        "d52f733f-53a2-470c-9456-a0a1376badbf:18:buyer_decision",
+        "d52f733f-53a2-470c-9456-a0a1376badbf:20:buyer_decision"
+      ]
+    },
+    {
+      "cluster_id": "persuasion_113",
+      "game_family": "persuasion",
+      "dimension": "outcome_consistency",
+      "n_judged_members": 10,
+      "n_items_used_in_kappa": 10,
+      "uniform_score_value": 5,
+      "member_ids": [
+        "00d5a05f-526d-4d55-9f47-22d73986bcd2:18:seller_message",
+        "1ecc9056-95e5-4c49-baa1-fe0f8cbc5913:20:seller_message",
+        "2ed3ceec-fff4-455c-821e-601bccecdb04:18:seller_message",
+        "2ed3ceec-fff4-455c-821e-601bccecdb04:19:seller_message",
+        "4397ae7c-d54a-4f61-b38a-7f3207fd02b8:19:buyer_decision",
+        "a9b83dd7-055c-48b4-94f7-42e749ac7494:18:buyer_decision",
+        "b1b2f36c-394b-43c9-be9d-72b396b840f0:20:buyer_decision",
+        "c14a2336-7495-491e-aa5a-36e21d55a01a:20:buyer_decision",
+        "cc08de04-4278-4d97-8c6e-e1aa695dabb4:18:buyer_decision",
+        "f9a1191c-e595-4946-99b1-357adefdc232:20:buyer_decision"
+      ]
+    },
+    {
+      "cluster_id": "persuasion_184",
+      "game_family": "persuasion",
+      "dimension": "outcome_consistency",
+      "n_judged_members": 10,
+      "n_items_used_in_kappa": 10,
+      "uniform_score_value": 5,
+      "member_ids": [
+        "1c103cee-5a2b-4043-89d6-4f2141c34c91:15:buyer_decision",
+        "1c56a597-8491-44b7-bac3-98ca7e608b16:15:buyer_decision",
+        "37c5a85d-ee97-40dd-b00f-ea3cbe7346f2:16:buyer_decision",
+        "3a89095c-e240-4cdd-b016-d4672ab622a1:14:seller_message",
+        "6ed53ef2-7a13-417b-9f76-f584fe793b14:13:buyer_decision",
+        "7848fda4-783d-4428-8c37-dba726f4f54d:13:buyer_decision",
+        "bf045985-31e9-4127-99f3-0467a991f13f:15:buyer_decision",
+        "bf045985-31e9-4127-99f3-0467a991f13f:17:buyer_decision",
+        "f9f0cabf-831c-47c1-9412-816e4bb9babf:16:buyer_decision",
+        "f9f0cabf-831c-47c1-9412-816e4bb9babf:17:buyer_decision"
+      ]
+    },
+    {
+      "cluster_id": "persuasion_188",
+      "game_family": "persuasion",
+      "dimension": "outcome_consistency",
+      "n_judged_members": 10,
+      "n_items_used_in_kappa": 10,
+      "uniform_score_value": 5,
+      "member_ids": [
+        "1c56a597-8491-44b7-bac3-98ca7e608b16:18:buyer_decision",
+        "37c5a85d-ee97-40dd-b00f-ea3cbe7346f2:20:buyer_decision",
+        "6024fe80-5a13-42bd-8a24-efe6121e767d:19:buyer_decision",
+        "6024fe80-5a13-42bd-8a24-efe6121e767d:20:buyer_decision",
+        "7111d230-6ac7-4e78-a9b3-2ced268fadd8:19:buyer_decision",
+        "bf045985-31e9-4127-99f3-0467a991f13f:18:buyer_decision",
+        "bf045985-31e9-4127-99f3-0467a991f13f:20:buyer_decision",
+        "db03eb34-0648-4de3-86ca-d86982c6cba0:20:buyer_decision",
+        "f13cd7ef-9d78-47b4-a62a-ade0aeb22840:18:seller_message",
+        "f13cd7ef-9d78-47b4-a62a-ade0aeb22840:20:seller_message"
+      ]
+    }
+  ],
+  "aggregates": {
+    "with_degenerate": {
+      "valuation_reasoning": {
+        "overall": {
+          "unweighted_mean": 0.06063812416290742,
+          "member_weighted_mean": 0.10663350515143659,
+          "pooled": 0.27588881469658966,
+          "n_clusters": 105,
+          "n_items_pooled": 805
+        },
+        "bargaining": {
+          "unweighted_mean": -0.017016686369457724,
+          "member_weighted_mean": 0.06551719566918565,
+          "pooled": 0.1414652567975831,
+          "n_clusters": 35,
+          "n_items_pooled": 234
+        },
+        "negotiation": {
+          "unweighted_mean": 0.023269227630441303,
+          "member_weighted_mean": 0.040847542672436614,
+          "pooled": 0.02374462372955617,
+          "n_clusters": 35,
+          "n_items_pooled": 221
+        },
+        "persuasion": {
+          "unweighted_mean": 0.17566183122773868,
+          "member_weighted_mean": 0.1756618312277387,
+          "pooled": 0.2368624420401854,
+          "n_clusters": 35,
+          "n_items_pooled": 350
+        }
+      },
+      "horizon_strategy_planning": {
+        "overall": {
+          "unweighted_mean": -0.03603294356271251,
+          "member_weighted_mean": 0.010580361505974792,
+          "pooled": 0.11116360972430525,
+          "n_clusters": 105,
+          "n_items_pooled": 805
+        },
+        "bargaining": {
+          "unweighted_mean": -0.019948438951080966,
+          "member_weighted_mean": 0.07246084813759673,
+          "pooled": 0.13070039295974625,
+          "n_clusters": 35,
+          "n_items_pooled": 234
+        },
+        "negotiation": {
+          "unweighted_mean": -0.11513793549909275,
+          "member_weighted_mean": -0.08092437904344155,
+          "pooled": 0.04491599494998533,
+          "n_clusters": 35,
+          "n_items_pooled": 221
+        },
+        "persuasion": {
+          "unweighted_mean": 0.026987543762036152,
+          "member_weighted_mean": 0.026987543762036152,
+          "pooled": 0.09273303639500821,
+          "n_clusters": 35,
+          "n_items_pooled": 350
+        }
+      },
+      "concession_handling": {
+        "overall": {
+          "unweighted_mean": -0.09759175377714643,
+          "member_weighted_mean": -0.04230659144448367,
+          "pooled": 0.08647416190626256,
+          "n_clusters": 66,
+          "n_items_pooled": 415
+        },
+        "bargaining": {
+          "unweighted_mean": -0.07691000413838986,
+          "member_weighted_mean": 0.02553816111608114,
+          "pooled": 0.10343602947704872,
+          "n_clusters": 32,
+          "n_items_pooled": 204
+        },
+        "negotiation": {
+          "unweighted_mean": -0.11705692990774089,
+          "member_weighted_mean": -0.10790057022341835,
+          "pooled": 0.011381870306582926,
+          "n_clusters": 34,
+          "n_items_pooled": 211
+        },
+        "persuasion": {
+          "unweighted_mean": null,
+          "member_weighted_mean": null,
+          "pooled": null,
+          "n_clusters": 0,
+          "n_items_pooled": 0
+        }
+      },
+      "outcome_consistency": {
+        "overall": {
+          "unweighted_mean": 0.14140123789817224,
+          "member_weighted_mean": 0.18670141503936882,
+          "pooled": 0.23383877550631546,
+          "n_clusters": 105,
+          "n_items_pooled": 805
+        },
+        "bargaining": {
+          "unweighted_mean": 0.04800083787621073,
+          "member_weighted_mean": 0.08412493877377909,
+          "pooled": 0.1394581384307652,
+          "n_clusters": 35,
+          "n_items_pooled": 234
+        },
+        "negotiation": {
+          "unweighted_mean": 0.06886212837302212,
+          "member_weighted_mean": 0.1042540354198108,
+          "pooled": 0.13917031238007496,
+          "n_clusters": 35,
+          "n_items_pooled": 221
+        },
+        "persuasion": {
+          "unweighted_mean": 0.307340747445284,
+          "member_weighted_mean": 0.307340747445284,
+          "pooled": 0.2595204513399147,
+          "n_clusters": 35,
+          "n_items_pooled": 350
+        }
+      },
+      "kappa_overall": {
+        "overall": {
+          "unweighted_mean": 0.04284125107550566,
+          "member_weighted_mean": 0.0922769064916777,
+          "pooled": 0.17684134045836825,
+          "n_clusters": 105,
+          "n_items_pooled": null
+        },
+        "bargaining": {
+          "unweighted_mean": -0.012841667216661,
+          "member_weighted_mean": 0.06405154980556205,
+          "pooled": 0.12876495441628583,
+          "n_clusters": 35,
+          "n_items_pooled": null
+        },
+        "negotiation": {
+          "unweighted_mean": -0.02863128703517501,
+          "member_weighted_mean": -0.0009230793942285441,
+          "pooled": 0.05480320034154985,
+          "n_clusters": 35,
+          "n_items_pooled": null
+        },
+        "persuasion": {
+          "unweighted_mean": 0.16999670747835297,
+          "member_weighted_mean": 0.1699967074783529,
+          "pooled": 0.19637197659170277,
+          "n_clusters": 35,
+          "n_items_pooled": null
+        }
+      }
+    },
+    "without_degenerate": {
+      "valuation_reasoning": {
+        "overall": {
+          "unweighted_mean": 0.03300983369711058,
+          "member_weighted_mean": 0.08967085018595757,
+          "pooled": 0.269260537012625,
+          "n_clusters": 102,
+          "n_items_pooled": 790
+        },
+        "bargaining": {
+          "unweighted_mean": -0.017016686369457724,
+          "member_weighted_mean": 0.06551719566918565,
+          "pooled": 0.1414652567975831,
+          "n_clusters": 35,
+          "n_items_pooled": 234
+        },
+        "negotiation": {
+          "unweighted_mean": -0.06829928227920481,
+          "member_weighted_mean": -0.028993655676657838,
+          "pooled": 0.008077520305780614,
+          "n_clusters": 32,
+          "n_items_pooled": 206
+        },
+        "persuasion": {
+          "unweighted_mean": 0.17566183122773868,
+          "member_weighted_mean": 0.1756618312277387,
+          "pooled": 0.2368624420401854,
+          "n_clusters": 35,
+          "n_items_pooled": 350
+        }
+      },
+      "horizon_strategy_planning": {
+        "overall": {
+          "unweighted_mean": -0.03603294356271251,
+          "member_weighted_mean": 0.010580361505974792,
+          "pooled": 0.11116360972430525,
+          "n_clusters": 105,
+          "n_items_pooled": 805
+        },
+        "bargaining": {
+          "unweighted_mean": -0.019948438951080966,
+          "member_weighted_mean": 0.07246084813759673,
+          "pooled": 0.13070039295974625,
+          "n_clusters": 35,
+          "n_items_pooled": 234
+        },
+        "negotiation": {
+          "unweighted_mean": -0.11513793549909275,
+          "member_weighted_mean": -0.08092437904344155,
+          "pooled": 0.04491599494998533,
+          "n_clusters": 35,
+          "n_items_pooled": 221
+        },
+        "persuasion": {
+          "unweighted_mean": 0.026987543762036152,
+          "member_weighted_mean": 0.026987543762036152,
+          "pooled": 0.09273303639500821,
+          "n_clusters": 35,
+          "n_items_pooled": 350
+        }
+      },
+      "concession_handling": {
+        "overall": {
+          "unweighted_mean": -0.09759175377714643,
+          "member_weighted_mean": -0.04230659144448367,
+          "pooled": 0.08647416190626256,
+          "n_clusters": 66,
+          "n_items_pooled": 415
+        },
+        "bargaining": {
+          "unweighted_mean": -0.07691000413838986,
+          "member_weighted_mean": 0.02553816111608114,
+          "pooled": 0.10343602947704872,
+          "n_clusters": 32,
+          "n_items_pooled": 204
+        },
+        "negotiation": {
+          "unweighted_mean": -0.11705692990774089,
+          "member_weighted_mean": -0.10790057022341835,
+          "pooled": 0.011381870306582926,
+          "n_clusters": 34,
+          "n_items_pooled": 211
+        },
+        "persuasion": {
+          "unweighted_mean": null,
+          "member_weighted_mean": null,
+          "pooled": null,
+          "n_clusters": 0,
+          "n_items_pooled": 0
+        }
+      },
+      "outcome_consistency": {
+        "overall": {
+          "unweighted_mean": 0.06090760395112594,
+          "member_weighted_mean": 0.10437023133610383,
+          "pooled": 0.214188254182099,
+          "n_clusters": 96,
+          "n_items_pooled": 731
+        },
+        "bargaining": {
+          "unweighted_mean": 0.0200008625196287,
+          "member_weighted_mean": 0.07622946410803581,
+          "pooled": 0.13530483620329242,
+          "n_clusters": 34,
+          "n_items_pooled": 232
+        },
+        "negotiation": {
+          "unweighted_mean": 0.012429530092599209,
+          "member_weighted_mean": 0.05282364510898652,
+          "pooled": 0.12680085617848008,
+          "n_clusters": 33,
+          "n_items_pooled": 209
+        },
+        "persuasion": {
+          "unweighted_mean": 0.1640319365718945,
+          "member_weighted_mean": 0.16403193657189452,
+          "pooled": 0.24376262744913724,
+          "n_clusters": 29,
+          "n_items_pooled": 290
+        }
+      },
+      "kappa_overall": {
+        "overall": {
+          "unweighted_mean": 0.007439484687895424,
+          "member_weighted_mean": 0.058109300418623125,
+          "pooled": 0.17027164070632295,
+          "n_clusters": 105,
+          "n_items_pooled": null
+        },
+        "bargaining": {
+          "unweighted_mean": -0.02323127760627139,
+          "member_weighted_mean": 0.060943546697558935,
+          "pooled": 0.12772662885941763,
+          "n_clusters": 35,
+          "n_items_pooled": null
+        },
+        "negotiation": {
+          "unweighted_mean": -0.0664647749758058,
+          "member_weighted_mean": -0.03026190233599267,
+          "pooled": 0.04779406043520724,
+          "n_clusters": 35,
+          "n_items_pooled": null
+        },
+        "persuasion": {
+          "unweighted_mean": 0.1120145066457635,
+          "member_weighted_mean": 0.11201450664576346,
+          "pooled": 0.1911193686281103,
+          "n_clusters": 35,
+          "n_items_pooled": null
+        }
+      }
+    }
+  },
+  "bootstrap": {
+    "seed": 20261002,
+    "n_resamples": 10000,
+    "ci_95": {
+      "kappa_overall": {
+        "overall": {
+          "low": 0.011467586325117688,
+          "high": 0.07654863885906278,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        },
+        "bargaining": {
+          "low": -0.0720781598128167,
+          "high": 0.04649075612754879,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        },
+        "negotiation": {
+          "low": -0.08906402865580265,
+          "high": 0.043749826568328806,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        },
+        "persuasion": {
+          "low": 0.1297673128579567,
+          "high": 0.21130178068507735,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        }
+      },
+      "valuation_reasoning": {
+        "overall": {
+          "low": 0.0112481835867945,
+          "high": 0.11461106024223415,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        },
+        "bargaining": {
+          "low": -0.09526174400696603,
+          "high": 0.06155435661780936,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        },
+        "negotiation": {
+          "low": -0.08217112467441945,
+          "high": 0.14773384408698625,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        },
+        "persuasion": {
+          "low": 0.11061325872602293,
+          "high": 0.2432727446871811,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        }
+      },
+      "horizon_strategy_planning": {
+        "overall": {
+          "low": -0.07300805182949685,
+          "high": 0.001181493923145193,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        },
+        "bargaining": {
+          "low": -0.10226674980274605,
+          "high": 0.0631903288007887,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        },
+        "negotiation": {
+          "low": -0.16698025221137341,
+          "high": -0.06180693837744955,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        },
+        "persuasion": {
+          "low": -0.02422334042725221,
+          "high": 0.07672799468840415,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        }
+      },
+      "concession_handling": {
+        "overall": {
+          "low": -0.14409016650251225,
+          "high": -0.05113446231251208,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        },
+        "bargaining": {
+          "low": -0.1580866161354733,
+          "high": 0.005676910173584092,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        },
+        "negotiation": {
+          "low": -0.16294320905284232,
+          "high": -0.06907359430337809,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        },
+        "persuasion": {
+          "low": null,
+          "high": null,
+          "n_valid_reps": 0,
+          "n_total_reps": 10000
+        }
+      },
+      "outcome_consistency": {
+        "overall": {
+          "low": 0.08540171017122354,
+          "high": 0.2011028633401092,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        },
+        "bargaining": {
+          "low": -0.029099638374553895,
+          "high": 0.1346421128747301,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        },
+        "negotiation": {
+          "low": -0.02156653144135769,
+          "high": 0.17507965944531922,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        },
+        "persuasion": {
+          "low": 0.1954777579768367,
+          "high": 0.42965532886765023,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        }
+      }
+    },
+    "fraction_positive": {
+      "kappa_overall": {
+        "overall": 0.9972,
+        "bargaining": 0.3434,
+        "negotiation": 0.1918,
+        "persuasion": 1.0
+      },
+      "valuation_reasoning": {
+        "overall": 0.993,
+        "bargaining": 0.3394,
+        "negotiation": 0.6377,
+        "persuasion": 1.0
+      },
+      "horizon_strategy_planning": {
+        "overall": 0.0289,
+        "bargaining": 0.3223,
+        "negotiation": 0.0,
+        "persuasion": 0.8554
+      },
+      "concession_handling": {
+        "overall": 0.0,
+        "bargaining": 0.0343,
+        "negotiation": 0.0,
+        "persuasion": null
+      },
+      "outcome_consistency": {
+        "overall": 1.0,
+        "bargaining": 0.8771,
+        "negotiation": 0.9213,
+        "persuasion": 1.0
+      }
+    }
+  },
+  "bootstrap_without_degenerate": {
+    "seed": 20261002,
+    "n_resamples": 10000,
+    "ci_95": {
+      "kappa_overall": {
+        "overall": {
+          "low": -0.022046002171491004,
+          "high": 0.03639741480190027,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        },
+        "bargaining": {
+          "low": -0.08819657085276665,
+          "high": 0.04103414354692685,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        },
+        "negotiation": {
+          "low": -0.1104325989346177,
+          "high": -0.020738683245685275,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        },
+        "persuasion": {
+          "low": 0.0701985281141323,
+          "high": 0.1530142715433141,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        }
+      },
+      "valuation_reasoning": {
+        "overall": {
+          "low": -0.007149337128670001,
+          "high": 0.07351563182267745,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        },
+        "bargaining": {
+          "low": -0.09526174400696603,
+          "high": 0.06155435661780936,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        },
+        "negotiation": {
+          "low": -0.13204374474830263,
+          "high": -0.0015896559920089942,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        },
+        "persuasion": {
+          "low": 0.11061325872602293,
+          "high": 0.2432727446871811,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        }
+      },
+      "horizon_strategy_planning": {
+        "overall": {
+          "low": -0.07300805182949685,
+          "high": 0.001181493923145193,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        },
+        "bargaining": {
+          "low": -0.10226674980274605,
+          "high": 0.0631903288007887,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        },
+        "negotiation": {
+          "low": -0.16698025221137341,
+          "high": -0.06180693837744955,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        },
+        "persuasion": {
+          "low": -0.02422334042725221,
+          "high": 0.07672799468840415,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        }
+      },
+      "concession_handling": {
+        "overall": {
+          "low": -0.14409016650251225,
+          "high": -0.05113446231251208,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        },
+        "bargaining": {
+          "low": -0.1580866161354733,
+          "high": 0.005676910173584092,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        },
+        "negotiation": {
+          "low": -0.16294320905284232,
+          "high": -0.06907359430337809,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        },
+        "persuasion": {
+          "low": null,
+          "high": null,
+          "n_valid_reps": 0,
+          "n_total_reps": 10000
+        }
+      },
+      "outcome_consistency": {
+        "overall": {
+          "low": 0.022975553691883394,
+          "high": 0.09906004697197054,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        },
+        "bargaining": {
+          "low": -0.043030809307127334,
+          "high": 0.08364632636609741,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        },
+        "negotiation": {
+          "low": -0.052960137799204436,
+          "high": 0.07825108923496242,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        },
+        "persuasion": {
+          "low": 0.10129763496418216,
+          "high": 0.22704835780330268,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        }
+      }
+    },
+    "fraction_positive": {
+      "kappa_overall": {
+        "overall": 0.6933,
+        "bargaining": 0.2453,
+        "negotiation": 0.0022,
+        "persuasion": 1.0
+      },
+      "valuation_reasoning": {
+        "overall": 0.9465,
+        "bargaining": 0.3394,
+        "negotiation": 0.0227,
+        "persuasion": 1.0
+      },
+      "horizon_strategy_planning": {
+        "overall": 0.0289,
+        "bargaining": 0.3223,
+        "negotiation": 0.0,
+        "persuasion": 0.8554
+      },
+      "concession_handling": {
+        "overall": 0.0,
+        "bargaining": 0.0343,
+        "negotiation": 0.0,
+        "persuasion": null
+      },
+      "outcome_consistency": {
+        "overall": 0.9996,
+        "bargaining": 0.7288,
+        "negotiation": 0.641,
+        "persuasion": 1.0
+      }
+    }
+  },
+  "judge_agreement": {
+    "valuation_reasoning": {
+      "bargaining": {
+        "distribution": {
+          "1": 0,
+          "2": 58,
+          "3": 260,
+          "4": 236,
+          "5": 148
+        },
+        "n_scores": 702,
+        "frac_ge_4": 0.5470085470085471,
+        "frac_eq_5": 0.21082621082621084,
+        "per_judge_mean": {
+          "GameTheoreticRigor": 3.3547008547008548,
+          "LiteralGroundedness": 4.183760683760684,
+          "OpponentResponsiveness": 3.4871794871794872
+        },
+        "pairwise": {
+          "GameTheoreticRigor|LiteralGroundedness": {
+            "n_items_paired": 234,
+            "exact_agreement": 0.3418803418803419,
+            "within_1_agreement": 0.8076923076923077,
+            "spearman_rho": 0.6570410797958751,
+            "spearman_p": 2.6882481961690463e-30,
+            "cohens_kappa": 0.15894132474443345
+          },
+          "GameTheoreticRigor|OpponentResponsiveness": {
+            "n_items_paired": 234,
+            "exact_agreement": 0.5897435897435898,
+            "within_1_agreement": 0.9700854700854701,
+            "spearman_rho": 0.5914120583535338,
+            "spearman_p": 1.8170337659659867e-23,
+            "cohens_kappa": 0.35588943686202545
+          },
+          "LiteralGroundedness|OpponentResponsiveness": {
+            "n_items_paired": 234,
+            "exact_agreement": 0.2692307692307692,
+            "within_1_agreement": 0.811965811965812,
+            "spearman_rho": 0.39094459527417497,
+            "spearman_p": 5.767641007039253e-10,
+            "cohens_kappa": 0.05363984674329492
+          }
+        }
+      },
+      "negotiation": {
+        "distribution": {
+          "1": 0,
+          "2": 2,
+          "3": 16,
+          "4": 116,
+          "5": 529
+        },
+        "n_scores": 663,
+        "frac_ge_4": 0.9728506787330317,
+        "frac_eq_5": 0.7978883861236803,
+        "per_judge_mean": {
+          "GameTheoreticRigor": 4.828054298642534,
+          "LiteralGroundedness": 4.995475113122172,
+          "OpponentResponsiveness": 4.479638009049774
+        },
+        "pairwise": {
+          "GameTheoreticRigor|LiteralGroundedness": {
+            "n_items_paired": 221,
+            "exact_agreement": 0.8416289592760181,
+            "within_1_agreement": 0.9909502262443439,
+            "spearman_rho": -0.028725744639209634,
+            "spearman_p": 0.6710518330777844,
+            "cohens_kappa": -0.008606076411526997
+          },
+          "GameTheoreticRigor|OpponentResponsiveness": {
+            "n_items_paired": 221,
+            "exact_agreement": 0.6334841628959276,
+            "within_1_agreement": 0.9909502262443439,
+            "spearman_rho": 0.5348582848324257,
+            "spearman_p": 9.403197055188315e-18,
+            "cohens_kappa": 0.23405074665183345
+          },
+          "LiteralGroundedness|OpponentResponsiveness": {
+            "n_items_paired": 221,
+            "exact_agreement": 0.5520361990950227,
+            "within_1_agreement": 0.9321266968325792,
+            "spearman_rho": 0.12277348577158942,
+            "spearman_p": 0.06849950889037175,
+            "cohens_kappa": 0.001779359430605032
+          }
+        }
+      },
+      "persuasion": {
+        "distribution": {
+          "1": 0,
+          "2": 2,
+          "3": 74,
+          "4": 288,
+          "5": 686
+        },
+        "n_scores": 1050,
+        "frac_ge_4": 0.9276190476190476,
+        "frac_eq_5": 0.6533333333333333,
+        "per_judge_mean": {
+          "GameTheoreticRigor": 4.46,
+          "LiteralGroundedness": 4.908571428571428,
+          "OpponentResponsiveness": 4.368571428571428
+        },
+        "pairwise": {
+          "GameTheoreticRigor|LiteralGroundedness": {
+            "n_items_paired": 350,
+            "exact_agreement": 0.5857142857142857,
+            "within_1_agreement": 0.9371428571428572,
+            "spearman_rho": 0.30459458845916976,
+            "spearman_p": 5.996545739945246e-09,
+            "cohens_kappa": 0.09979423868312753
+          },
+          "GameTheoreticRigor|OpponentResponsiveness": {
+            "n_items_paired": 350,
+            "exact_agreement": 0.7485714285714286,
+            "within_1_agreement": 1.0,
+            "spearman_rho": 0.7345325254935862,
+            "spearman_p": 1.4437436963712798e-60,
+            "cohens_kappa": 0.5666244547629098
+          },
+          "LiteralGroundedness|OpponentResponsiveness": {
+            "n_items_paired": 350,
+            "exact_agreement": 0.5371428571428571,
+            "within_1_agreement": 0.9114285714285715,
+            "spearman_rho": 0.2857154604037584,
+            "spearman_p": 5.329912423281818e-08,
+            "cohens_kappa": 0.12499999999999989
+          }
+        }
+      }
+    },
+    "horizon_strategy_planning": {
+      "bargaining": {
+        "distribution": {
+          "1": 0,
+          "2": 50,
+          "3": 363,
+          "4": 228,
+          "5": 61
+        },
+        "n_scores": 702,
+        "frac_ge_4": 0.4116809116809117,
+        "frac_eq_5": 0.0868945868945869,
+        "per_judge_mean": {
+          "GameTheoreticRigor": 3.158119658119658,
+          "LiteralGroundedness": 3.871794871794872,
+          "OpponentResponsiveness": 3.252136752136752
+        },
+        "pairwise": {
+          "GameTheoreticRigor|LiteralGroundedness": {
+            "n_items_paired": 234,
+            "exact_agreement": 0.3247863247863248,
+            "within_1_agreement": 0.9529914529914529,
+            "spearman_rho": 0.6830454907979646,
+            "spearman_p": 1.6785914425686255e-33,
+            "cohens_kappa": 0.04162994452796931
+          },
+          "GameTheoreticRigor|OpponentResponsiveness": {
+            "n_items_paired": 234,
+            "exact_agreement": 0.6837606837606838,
+            "within_1_agreement": 1.0,
+            "spearman_rho": 0.6323951981080217,
+            "spearman_p": 1.5379766901891456e-27,
+            "cohens_kappa": 0.40773677189862156
+          },
+          "LiteralGroundedness|OpponentResponsiveness": {
+            "n_items_paired": 234,
+            "exact_agreement": 0.3888888888888889,
+            "within_1_agreement": 0.9316239316239316,
+            "spearman_rho": 0.5387389048029786,
+            "spearman_p": 5.150947752604528e-19,
+            "cohens_kappa": 0.10624999999999996
+          }
+        }
+      },
+      "negotiation": {
+        "distribution": {
+          "1": 3,
+          "2": 111,
+          "3": 182,
+          "4": 278,
+          "5": 89
+        },
+        "n_scores": 663,
+        "frac_ge_4": 0.5535444947209653,
+        "frac_eq_5": 0.13423831070889894,
+        "per_judge_mean": {
+          "GameTheoreticRigor": 3.158371040723982,
+          "LiteralGroundedness": 4.266968325791855,
+          "OpponentResponsiveness": 3.1085972850678734
+        },
+        "pairwise": {
+          "GameTheoreticRigor|LiteralGroundedness": {
+            "n_items_paired": 221,
+            "exact_agreement": 0.13122171945701358,
+            "within_1_agreement": 0.7601809954751131,
+            "spearman_rho": 0.709823350640721,
+            "spearman_p": 3.530680950283171e-35,
+            "cohens_kappa": -0.14313424391820884
+          },
+          "GameTheoreticRigor|OpponentResponsiveness": {
+            "n_items_paired": 221,
+            "exact_agreement": 0.7194570135746606,
+            "within_1_agreement": 0.995475113122172,
+            "spearman_rho": 0.8105482785539783,
+            "spearman_p": 8.664074461760123e-53,
+            "cohens_kappa": 0.5941711340816871
+          },
+          "LiteralGroundedness|OpponentResponsiveness": {
+            "n_items_paired": 221,
+            "exact_agreement": 0.13574660633484162,
+            "within_1_agreement": 0.7104072398190046,
+            "spearman_rho": 0.7063452589405805,
+            "spearman_p": 1.0464857236478788e-34,
+            "cohens_kappa": -0.10263309127004838
+          }
+        }
+      },
+      "persuasion": {
+        "distribution": {
+          "1": 1,
+          "2": 84,
+          "3": 312,
+          "4": 463,
+          "5": 190
+        },
+        "n_scores": 1050,
+        "frac_ge_4": 0.621904761904762,
+        "frac_eq_5": 0.18095238095238095,
+        "per_judge_mean": {
+          "GameTheoreticRigor": 3.6,
+          "LiteralGroundedness": 4.248571428571428,
+          "OpponentResponsiveness": 3.3142857142857145
+        },
+        "pairwise": {
+          "GameTheoreticRigor|LiteralGroundedness": {
+            "n_items_paired": 350,
+            "exact_agreement": 0.4228571428571429,
+            "within_1_agreement": 0.8942857142857142,
+            "spearman_rho": 0.5298046889995872,
+            "spearman_p": 1.015508806404359e-26,
+            "cohens_kappa": 0.14817224511434013
+          },
+          "GameTheoreticRigor|OpponentResponsiveness": {
+            "n_items_paired": 350,
+            "exact_agreement": 0.49142857142857144,
+            "within_1_agreement": 0.9685714285714285,
+            "spearman_rho": 0.589642495218773,
+            "spearman_p": 3.7524310214932586e-34,
+            "cohens_kappa": 0.25047221453578605
+          },
+          "LiteralGroundedness|OpponentResponsiveness": {
+            "n_items_paired": 350,
+            "exact_agreement": 0.24,
+            "within_1_agreement": 0.8228571428571428,
+            "spearman_rho": 0.6226353495795155,
+            "spearman_p": 5.882474761497602e-39,
+            "cohens_kappa": -0.004369167700523091
+          }
+        }
+      }
+    },
+    "concession_handling": {
+      "bargaining": {
+        "distribution": {
+          "1": 1,
+          "2": 37,
+          "3": 214,
+          "4": 266,
+          "5": 94
+        },
+        "n_scores": 612,
+        "frac_ge_4": 0.5882352941176471,
+        "frac_eq_5": 0.15359477124183007,
+        "per_judge_mean": {
+          "GameTheoreticRigor": 3.4215686274509802,
+          "LiteralGroundedness": 4.176470588235294,
+          "OpponentResponsiveness": 3.4362745098039214
+        },
+        "pairwise": {
+          "GameTheoreticRigor|LiteralGroundedness": {
+            "n_items_paired": 204,
+            "exact_agreement": 0.29411764705882354,
+            "within_1_agreement": 0.9509803921568627,
+            "spearman_rho": 0.6875716246418413,
+            "spearman_p": 6.797466796769414e-30,
+            "cohens_kappa": 0.005417118093174467
+          },
+          "GameTheoreticRigor|OpponentResponsiveness": {
+            "n_items_paired": 204,
+            "exact_agreement": 0.5980392156862745,
+            "within_1_agreement": 0.9656862745098039,
+            "spearman_rho": 0.5975378378497419,
+            "spearman_p": 3.93011562147976e-21,
+            "cohens_kappa": 0.37282543491301745
+          },
+          "LiteralGroundedness|OpponentResponsiveness": {
+            "n_items_paired": 204,
+            "exact_agreement": 0.3284313725490196,
+            "within_1_agreement": 0.8823529411764706,
+            "spearman_rho": 0.5757689922476542,
+            "spearman_p": 2.0838991905461272e-19,
+            "cohens_kappa": 0.05174227258847075
+          }
+        }
+      },
+      "negotiation": {
+        "distribution": {
+          "1": 4,
+          "2": 76,
+          "3": 93,
+          "4": 231,
+          "5": 229
+        },
+        "n_scores": 633,
+        "frac_ge_4": 0.7266982622432859,
+        "frac_eq_5": 0.3617693522906793,
+        "per_judge_mean": {
+          "GameTheoreticRigor": 3.6018957345971563,
+          "LiteralGroundedness": 4.834123222748815,
+          "OpponentResponsiveness": 3.4312796208530805
+        },
+        "pairwise": {
+          "GameTheoreticRigor|LiteralGroundedness": {
+            "n_items_paired": 211,
+            "exact_agreement": 0.14691943127962084,
+            "within_1_agreement": 0.6966824644549763,
+            "spearman_rho": 0.4021412562458093,
+            "spearman_p": 1.3218228826901461e-09,
+            "cohens_kappa": -0.04108988240453937
+          },
+          "GameTheoreticRigor|OpponentResponsiveness": {
+            "n_items_paired": 211,
+            "exact_agreement": 0.5876777251184834,
+            "within_1_agreement": 0.9478672985781991,
+            "spearman_rho": 0.681275631664889,
+            "spearman_p": 3.906988530393592e-30,
+            "cohens_kappa": 0.40598000194155914
+          },
+          "LiteralGroundedness|OpponentResponsiveness": {
+            "n_items_paired": 211,
+            "exact_agreement": 0.1895734597156398,
+            "within_1_agreement": 0.6113744075829384,
+            "spearman_rho": 0.165144886671629,
+            "spearman_p": 0.016344619658130118,
+            "cohens_kappa": 0.008027932807302185
+          }
+        }
+      },
+      "persuasion": {
+        "distribution": {
+          "1": 0,
+          "2": 0,
+          "3": 0,
+          "4": 0,
+          "5": 0
+        },
+        "n_scores": 0,
+        "frac_ge_4": null,
+        "frac_eq_5": null,
+        "per_judge_mean": {
+          "GameTheoreticRigor": null,
+          "LiteralGroundedness": null,
+          "OpponentResponsiveness": null
+        },
+        "pairwise": {
+          "GameTheoreticRigor|LiteralGroundedness": {
+            "n_items_paired": 0,
+            "exact_agreement": null,
+            "within_1_agreement": null,
+            "spearman_rho": null,
+            "spearman_p": null,
+            "cohens_kappa": null
+          },
+          "GameTheoreticRigor|OpponentResponsiveness": {
+            "n_items_paired": 0,
+            "exact_agreement": null,
+            "within_1_agreement": null,
+            "spearman_rho": null,
+            "spearman_p": null,
+            "cohens_kappa": null
+          },
+          "LiteralGroundedness|OpponentResponsiveness": {
+            "n_items_paired": 0,
+            "exact_agreement": null,
+            "within_1_agreement": null,
+            "spearman_rho": null,
+            "spearman_p": null,
+            "cohens_kappa": null
+          }
+        }
+      }
+    },
+    "outcome_consistency": {
+      "bargaining": {
+        "distribution": {
+          "1": 2,
+          "2": 6,
+          "3": 30,
+          "4": 247,
+          "5": 417
+        },
+        "n_scores": 702,
+        "frac_ge_4": 0.9458689458689459,
+        "frac_eq_5": 0.594017094017094,
+        "per_judge_mean": {
+          "GameTheoreticRigor": 4.222222222222222,
+          "LiteralGroundedness": 4.8760683760683765,
+          "OpponentResponsiveness": 4.478632478632479
+        },
+        "pairwise": {
+          "GameTheoreticRigor|LiteralGroundedness": {
+            "n_items_paired": 234,
+            "exact_agreement": 0.4017094017094017,
+            "within_1_agreement": 0.9358974358974359,
+            "spearman_rho": 0.358879375934291,
+            "spearman_p": 1.606992784024874e-08,
+            "cohens_kappa": 0.07240139309680893
+          },
+          "GameTheoreticRigor|OpponentResponsiveness": {
+            "n_items_paired": 234,
+            "exact_agreement": 0.6709401709401709,
+            "within_1_agreement": 0.9957264957264957,
+            "spearman_rho": 0.6332977491536463,
+            "spearman_p": 1.2312548659149251e-27,
+            "cohens_kappa": 0.4296115736490551
+          },
+          "LiteralGroundedness|OpponentResponsiveness": {
+            "n_items_paired": 234,
+            "exact_agreement": 0.5811965811965812,
+            "within_1_agreement": 0.9786324786324786,
+            "spearman_rho": 0.34918491242061445,
+            "spearman_p": 4.0980122816442775e-08,
+            "cohens_kappa": 0.14416868818809492
+          }
+        }
+      },
+      "negotiation": {
+        "distribution": {
+          "1": 0,
+          "2": 0,
+          "3": 18,
+          "4": 129,
+          "5": 516
+        },
+        "n_scores": 663,
+        "frac_ge_4": 0.9728506787330317,
+        "frac_eq_5": 0.7782805429864253,
+        "per_judge_mean": {
+          "GameTheoreticRigor": 4.5565610859728505,
+          "LiteralGroundedness": 5.0,
+          "OpponentResponsiveness": 4.6968325791855206
+        },
+        "pairwise": {
+          "GameTheoreticRigor|LiteralGroundedness": {
+            "n_items_paired": 221,
+            "exact_agreement": 0.6063348416289592,
+            "within_1_agreement": 0.9502262443438914,
+            "spearman_rho": null,
+            "spearman_p": null,
+            "cohens_kappa": 0.0
+          },
+          "GameTheoreticRigor|OpponentResponsiveness": {
+            "n_items_paired": 221,
+            "exact_agreement": 0.746606334841629,
+            "within_1_agreement": 0.995475113122172,
+            "spearman_rho": 0.6141285600057144,
+            "spearman_p": 2.65747091516146e-24,
+            "cohens_kappa": 0.46567653915896734
+          },
+          "LiteralGroundedness|OpponentResponsiveness": {
+            "n_items_paired": 221,
+            "exact_agreement": 0.7285067873303167,
+            "within_1_agreement": 0.9683257918552036,
+            "spearman_rho": null,
+            "spearman_p": null,
+            "cohens_kappa": 0.0
+          }
+        }
+      },
+      "persuasion": {
+        "distribution": {
+          "1": 0,
+          "2": 2,
+          "3": 14,
+          "4": 94,
+          "5": 940
+        },
+        "n_scores": 1050,
+        "frac_ge_4": 0.9847619047619047,
+        "frac_eq_5": 0.8952380952380953,
+        "per_judge_mean": {
+          "GameTheoreticRigor": 4.78,
+          "LiteralGroundedness": 4.997142857142857,
+          "OpponentResponsiveness": 4.857142857142857
+        },
+        "pairwise": {
+          "GameTheoreticRigor|LiteralGroundedness": {
+            "n_items_paired": 350,
+            "exact_agreement": 0.8057142857142857,
+            "within_1_agreement": 0.9771428571428571,
+            "spearman_rho": 0.13146118639966967,
+            "spearman_p": 0.013843213752752801,
+            "cohens_kappa": 0.009282770678100238
+          },
+          "GameTheoreticRigor|OpponentResponsiveness": {
+            "n_items_paired": 350,
+            "exact_agreement": 0.8885714285714286,
+            "within_1_agreement": 0.9971428571428571,
+            "spearman_rho": 0.689302655529375,
+            "spearman_p": 1.1992216004772881e-50,
+            "cohens_kappa": 0.5902254510522049
+          },
+          "LiteralGroundedness|OpponentResponsiveness": {
+            "n_items_paired": 350,
+            "exact_agreement": 0.8828571428571429,
+            "within_1_agreement": 0.9828571428571429,
+            "spearman_rho": 0.16199057147855475,
+            "spearman_p": 0.002367145395102089,
+            "cohens_kappa": 0.018803418803418737
+          }
+        }
+      }
+    }
+  },
+  "shuffled_cluster_floor": {
+    "valuation_reasoning": {
+      "bargaining": {
+        "real": -0.017016686369457724,
+        "shuffled_mean": 0.034956042067262855,
+        "ci_low": -0.016450361803544793,
+        "ci_high": 0.09049373583161564,
+        "n_valid_perms": 1000,
+        "n_total_perms": 1000
+      },
+      "negotiation": {
+        "real": 0.023269227630441303,
+        "shuffled_mean": 0.04270165680988126,
+        "ci_low": -0.04300913745802439,
+        "ci_high": 0.13280638337935052,
+        "n_valid_perms": 1000,
+        "n_total_perms": 1000
+      },
+      "persuasion": {
+        "real": 0.17566183122773868,
+        "shuffled_mean": 0.20336579933997564,
+        "ci_low": 0.18529919323600705,
+        "ci_high": 0.21932494536630068,
+        "n_valid_perms": 1000,
+        "n_total_perms": 1000
+      }
+    },
+    "horizon_strategy_planning": {
+      "bargaining": {
+        "real": -0.019948438951080966,
+        "shuffled_mean": 0.024406598349221164,
+        "ci_low": -0.0284059006210753,
+        "ci_high": 0.08757487274051828,
+        "n_valid_perms": 1000,
+        "n_total_perms": 1000
+      },
+      "negotiation": {
+        "real": -0.11513793549909275,
+        "shuffled_mean": -0.049808507347311154,
+        "ci_low": -0.08758140281209804,
+        "ci_high": -0.011180356798236665,
+        "n_valid_perms": 1000,
+        "n_total_perms": 1000
+      },
+      "persuasion": {
+        "real": 0.026987543762036152,
+        "shuffled_mean": 0.05335934365367304,
+        "ci_low": 0.04072495521286519,
+        "ci_high": 0.06414666463965696,
+        "n_valid_perms": 1000,
+        "n_total_perms": 1000
+      }
+    },
+    "concession_handling": {
+      "bargaining": {
+        "real": -0.07691000413838986,
+        "shuffled_mean": 0.002258235457206168,
+        "ci_low": -0.04365204318442592,
+        "ci_high": 0.05899697887823926,
+        "n_valid_perms": 1000,
+        "n_total_perms": 1000
+      },
+      "negotiation": {
+        "real": -0.11705692990774089,
+        "shuffled_mean": -0.07781436366298813,
+        "ci_low": -0.11666296133021233,
+        "ci_high": -0.037552618136924155,
+        "n_valid_perms": 1000,
+        "n_total_perms": 1000
+      },
+      "persuasion": {
+        "real": null,
+        "shuffled_mean": null,
+        "ci_low": null,
+        "ci_high": null,
+        "n_valid_perms": 0,
+        "n_total_perms": 1000
+      }
+    },
+    "outcome_consistency": {
+      "bargaining": {
+        "real": 0.04800083787621073,
+        "shuffled_mean": 0.07096256985846597,
+        "ci_low": 0.004033088108291093,
+        "ci_high": 0.14694607710387922,
+        "n_valid_perms": 1000,
+        "n_total_perms": 1000
+      },
+      "negotiation": {
+        "real": 0.06886212837302212,
+        "shuffled_mean": 0.1516380139391133,
+        "ci_low": 0.06588868453590728,
+        "ci_high": 0.24216225561239127,
+        "n_valid_perms": 1000,
+        "n_total_perms": 1000
+      },
+      "persuasion": {
+        "real": 0.307340747445284,
+        "shuffled_mean": 0.27999521172428365,
+        "ci_low": 0.21147034290586297,
+        "ci_high": 0.34857833530141275,
+        "n_valid_perms": 1000,
+        "n_total_perms": 1000
+      }
+    },
+    "kappa_overall": {
+      "bargaining": {
+        "real": -0.012841667216661,
+        "shuffled_mean": 0.03207689887847874,
+        "ci_low": -0.0027530536646661816,
+        "ci_high": 0.07157014107268103,
+        "n_valid_perms": 1000,
+        "n_total_perms": 1000
+      },
+      "negotiation": {
+        "real": -0.02863128703517501,
+        "shuffled_mean": 0.017933881152351977,
+        "ci_low": -0.02008210188251563,
+        "ci_high": 0.06040355362481249,
+        "n_valid_perms": 1000,
+        "n_total_perms": 1000
+      },
+      "persuasion": {
+        "real": 0.16999670747835297,
+        "shuffled_mean": 0.1789067849059775,
+        "ci_low": 0.1556527659219476,
+        "ci_high": 0.2041768801111171,
+        "n_valid_perms": 1000,
+        "n_total_perms": 1000
+      }
+    }
+  },
+  "dependence": {
+    "bargaining": {
+      "n_clusters": 35,
+      "distinct_games": 139,
+      "mean_clusters_per_game": 1.60431654676259,
+      "share_clusters_sharing_a_game": 0.9428571428571428
+    },
+    "negotiation": {
+      "n_clusters": 35,
+      "distinct_games": 125,
+      "mean_clusters_per_game": 1.768,
+      "share_clusters_sharing_a_game": 1.0
+    },
+    "persuasion": {
+      "n_clusters": 35,
+      "distinct_games": 246,
+      "mean_clusters_per_game": 1.0975609756097562,
+      "share_clusters_sharing_a_game": 0.34285714285714286
+    }
+  },
+  "cluster_components": {
+    "bargaining": {
+      "n_clusters": 35,
+      "n_components": 7,
+      "component_sizes": [
+        14,
+        7,
+        6,
+        4,
+        2,
+        1,
+        1
+      ],
+      "largest_component_size": 14
+    },
+    "negotiation": {
+      "n_clusters": 35,
+      "n_components": 5,
+      "component_sizes": [
+        21,
+        4,
+        4,
+        3,
+        3
+      ],
+      "largest_component_size": 21
+    },
+    "persuasion": {
+      "n_clusters": 35,
+      "n_components": 29,
+      "component_sizes": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "largest_component_size": 2
+    }
+  },
+  "game_level_bootstrap": {
+    "seed": 20261002,
+    "n_resamples": 10000,
+    "ci_95": {
+      "kappa_overall": {
+        "overall": {
+          "low": -0.04309452710963636,
+          "high": 0.07912231559711372,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        },
+        "bargaining": {
+          "low": -0.11759423457131482,
+          "high": 0.10447335252582728,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        },
+        "negotiation": {
+          "low": -0.14925385117765883,
+          "high": 0.053827463827243446,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        },
+        "persuasion": {
+          "low": 0.06981962512335271,
+          "high": 0.15386382049388556,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        }
+      },
+      "valuation_reasoning": {
+        "overall": {
+          "low": -0.03701933560127356,
+          "high": 0.130131960168112,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        },
+        "bargaining": {
+          "low": -0.14538257556788078,
+          "high": 0.17128982162795944,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        },
+        "negotiation": {
+          "low": -0.1593734157452302,
+          "high": 0.05973383088494993,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        },
+        "persuasion": {
+          "low": 0.11478219865647314,
+          "high": 0.2439959847277032,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        }
+      },
+      "horizon_strategy_planning": {
+        "overall": {
+          "low": -0.07829631976997944,
+          "high": 0.029199477844816614,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        },
+        "bargaining": {
+          "low": -0.0982911932204975,
+          "high": 0.13848931156532746,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        },
+        "negotiation": {
+          "low": -0.21193623175597417,
+          "high": 0.011877329663924812,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        },
+        "persuasion": {
+          "low": -0.019831417814738427,
+          "high": 0.07802926278570688,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        }
+      },
+      "concession_handling": {
+        "overall": {
+          "low": -0.15527626863955463,
+          "high": -0.013834314082593198,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        },
+        "bargaining": {
+          "low": -0.1736880638695879,
+          "high": 0.0665252278383352,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        },
+        "negotiation": {
+          "low": -0.1824833107366826,
+          "high": -0.03570232636182607,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        },
+        "persuasion": {
+          "low": null,
+          "high": null,
+          "n_valid_reps": 0,
+          "n_total_reps": 10000
+        }
+      },
+      "outcome_consistency": {
+        "overall": {
+          "low": 0.016732025253443583,
+          "high": 0.11727419726284295,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        },
+        "bargaining": {
+          "low": -0.05720551240361597,
+          "high": 0.10797009548158396,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        },
+        "negotiation": {
+          "low": -0.06663781515591388,
+          "high": 0.10300748432979306,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        },
+        "persuasion": {
+          "low": 0.09526062202972821,
+          "high": 0.2314397338408507,
+          "n_valid_reps": 10000,
+          "n_total_reps": 10000
+        }
+      }
+    },
+    "fraction_positive": {
+      "kappa_overall": {
+        "overall": 0.6215,
+        "bargaining": 0.3659,
+        "negotiation": 0.086,
+        "persuasion": 1.0
+      },
+      "valuation_reasoning": {
+        "overall": 0.8147,
+        "bargaining": 0.4214,
+        "negotiation": 0.1178,
+        "persuasion": 1.0
+      },
+      "horizon_strategy_planning": {
+        "overall": 0.1206,
+        "bargaining": 0.392,
+        "negotiation": 0.0334,
+        "persuasion": 0.8671
+      },
+      "concession_handling": {
+        "overall": 0.0098,
+        "bargaining": 0.3313,
+        "negotiation": 0.0055,
+        "persuasion": null
+      },
+      "outcome_consistency": {
+        "overall": 0.9978,
+        "bargaining": 0.6707,
+        "negotiation": 0.7212,
+        "persuasion": 1.0
+      }
+    }
+  },
+  "game_level_audit": {
+    "kappa_overall": {
+      "overall": {
+        "unweighted_mean": 0.007439484687895424,
+        "member_weighted_mean": 0.058109300418623125,
+        "pooled": 0.17027164070632295,
+        "cluster_ci_low": -0.022046002171491004,
+        "cluster_ci_high": 0.03639741480190027,
+        "game_ci_low": -0.04309452710963636,
+        "game_ci_high": 0.07912231559711372,
+        "cluster_ci_width": 0.058443416973391275,
+        "game_ci_width": 0.12221684270675008,
+        "point_estimate_in_cluster_ci": true,
+        "point_estimate_in_game_ci": true,
+        "game_ci_at_least_as_wide_as_cluster_ci": true
+      },
+      "bargaining": {
+        "unweighted_mean": -0.02323127760627139,
+        "member_weighted_mean": 0.060943546697558935,
+        "pooled": 0.12772662885941763,
+        "cluster_ci_low": -0.08819657085276665,
+        "cluster_ci_high": 0.04103414354692685,
+        "game_ci_low": -0.11759423457131482,
+        "game_ci_high": 0.10447335252582728,
+        "cluster_ci_width": 0.1292307143996935,
+        "game_ci_width": 0.22206758709714208,
+        "point_estimate_in_cluster_ci": true,
+        "point_estimate_in_game_ci": true,
+        "game_ci_at_least_as_wide_as_cluster_ci": true
+      },
+      "negotiation": {
+        "unweighted_mean": -0.0664647749758058,
+        "member_weighted_mean": -0.03026190233599267,
+        "pooled": 0.04779406043520724,
+        "cluster_ci_low": -0.1104325989346177,
+        "cluster_ci_high": -0.020738683245685275,
+        "game_ci_low": -0.14925385117765883,
+        "game_ci_high": 0.053827463827243446,
+        "cluster_ci_width": 0.08969391568893242,
+        "game_ci_width": 0.20308131500490229,
+        "point_estimate_in_cluster_ci": true,
+        "point_estimate_in_game_ci": true,
+        "game_ci_at_least_as_wide_as_cluster_ci": true
+      },
+      "persuasion": {
+        "unweighted_mean": 0.1120145066457635,
+        "member_weighted_mean": 0.11201450664576346,
+        "pooled": 0.1911193686281103,
+        "cluster_ci_low": 0.0701985281141323,
+        "cluster_ci_high": 0.1530142715433141,
+        "game_ci_low": 0.06981962512335271,
+        "game_ci_high": 0.15386382049388556,
+        "cluster_ci_width": 0.0828157434291818,
+        "game_ci_width": 0.08404419537053284,
+        "point_estimate_in_cluster_ci": true,
+        "point_estimate_in_game_ci": true,
+        "game_ci_at_least_as_wide_as_cluster_ci": true
+      }
+    },
+    "valuation_reasoning": {
+      "overall": {
+        "unweighted_mean": 0.03300983369711058,
+        "member_weighted_mean": 0.08967085018595757,
+        "pooled": 0.269260537012625,
+        "cluster_ci_low": -0.007149337128670001,
+        "cluster_ci_high": 0.07351563182267745,
+        "game_ci_low": -0.03701933560127356,
+        "game_ci_high": 0.130131960168112,
+        "cluster_ci_width": 0.08066496895134745,
+        "game_ci_width": 0.16715129576938553,
+        "point_estimate_in_cluster_ci": true,
+        "point_estimate_in_game_ci": true,
+        "game_ci_at_least_as_wide_as_cluster_ci": true
+      },
+      "bargaining": {
+        "unweighted_mean": -0.017016686369457724,
+        "member_weighted_mean": 0.06551719566918565,
+        "pooled": 0.1414652567975831,
+        "cluster_ci_low": -0.09526174400696603,
+        "cluster_ci_high": 0.06155435661780936,
+        "game_ci_low": -0.14538257556788078,
+        "game_ci_high": 0.17128982162795944,
+        "cluster_ci_width": 0.15681610062477538,
+        "game_ci_width": 0.3166723971958402,
+        "point_estimate_in_cluster_ci": true,
+        "point_estimate_in_game_ci": true,
+        "game_ci_at_least_as_wide_as_cluster_ci": true
+      },
+      "negotiation": {
+        "unweighted_mean": -0.06829928227920481,
+        "member_weighted_mean": -0.028993655676657838,
+        "pooled": 0.008077520305780614,
+        "cluster_ci_low": -0.13204374474830263,
+        "cluster_ci_high": -0.0015896559920089942,
+        "game_ci_low": -0.1593734157452302,
+        "game_ci_high": 0.05973383088494993,
+        "cluster_ci_width": 0.13045408875629363,
+        "game_ci_width": 0.21910724663018014,
+        "point_estimate_in_cluster_ci": true,
+        "point_estimate_in_game_ci": true,
+        "game_ci_at_least_as_wide_as_cluster_ci": true
+      },
+      "persuasion": {
+        "unweighted_mean": 0.17566183122773868,
+        "member_weighted_mean": 0.1756618312277387,
+        "pooled": 0.2368624420401854,
+        "cluster_ci_low": 0.11061325872602293,
+        "cluster_ci_high": 0.2432727446871811,
+        "game_ci_low": 0.11478219865647314,
+        "game_ci_high": 0.2439959847277032,
+        "cluster_ci_width": 0.13265948596115817,
+        "game_ci_width": 0.12921378607123007,
+        "point_estimate_in_cluster_ci": true,
+        "point_estimate_in_game_ci": true,
+        "game_ci_at_least_as_wide_as_cluster_ci": false
+      }
+    },
+    "horizon_strategy_planning": {
+      "overall": {
+        "unweighted_mean": -0.03603294356271251,
+        "member_weighted_mean": 0.010580361505974792,
+        "pooled": 0.11116360972430525,
+        "cluster_ci_low": -0.07300805182949685,
+        "cluster_ci_high": 0.001181493923145193,
+        "game_ci_low": -0.07829631976997944,
+        "game_ci_high": 0.029199477844816614,
+        "cluster_ci_width": 0.07418954575264204,
+        "game_ci_width": 0.10749579761479605,
+        "point_estimate_in_cluster_ci": true,
+        "point_estimate_in_game_ci": true,
+        "game_ci_at_least_as_wide_as_cluster_ci": true
+      },
+      "bargaining": {
+        "unweighted_mean": -0.019948438951080966,
+        "member_weighted_mean": 0.07246084813759673,
+        "pooled": 0.13070039295974625,
+        "cluster_ci_low": -0.10226674980274605,
+        "cluster_ci_high": 0.0631903288007887,
+        "game_ci_low": -0.0982911932204975,
+        "game_ci_high": 0.13848931156532746,
+        "cluster_ci_width": 0.16545707860353476,
+        "game_ci_width": 0.23678050478582496,
+        "point_estimate_in_cluster_ci": true,
+        "point_estimate_in_game_ci": true,
+        "game_ci_at_least_as_wide_as_cluster_ci": true
+      },
+      "negotiation": {
+        "unweighted_mean": -0.11513793549909275,
+        "member_weighted_mean": -0.08092437904344155,
+        "pooled": 0.04491599494998533,
+        "cluster_ci_low": -0.16698025221137341,
+        "cluster_ci_high": -0.06180693837744955,
+        "game_ci_low": -0.21193623175597417,
+        "game_ci_high": 0.011877329663924812,
+        "cluster_ci_width": 0.10517331383392386,
+        "game_ci_width": 0.223813561419899,
+        "point_estimate_in_cluster_ci": true,
+        "point_estimate_in_game_ci": true,
+        "game_ci_at_least_as_wide_as_cluster_ci": true
+      },
+      "persuasion": {
+        "unweighted_mean": 0.026987543762036152,
+        "member_weighted_mean": 0.026987543762036152,
+        "pooled": 0.09273303639500821,
+        "cluster_ci_low": -0.02422334042725221,
+        "cluster_ci_high": 0.07672799468840415,
+        "game_ci_low": -0.019831417814738427,
+        "game_ci_high": 0.07802926278570688,
+        "cluster_ci_width": 0.10095133511565635,
+        "game_ci_width": 0.09786068060044531,
+        "point_estimate_in_cluster_ci": true,
+        "point_estimate_in_game_ci": true,
+        "game_ci_at_least_as_wide_as_cluster_ci": false
+      }
+    },
+    "concession_handling": {
+      "overall": {
+        "unweighted_mean": -0.09759175377714643,
+        "member_weighted_mean": -0.04230659144448367,
+        "pooled": 0.08647416190626256,
+        "cluster_ci_low": -0.14409016650251225,
+        "cluster_ci_high": -0.05113446231251208,
+        "game_ci_low": -0.15527626863955463,
+        "game_ci_high": -0.013834314082593198,
+        "cluster_ci_width": 0.09295570419000017,
+        "game_ci_width": 0.14144195455696143,
+        "point_estimate_in_cluster_ci": true,
+        "point_estimate_in_game_ci": true,
+        "game_ci_at_least_as_wide_as_cluster_ci": true
+      },
+      "bargaining": {
+        "unweighted_mean": -0.07691000413838986,
+        "member_weighted_mean": 0.02553816111608114,
+        "pooled": 0.10343602947704872,
+        "cluster_ci_low": -0.1580866161354733,
+        "cluster_ci_high": 0.005676910173584092,
+        "game_ci_low": -0.1736880638695879,
+        "game_ci_high": 0.0665252278383352,
+        "cluster_ci_width": 0.1637635263090574,
+        "game_ci_width": 0.2402132917079231,
+        "point_estimate_in_cluster_ci": true,
+        "point_estimate_in_game_ci": true,
+        "game_ci_at_least_as_wide_as_cluster_ci": true
+      },
+      "negotiation": {
+        "unweighted_mean": -0.11705692990774089,
+        "member_weighted_mean": -0.10790057022341835,
+        "pooled": 0.011381870306582926,
+        "cluster_ci_low": -0.16294320905284232,
+        "cluster_ci_high": -0.06907359430337809,
+        "game_ci_low": -0.1824833107366826,
+        "game_ci_high": -0.03570232636182607,
+        "cluster_ci_width": 0.09386961474946423,
+        "game_ci_width": 0.14678098437485654,
+        "point_estimate_in_cluster_ci": true,
+        "point_estimate_in_game_ci": true,
+        "game_ci_at_least_as_wide_as_cluster_ci": true
+      },
+      "persuasion": {
+        "unweighted_mean": null,
+        "member_weighted_mean": null,
+        "pooled": null,
+        "cluster_ci_low": null,
+        "cluster_ci_high": null,
+        "game_ci_low": null,
+        "game_ci_high": null,
+        "cluster_ci_width": null,
+        "game_ci_width": null,
+        "point_estimate_in_cluster_ci": null,
+        "point_estimate_in_game_ci": null,
+        "game_ci_at_least_as_wide_as_cluster_ci": null
+      }
+    },
+    "outcome_consistency": {
+      "overall": {
+        "unweighted_mean": 0.06090760395112594,
+        "member_weighted_mean": 0.10437023133610383,
+        "pooled": 0.214188254182099,
+        "cluster_ci_low": 0.022975553691883394,
+        "cluster_ci_high": 0.09906004697197054,
+        "game_ci_low": 0.016732025253443583,
+        "game_ci_high": 0.11727419726284295,
+        "cluster_ci_width": 0.07608449328008715,
+        "game_ci_width": 0.10054217200939937,
+        "point_estimate_in_cluster_ci": true,
+        "point_estimate_in_game_ci": true,
+        "game_ci_at_least_as_wide_as_cluster_ci": true
+      },
+      "bargaining": {
+        "unweighted_mean": 0.0200008625196287,
+        "member_weighted_mean": 0.07622946410803581,
+        "pooled": 0.13530483620329242,
+        "cluster_ci_low": -0.043030809307127334,
+        "cluster_ci_high": 0.08364632636609741,
+        "game_ci_low": -0.05720551240361597,
+        "game_ci_high": 0.10797009548158396,
+        "cluster_ci_width": 0.12667713567322475,
+        "game_ci_width": 0.16517560788519992,
+        "point_estimate_in_cluster_ci": true,
+        "point_estimate_in_game_ci": true,
+        "game_ci_at_least_as_wide_as_cluster_ci": true
+      },
+      "negotiation": {
+        "unweighted_mean": 0.012429530092599209,
+        "member_weighted_mean": 0.05282364510898652,
+        "pooled": 0.12680085617848008,
+        "cluster_ci_low": -0.052960137799204436,
+        "cluster_ci_high": 0.07825108923496242,
+        "game_ci_low": -0.06663781515591388,
+        "game_ci_high": 0.10300748432979306,
+        "cluster_ci_width": 0.13121122703416685,
+        "game_ci_width": 0.16964529948570695,
+        "point_estimate_in_cluster_ci": true,
+        "point_estimate_in_game_ci": true,
+        "game_ci_at_least_as_wide_as_cluster_ci": true
+      },
+      "persuasion": {
+        "unweighted_mean": 0.1640319365718945,
+        "member_weighted_mean": 0.16403193657189452,
+        "pooled": 0.24376262744913724,
+        "cluster_ci_low": 0.10129763496418216,
+        "cluster_ci_high": 0.22704835780330268,
+        "game_ci_low": 0.09526062202972821,
+        "game_ci_high": 0.2314397338408507,
+        "cluster_ci_width": 0.12575072283912053,
+        "game_ci_width": 0.1361791118111225,
+        "point_estimate_in_cluster_ci": true,
+        "point_estimate_in_game_ci": true,
+        "game_ci_at_least_as_wide_as_cluster_ci": true
+      }
+    }
+  },
+  "offset_robust_agreement": {
+    "valuation_reasoning": {
+      "bargaining": {
+        "icc_3_1_consistency": 0.5397434739409268,
+        "krippendorff_alpha_ordinal": 0.46248561135736344,
+        "n_items": 234,
+        "n_judges": 3
+      },
+      "negotiation": {
+        "icc_3_1_consistency": 0.27757150715071516,
+        "krippendorff_alpha_ordinal": 0.12956045518320325,
+        "n_items": 221,
+        "n_judges": 3
+      },
+      "persuasion": {
+        "icc_3_1_consistency": 0.4704589414454018,
+        "krippendorff_alpha_ordinal": 0.4096730935412851,
+        "n_items": 350,
+        "n_judges": 3
+      }
+    },
+    "horizon_strategy_planning": {
+      "bargaining": {
+        "icc_3_1_consistency": 0.6214027113448373,
+        "krippendorff_alpha_ordinal": 0.5234821227070012,
+        "n_items": 234,
+        "n_judges": 3
+      },
+      "negotiation": {
+        "icc_3_1_consistency": 0.701467346376412,
+        "krippendorff_alpha_ordinal": 0.6271259848766524,
+        "n_items": 221,
+        "n_judges": 3
+      },
+      "persuasion": {
+        "icc_3_1_consistency": 0.5827636868684483,
+        "krippendorff_alpha_ordinal": 0.5251731585464263,
+        "n_items": 350,
+        "n_judges": 3
+      }
+    },
+    "concession_handling": {
+      "bargaining": {
+        "icc_3_1_consistency": 0.5885116314085674,
+        "krippendorff_alpha_ordinal": 0.5465271740385673,
+        "n_items": 204,
+        "n_judges": 3
+      },
+      "negotiation": {
+        "icc_3_1_consistency": 0.41205730659025774,
+        "krippendorff_alpha_ordinal": 0.3473126010857196,
+        "n_items": 211,
+        "n_judges": 3
+      },
+      "persuasion": {
+        "icc_3_1_consistency": null,
+        "krippendorff_alpha_ordinal": null,
+        "n_items": 0,
+        "n_judges": 3
+      }
+    },
+    "outcome_consistency": {
+      "bargaining": {
+        "icc_3_1_consistency": 0.5381344811295993,
+        "krippendorff_alpha_ordinal": 0.4115046660715971,
+        "n_items": 234,
+        "n_judges": 3
+      },
+      "negotiation": {
+        "icc_3_1_consistency": 0.3008770772883142,
+        "krippendorff_alpha_ordinal": 0.2130715150718704,
+        "n_items": 221,
+        "n_judges": 3
+      },
+      "persuasion": {
+        "icc_3_1_consistency": 0.3657534246575344,
+        "krippendorff_alpha_ordinal": -0.03986854590470501,
+        "n_items": 350,
+        "n_judges": 3
+      }
+    }
+  },
+  "leave_one_judge_out": {
+    "excluded_judge": "LiteralGroundedness",
+    "remaining_judges": [
+      "GameTheoreticRigor",
+      "OpponentResponsiveness"
+    ],
+    "aggregates": {
+      "with_degenerate": {
+        "valuation_reasoning": {
+          "overall": {
+            "unweighted_mean": 0.2730363314887001,
+            "member_weighted_mean": 0.33237669793750513,
+            "pooled": 0.49605192442845925,
+            "n_clusters": 105,
+            "n_items_pooled": 805
+          },
+          "bargaining": {
+            "unweighted_mean": 0.2405946650245728,
+            "member_weighted_mean": 0.2744441621326092,
+            "pooled": 0.3502162185615319,
+            "n_clusters": 35,
+            "n_items_pooled": 234
+          },
+          "negotiation": {
+            "unweighted_mean": 0.08296001158503792,
+            "member_weighted_mean": 0.13529093507189796,
+            "pooled": 0.1712308155281372,
+            "n_clusters": 35,
+            "n_items_pooled": 221
+          },
+          "persuasion": {
+            "unweighted_mean": 0.4955543178564902,
+            "member_weighted_mean": 0.4955543178564901,
+            "pooled": 0.564516585131352,
+            "n_clusters": 35,
+            "n_items_pooled": 350
+          }
+        },
+        "horizon_strategy_planning": {
+          "overall": {
+            "unweighted_mean": 0.29320009665006647,
+            "member_weighted_mean": 0.2884467614002698,
+            "pooled": 0.4053359086348274,
+            "n_clusters": 105,
+            "n_items_pooled": 805
+          },
+          "bargaining": {
+            "unweighted_mean": 0.31735720881642704,
+            "member_weighted_mean": 0.34426079827489153,
+            "pooled": 0.40671200726363227,
+            "n_clusters": 35,
+            "n_items_pooled": 234
+          },
+          "negotiation": {
+            "unweighted_mean": 0.4077981284917077,
+            "member_weighted_mean": 0.44156960500529446,
+            "pooled": 0.5931347804139323,
+            "n_clusters": 35,
+            "n_items_pooled": 221
+          },
+          "persuasion": {
+            "unweighted_mean": 0.15444495264206415,
+            "member_weighted_mean": 0.15444495264206418,
+            "pooled": 0.24160808302139436,
+            "n_clusters": 35,
+            "n_items_pooled": 350
+          }
+        },
+        "concession_handling": {
+          "overall": {
+            "unweighted_mean": 0.21238685052779646,
+            "member_weighted_mean": 0.26661434395712214,
+            "pooled": 0.3987853123084637,
+            "n_clusters": 66,
+            "n_items_pooled": 415
+          },
+          "bargaining": {
+            "unweighted_mean": 0.19771243605278715,
+            "member_weighted_mean": 0.27968325243421327,
+            "pooled": 0.3623298898334159,
+            "n_clusters": 32,
+            "n_items_pooled": 204
+          },
+          "negotiation": {
+            "unweighted_mean": 0.22619806415133462,
+            "member_weighted_mean": 0.2539790011641054,
+            "pooled": 0.4001862471205214,
+            "n_clusters": 34,
+            "n_items_pooled": 211
+          },
+          "persuasion": {
+            "unweighted_mean": null,
+            "member_weighted_mean": null,
+            "pooled": null,
+            "n_clusters": 0,
+            "n_items_pooled": 0
+          }
+        },
+        "outcome_consistency": {
+          "overall": {
+            "unweighted_mean": 0.37044850971373,
+            "member_weighted_mean": 0.4313702411018138,
+            "pooled": 0.53689907001868,
+            "n_clusters": 105,
+            "n_items_pooled": 805
+          },
+          "bargaining": {
+            "unweighted_mean": 0.24343772548727052,
+            "member_weighted_mean": 0.34308896389118304,
+            "pooled": 0.41712899312575813,
+            "n_clusters": 35,
+            "n_items_pooled": 234
+          },
+          "negotiation": {
+            "unweighted_mean": 0.3347004894052377,
+            "member_weighted_mean": 0.3635641020334146,
+            "pooled": 0.45822662901919586,
+            "n_clusters": 35,
+            "n_items_pooled": 221
+          },
+          "persuasion": {
+            "unweighted_mean": 0.5332073142486818,
+            "member_weighted_mean": 0.5332073142486816,
+            "pooled": 0.5859558656252369,
+            "n_clusters": 35,
+            "n_items_pooled": 350
+          }
+        },
+        "kappa_overall": {
+          "overall": {
+            "unweighted_mean": 0.3046625926594841,
+            "member_weighted_mean": 0.34582275300386356,
+            "pooled": 0.45926805384760755,
+            "n_clusters": 105,
+            "n_items_pooled": null
+          },
+          "bargaining": {
+            "unweighted_mean": 0.25213631646180756,
+            "member_weighted_mean": 0.311273146930786,
+            "pooled": 0.3840967771960846,
+            "n_clusters": 35,
+            "n_items_pooled": null
+          },
+          "negotiation": {
+            "unweighted_mean": 0.2674492666008993,
+            "member_weighted_mean": 0.30546892111219626,
+            "pooled": 0.4056946180204467,
+            "n_clusters": 35,
+            "n_items_pooled": null
+          },
+          "persuasion": {
+            "unweighted_mean": 0.3944021949157452,
+            "member_weighted_mean": 0.39440219491574535,
+            "pooled": 0.464026844592661,
+            "n_clusters": 35,
+            "n_items_pooled": null
+          }
+        }
+      },
+      "without_degenerate": {
+        "valuation_reasoning": {
+          "overall": {
+            "unweighted_mean": 0.244245691151619,
+            "member_weighted_mean": 0.317973657156969,
+            "pooled": 0.48780149793901545,
+            "n_clusters": 101,
+            "n_items_pooled": 788
+          },
+          "bargaining": {
+            "unweighted_mean": 0.21825921399588383,
+            "member_weighted_mean": 0.2681893704268558,
+            "pooled": 0.3446231259287595,
+            "n_clusters": 34,
+            "n_items_pooled": 232
+          },
+          "negotiation": {
+            "unweighted_mean": -0.003012487328864789,
+            "member_weighted_mean": 0.07232668277130808,
+            "pooled": 0.14886888214440552,
+            "n_clusters": 32,
+            "n_items_pooled": 206
+          },
+          "persuasion": {
+            "unweighted_mean": 0.4955543178564902,
+            "member_weighted_mean": 0.4955543178564901,
+            "pooled": 0.564516585131352,
+            "n_clusters": 35,
+            "n_items_pooled": 350
+          }
+        },
+        "horizon_strategy_planning": {
+          "overall": {
+            "unweighted_mean": 0.2724118641985978,
+            "member_weighted_mean": 0.28310343295020923,
+            "pooled": 0.4004017460778374,
+            "n_clusters": 102,
+            "n_items_pooled": 799
+          },
+          "bargaining": {
+            "unweighted_mean": 0.27598491844166506,
+            "member_weighted_mean": 0.33285663824488965,
+            "pooled": 0.3950057762374477,
+            "n_clusters": 33,
+            "n_items_pooled": 230
+          },
+          "negotiation": {
+            "unweighted_mean": 0.39038042638852266,
+            "member_weighted_mean": 0.4364697840464387,
+            "pooled": 0.5887323943661972,
+            "n_clusters": 34,
+            "n_items_pooled": 219
+          },
+          "persuasion": {
+            "unweighted_mean": 0.15444495264206415,
+            "member_weighted_mean": 0.15444495264206418,
+            "pooled": 0.24160808302139436,
+            "n_clusters": 35,
+            "n_items_pooled": 350
+          }
+        },
+        "concession_handling": {
+          "overall": {
+            "unweighted_mean": 0.17488146245769154,
+            "member_weighted_mean": 0.255855630176542,
+            "pooled": 0.39012048299076646,
+            "n_clusters": 63,
+            "n_items_pooled": 409
+          },
+          "bargaining": {
+            "unweighted_mean": 0.14422659845630634,
+            "member_weighted_mean": 0.2652769174828975,
+            "pooled": 0.35016047866228156,
+            "n_clusters": 30,
+            "n_items_pooled": 200
+          },
+          "negotiation": {
+            "unweighted_mean": 0.202749520640769,
+            "member_weighted_mean": 0.24684004423744607,
+            "pooled": 0.39212703719180947,
+            "n_clusters": 33,
+            "n_items_pooled": 209
+          },
+          "persuasion": {
+            "unweighted_mean": null,
+            "member_weighted_mean": null,
+            "pooled": null,
+            "n_clusters": 0,
+            "n_items_pooled": 0
+          }
+        },
+        "outcome_consistency": {
+          "overall": {
+            "unweighted_mean": 0.30417993178885944,
+            "member_weighted_mean": 0.37208922371325115,
+            "pooled": 0.5149109521073798,
+            "n_clusters": 95,
+            "n_items_pooled": 729
+          },
+          "bargaining": {
+            "unweighted_mean": 0.22118589388395501,
+            "member_weighted_mean": 0.3374259377178312,
+            "pooled": 0.4120686534252663,
+            "n_clusters": 34,
+            "n_items_pooled": 232
+          },
+          "negotiation": {
+            "unweighted_mean": 0.2723286602869789,
+            "member_weighted_mean": 0.3205201282578969,
+            "pooled": 0.4345779577104114,
+            "n_clusters": 32,
+            "n_items_pooled": 207
+          },
+          "persuasion": {
+            "unweighted_mean": 0.4366295171966847,
+            "member_weighted_mean": 0.43662951719668475,
+            "pooled": 0.5720367041907103,
+            "n_clusters": 29,
+            "n_items_pooled": 290
+          }
+        },
+        "kappa_overall": {
+          "overall": {
+            "unweighted_mean": 0.25284322492895683,
+            "member_weighted_mean": 0.3114615561498498,
+            "pooled": 0.4483086697787498,
+            "n_clusters": 105,
+            "n_items_pooled": null
+          },
+          "bargaining": {
+            "unweighted_mean": 0.1988029831284743,
+            "member_weighted_mean": 0.29531873097637,
+            "pooled": 0.37546450856343877,
+            "n_clusters": 35,
+            "n_items_pooled": null
+          },
+          "negotiation": {
+            "unweighted_mean": 0.21668003583166848,
+            "member_weighted_mean": 0.27853230820273267,
+            "pooled": 0.3910765678532059,
+            "n_clusters": 35,
+            "n_items_pooled": null
+          },
+          "persuasion": {
+            "unweighted_mean": 0.34304665582672733,
+            "member_weighted_mean": 0.3430466558267274,
+            "pooled": 0.4593871241144855,
+            "n_clusters": 35,
+            "n_items_pooled": null
+          }
+        }
+      }
+    },
+    "degenerate_entries": [
+      {
+        "cluster_id": "bargaining_047",
+        "game_family": "bargaining",
+        "dimension": "concession_handling",
+        "n_judged_members": 2,
+        "n_items_used_in_kappa": 2,
+        "uniform_score_value": 4,
+        "member_ids": [
+          "9d7c2144-4926-491f-88f0-f28fa3a46d92:10:offer",
+          "c6574356-0675-4f67-aa48-0a923dd55314:10:offer"
+        ]
+      },
+      {
+        "cluster_id": "bargaining_058",
+        "game_family": "bargaining",
+        "dimension": "horizon_strategy_planning",
+        "n_judged_members": 2,
+        "n_items_used_in_kappa": 2,
+        "uniform_score_value": 3,
+        "member_ids": [
+          "2ac5aa78-a88d-4f99-bf32-b712663f284f:10:offer",
+          "e65f5641-4d64-4123-a00a-60209f021435:10:decision"
+        ]
+      },
+      {
+        "cluster_id": "bargaining_062",
+        "game_family": "bargaining",
+        "dimension": "valuation_reasoning",
+        "n_judged_members": 2,
+        "n_items_used_in_kappa": 2,
+        "uniform_score_value": 4,
+        "member_ids": [
+          "2ac5aa78-a88d-4f99-bf32-b712663f284f:14:offer",
+          "e65f5641-4d64-4123-a00a-60209f021435:14:decision"
+        ]
+      },
+      {
+        "cluster_id": "bargaining_062",
+        "game_family": "bargaining",
+        "dimension": "horizon_strategy_planning",
+        "n_judged_members": 2,
+        "n_items_used_in_kappa": 2,
+        "uniform_score_value": 4,
+        "member_ids": [
+          "2ac5aa78-a88d-4f99-bf32-b712663f284f:14:offer",
+          "e65f5641-4d64-4123-a00a-60209f021435:14:decision"
+        ]
+      },
+      {
+        "cluster_id": "bargaining_062",
+        "game_family": "bargaining",
+        "dimension": "outcome_consistency",
+        "n_judged_members": 2,
+        "n_items_used_in_kappa": 2,
+        "uniform_score_value": 5,
+        "member_ids": [
+          "2ac5aa78-a88d-4f99-bf32-b712663f284f:14:offer",
+          "e65f5641-4d64-4123-a00a-60209f021435:14:decision"
+        ]
+      },
+      {
+        "cluster_id": "bargaining_068",
+        "game_family": "bargaining",
+        "dimension": "concession_handling",
+        "n_judged_members": 2,
+        "n_items_used_in_kappa": 2,
+        "uniform_score_value": 4,
+        "member_ids": [
+          "2ac5aa78-a88d-4f99-bf32-b712663f284f:20:offer",
+          "e65f5641-4d64-4123-a00a-60209f021435:20:decision"
+        ]
+      },
+      {
+        "cluster_id": "negotiation_002",
+        "game_family": "negotiation",
+        "dimension": "valuation_reasoning",
+        "n_judged_members": 10,
+        "n_items_used_in_kappa": 10,
+        "uniform_score_value": 5,
+        "member_ids": [
+          "0591524e-b28e-4db8-ae98-35aab8ba6e79:1:decision",
+          "0ede95d8-9514-409e-aae5-18792c0e5dea:1:decision",
+          "27e624c7-f6e8-4df3-9d16-7675e1315c94:1:decision",
+          "44a65e44-37f5-4a2b-b80e-e6d570849161:1:decision",
+          "5e836391-1533-4228-a315-c9fe5cbd7b32:1:decision",
+          "709544c2-e304-4a08-8adc-f56ecf553f09:1:decision",
+          "a50f30af-ed0a-4919-8d52-defce2288864:1:decision",
+          "a54c2624-f0f9-4642-a0be-9908a55f9255:1:decision",
+          "ec3d62bb-05f2-4357-88f1-4803b008f70b:1:decision",
+          "ef655db7-c240-4d97-8298-ea50e72ef4e2:1:decision"
+        ]
+      },
+      {
+        "cluster_id": "negotiation_002",
+        "game_family": "negotiation",
+        "dimension": "outcome_consistency",
+        "n_judged_members": 10,
+        "n_items_used_in_kappa": 10,
+        "uniform_score_value": 5,
+        "member_ids": [
+          "0591524e-b28e-4db8-ae98-35aab8ba6e79:1:decision",
+          "0ede95d8-9514-409e-aae5-18792c0e5dea:1:decision",
+          "27e624c7-f6e8-4df3-9d16-7675e1315c94:1:decision",
+          "44a65e44-37f5-4a2b-b80e-e6d570849161:1:decision",
+          "5e836391-1533-4228-a315-c9fe5cbd7b32:1:decision",
+          "709544c2-e304-4a08-8adc-f56ecf553f09:1:decision",
+          "a50f30af-ed0a-4919-8d52-defce2288864:1:decision",
+          "a54c2624-f0f9-4642-a0be-9908a55f9255:1:decision",
+          "ec3d62bb-05f2-4357-88f1-4803b008f70b:1:decision",
+          "ef655db7-c240-4d97-8298-ea50e72ef4e2:1:decision"
+        ]
+      },
+      {
+        "cluster_id": "negotiation_064",
+        "game_family": "negotiation",
+        "dimension": "valuation_reasoning",
+        "n_judged_members": 3,
+        "n_items_used_in_kappa": 3,
+        "uniform_score_value": 5,
+        "member_ids": [
+          "19d2a6ae-f629-40dd-881b-941e377799c0:80:decision",
+          "c2b5c205-1fbb-41ce-a0af-f843cc421095:80:decision",
+          "e249a62b-2382-4e3e-9bb1-9ed3db0058c5:80:decision"
+        ]
+      },
+      {
+        "cluster_id": "negotiation_076",
+        "game_family": "negotiation",
+        "dimension": "horizon_strategy_planning",
+        "n_judged_members": 2,
+        "n_items_used_in_kappa": 2,
+        "uniform_score_value": 2,
+        "member_ids": [
+          "33df744d-20f8-48b0-80f2-06c2c84e8a6f:31:decision",
+          "65e124c0-5675-4784-afb2-f80cca83f727:31:decision"
+        ]
+      },
+      {
+        "cluster_id": "negotiation_076",
+        "game_family": "negotiation",
+        "dimension": "concession_handling",
+        "n_judged_members": 2,
+        "n_items_used_in_kappa": 2,
+        "uniform_score_value": 2,
+        "member_ids": [
+          "33df744d-20f8-48b0-80f2-06c2c84e8a6f:31:decision",
+          "65e124c0-5675-4784-afb2-f80cca83f727:31:decision"
+        ]
+      },
+      {
+        "cluster_id": "negotiation_077",
+        "game_family": "negotiation",
+        "dimension": "outcome_consistency",
+        "n_judged_members": 2,
+        "n_items_used_in_kappa": 2,
+        "uniform_score_value": 4,
+        "member_ids": [
+          "33df744d-20f8-48b0-80f2-06c2c84e8a6f:33:decision",
+          "65e124c0-5675-4784-afb2-f80cca83f727:33:decision"
+        ]
+      },
+      {
+        "cluster_id": "negotiation_081",
+        "game_family": "negotiation",
+        "dimension": "valuation_reasoning",
+        "n_judged_members": 2,
+        "n_items_used_in_kappa": 2,
+        "uniform_score_value": 5,
+        "member_ids": [
+          "33df744d-20f8-48b0-80f2-06c2c84e8a6f:41:decision",
+          "65e124c0-5675-4784-afb2-f80cca83f727:41:decision"
+        ]
+      },
+      {
+        "cluster_id": "negotiation_081",
+        "game_family": "negotiation",
+        "dimension": "outcome_consistency",
+        "n_judged_members": 2,
+        "n_items_used_in_kappa": 2,
+        "uniform_score_value": 5,
+        "member_ids": [
+          "33df744d-20f8-48b0-80f2-06c2c84e8a6f:41:decision",
+          "65e124c0-5675-4784-afb2-f80cca83f727:41:decision"
+        ]
+      },
+      {
+        "cluster_id": "persuasion_011",
+        "game_family": "persuasion",
+        "dimension": "outcome_consistency",
+        "n_judged_members": 10,
+        "n_items_used_in_kappa": 10,
+        "uniform_score_value": 5,
+        "member_ids": [
+          "1647669b-f340-40bd-bd75-7cf2a24c710f:1:buyer_decision",
+          "1647669b-f340-40bd-bd75-7cf2a24c710f:2:buyer_decision",
+          "4dd7eb7a-8dfc-4dc6-be93-7b29657ce2c8:1:buyer_decision",
+          "5da60396-e39c-429d-971a-d8b5c10d4fdb:1:buyer_decision",
+          "a0c6a448-a93e-4ec5-a531-a28b0cdda6d1:1:buyer_decision",
+          "b55b97d8-890b-4a23-bf7f-21b5197f7034:1:buyer_decision",
+          "e56b7f08-e0aa-43cd-a226-7e0627ef303e:1:buyer_decision",
+          "e56b7f08-e0aa-43cd-a226-7e0627ef303e:2:buyer_decision",
+          "f307c80f-4299-4aa8-b973-1eb7b6b1297b:1:buyer_decision",
+          "f307c80f-4299-4aa8-b973-1eb7b6b1297b:2:buyer_decision"
+        ]
+      },
+      {
+        "cluster_id": "persuasion_015",
+        "game_family": "persuasion",
+        "dimension": "outcome_consistency",
+        "n_judged_members": 10,
+        "n_items_used_in_kappa": 10,
+        "uniform_score_value": 5,
+        "member_ids": [
+          "1647669b-f340-40bd-bd75-7cf2a24c710f:8:buyer_decision",
+          "1647669b-f340-40bd-bd75-7cf2a24c710f:9:buyer_decision",
+          "3b017a42-61c5-470c-8dfa-b13bce332125:10:buyer_decision",
+          "4dd7eb7a-8dfc-4dc6-be93-7b29657ce2c8:11:buyer_decision",
+          "5da60396-e39c-429d-971a-d8b5c10d4fdb:10:buyer_decision",
+          "5da60396-e39c-429d-971a-d8b5c10d4fdb:8:buyer_decision",
+          "a0c6a448-a93e-4ec5-a531-a28b0cdda6d1:10:buyer_decision",
+          "a0c6a448-a93e-4ec5-a531-a28b0cdda6d1:11:buyer_decision",
+          "b55b97d8-890b-4a23-bf7f-21b5197f7034:10:buyer_decision",
+          "f307c80f-4299-4aa8-b973-1eb7b6b1297b:9:buyer_decision"
+        ]
+      },
+      {
+        "cluster_id": "persuasion_103",
+        "game_family": "persuasion",
+        "dimension": "outcome_consistency",
+        "n_judged_members": 10,
+        "n_items_used_in_kappa": 10,
+        "uniform_score_value": 5,
+        "member_ids": [
+          "0e902e6c-e79d-4e41-aefc-d3a9b3783d21:18:seller_message",
+          "0e902e6c-e79d-4e41-aefc-d3a9b3783d21:19:seller_message",
+          "0e902e6c-e79d-4e41-aefc-d3a9b3783d21:20:seller_message",
+          "26e91cdc-f422-4293-a02d-7efae61bb7f4:18:buyer_decision",
+          "26e91cdc-f422-4293-a02d-7efae61bb7f4:20:buyer_decision",
+          "36b1ed17-4476-4bcf-9266-68ad4645827a:18:seller_message",
+          "36ea5ec9-95c1-482e-81ff-8036537e7d9f:19:buyer_decision",
+          "36ea5ec9-95c1-482e-81ff-8036537e7d9f:20:buyer_decision",
+          "d52f733f-53a2-470c-9456-a0a1376badbf:18:buyer_decision",
+          "d52f733f-53a2-470c-9456-a0a1376badbf:20:buyer_decision"
+        ]
+      },
+      {
+        "cluster_id": "persuasion_113",
+        "game_family": "persuasion",
+        "dimension": "outcome_consistency",
+        "n_judged_members": 10,
+        "n_items_used_in_kappa": 10,
+        "uniform_score_value": 5,
+        "member_ids": [
+          "00d5a05f-526d-4d55-9f47-22d73986bcd2:18:seller_message",
+          "1ecc9056-95e5-4c49-baa1-fe0f8cbc5913:20:seller_message",
+          "2ed3ceec-fff4-455c-821e-601bccecdb04:18:seller_message",
+          "2ed3ceec-fff4-455c-821e-601bccecdb04:19:seller_message",
+          "4397ae7c-d54a-4f61-b38a-7f3207fd02b8:19:buyer_decision",
+          "a9b83dd7-055c-48b4-94f7-42e749ac7494:18:buyer_decision",
+          "b1b2f36c-394b-43c9-be9d-72b396b840f0:20:buyer_decision",
+          "c14a2336-7495-491e-aa5a-36e21d55a01a:20:buyer_decision",
+          "cc08de04-4278-4d97-8c6e-e1aa695dabb4:18:buyer_decision",
+          "f9a1191c-e595-4946-99b1-357adefdc232:20:buyer_decision"
+        ]
+      },
+      {
+        "cluster_id": "persuasion_184",
+        "game_family": "persuasion",
+        "dimension": "outcome_consistency",
+        "n_judged_members": 10,
+        "n_items_used_in_kappa": 10,
+        "uniform_score_value": 5,
+        "member_ids": [
+          "1c103cee-5a2b-4043-89d6-4f2141c34c91:15:buyer_decision",
+          "1c56a597-8491-44b7-bac3-98ca7e608b16:15:buyer_decision",
+          "37c5a85d-ee97-40dd-b00f-ea3cbe7346f2:16:buyer_decision",
+          "3a89095c-e240-4cdd-b016-d4672ab622a1:14:seller_message",
+          "6ed53ef2-7a13-417b-9f76-f584fe793b14:13:buyer_decision",
+          "7848fda4-783d-4428-8c37-dba726f4f54d:13:buyer_decision",
+          "bf045985-31e9-4127-99f3-0467a991f13f:15:buyer_decision",
+          "bf045985-31e9-4127-99f3-0467a991f13f:17:buyer_decision",
+          "f9f0cabf-831c-47c1-9412-816e4bb9babf:16:buyer_decision",
+          "f9f0cabf-831c-47c1-9412-816e4bb9babf:17:buyer_decision"
+        ]
+      },
+      {
+        "cluster_id": "persuasion_188",
+        "game_family": "persuasion",
+        "dimension": "outcome_consistency",
+        "n_judged_members": 10,
+        "n_items_used_in_kappa": 10,
+        "uniform_score_value": 5,
+        "member_ids": [
+          "1c56a597-8491-44b7-bac3-98ca7e608b16:18:buyer_decision",
+          "37c5a85d-ee97-40dd-b00f-ea3cbe7346f2:20:buyer_decision",
+          "6024fe80-5a13-42bd-8a24-efe6121e767d:19:buyer_decision",
+          "6024fe80-5a13-42bd-8a24-efe6121e767d:20:buyer_decision",
+          "7111d230-6ac7-4e78-a9b3-2ced268fadd8:19:buyer_decision",
+          "bf045985-31e9-4127-99f3-0467a991f13f:18:buyer_decision",
+          "bf045985-31e9-4127-99f3-0467a991f13f:20:buyer_decision",
+          "db03eb34-0648-4de3-86ca-d86982c6cba0:20:buyer_decision",
+          "f13cd7ef-9d78-47b4-a62a-ade0aeb22840:18:seller_message",
+          "f13cd7ef-9d78-47b4-a62a-ade0aeb22840:20:seller_message"
+        ]
+      }
+    ],
+    "shuffled_cluster_floor": {
+      "valuation_reasoning": {
+        "bargaining": {
+          "real": 0.2405946650245728,
+          "shuffled_mean": 0.24297671934812629,
+          "ci_low": 0.14152798530803548,
+          "ci_high": 0.35468619311340477,
+          "n_valid_perms": 1000,
+          "n_total_perms": 1000
+        },
+        "negotiation": {
+          "real": 0.08296001158503792,
+          "shuffled_mean": 0.12168505668699424,
+          "ci_low": 0.02107581624181167,
+          "ci_high": 0.22540621498056582,
+          "n_valid_perms": 1000,
+          "n_total_perms": 1000
+        },
+        "persuasion": {
+          "real": 0.4955543178564902,
+          "shuffled_mean": 0.5279358475203884,
+          "ci_low": 0.5037112613991135,
+          "ci_high": 0.5466985042679241,
+          "n_valid_perms": 1000,
+          "n_total_perms": 1000
+        }
+      },
+      "horizon_strategy_planning": {
+        "bargaining": {
+          "real": 0.31735720881642704,
+          "shuffled_mean": 0.3284123320302362,
+          "ci_low": 0.21777153717748662,
+          "ci_high": 0.4346528949270664,
+          "n_valid_perms": 1000,
+          "n_total_perms": 1000
+        },
+        "negotiation": {
+          "real": 0.4077981284917077,
+          "shuffled_mean": 0.49970380445661977,
+          "ci_low": 0.40863148789817,
+          "ci_high": 0.5911091289459519,
+          "n_valid_perms": 1000,
+          "n_total_perms": 1000
+        },
+        "persuasion": {
+          "real": 0.15444495264206415,
+          "shuffled_mean": 0.18740732187296433,
+          "ci_low": 0.1667660519019328,
+          "ci_high": 0.20356659255988113,
+          "n_valid_perms": 1000,
+          "n_total_perms": 1000
+        }
+      },
+      "concession_handling": {
+        "bargaining": {
+          "real": 0.19771243605278715,
+          "shuffled_mean": 0.261026731460017,
+          "ci_low": 0.1535812313869216,
+          "ci_high": 0.3771388892981662,
+          "n_valid_perms": 1000,
+          "n_total_perms": 1000
+        },
+        "negotiation": {
+          "real": 0.22619806415133462,
+          "shuffled_mean": 0.2838850113579951,
+          "ci_low": 0.1906344714687808,
+          "ci_high": 0.37651468655102943,
+          "n_valid_perms": 1000,
+          "n_total_perms": 1000
+        },
+        "persuasion": {
+          "real": null,
+          "shuffled_mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n_valid_perms": 0,
+          "n_total_perms": 1000
+        }
+      },
+      "outcome_consistency": {
+        "bargaining": {
+          "real": 0.24343772548727052,
+          "shuffled_mean": 0.3293389100867805,
+          "ci_low": 0.2247394174590485,
+          "ci_high": 0.4401669900226527,
+          "n_valid_perms": 1000,
+          "n_total_perms": 1000
+        },
+        "negotiation": {
+          "real": 0.3347004894052377,
+          "shuffled_mean": 0.4001994522467936,
+          "ci_low": 0.29703859074458955,
+          "ci_high": 0.5062192806846334,
+          "n_valid_perms": 1000,
+          "n_total_perms": 1000
+        },
+        "persuasion": {
+          "real": 0.5332073142486818,
+          "shuffled_mean": 0.5404787813765126,
+          "ci_low": 0.46351037994841965,
+          "ci_high": 0.6071242816199013,
+          "n_valid_perms": 1000,
+          "n_total_perms": 1000
+        }
+      },
+      "kappa_overall": {
+        "bargaining": {
+          "real": 0.25213631646180756,
+          "shuffled_mean": 0.28893145739395787,
+          "ci_low": 0.22504571336523532,
+          "ci_high": 0.3567457500747637,
+          "n_valid_perms": 1000,
+          "n_total_perms": 1000
+        },
+        "negotiation": {
+          "real": 0.2674492666008993,
+          "shuffled_mean": 0.32720160039254226,
+          "ci_low": 0.27553477286896716,
+          "ci_high": 0.3838546808581897,
+          "n_valid_perms": 1000,
+          "n_total_perms": 1000
+        },
+        "persuasion": {
+          "real": 0.3944021949157452,
+          "shuffled_mean": 0.4186073169232878,
+          "ci_low": 0.39139500113152564,
+          "ci_high": 0.44400391985826027,
+          "n_valid_perms": 1000,
+          "n_total_perms": 1000
+        }
+      }
+    }
+  },
+  "variance_decomposition": {
+    "valuation_reasoning": {
+      "overall": {
+        "real_eta_squared": 0.5369549674345139,
+        "shuffled_mean": 0.5107016893096554,
+        "ci_low": 0.4918825378826777,
+        "ci_high": 0.5328226005177288,
+        "n_valid_perms": 1000,
+        "n_total_perms": 1000,
+        "n_members": 805,
+        "n_clusters": 105
+      },
+      "bargaining": {
+        "real_eta_squared": 0.16972960646338284,
+        "shuffled_mean": 0.14491974003127442,
+        "ci_low": 0.08877775605942148,
+        "ci_high": 0.21561669272869435,
+        "n_valid_perms": 1000,
+        "n_total_perms": 1000,
+        "n_members": 234,
+        "n_clusters": 35
+      },
+      "negotiation": {
+        "real_eta_squared": 0.24023660043201978,
+        "shuffled_mean": 0.15721451230372752,
+        "ci_low": 0.09848528773964282,
+        "ci_high": 0.2425379179842713,
+        "n_valid_perms": 1000,
+        "n_total_perms": 1000,
+        "n_members": 221,
+        "n_clusters": 35
+      },
+      "persuasion": {
+        "real_eta_squared": 0.16490965095784801,
+        "shuffled_mean": 0.09777640053369342,
+        "ci_low": 0.061424171045479356,
+        "ci_high": 0.14445036979690004,
+        "n_valid_perms": 1000,
+        "n_total_perms": 1000,
+        "n_members": 350,
+        "n_clusters": 35
+      }
+    },
+    "horizon_strategy_planning": {
+      "overall": {
+        "real_eta_squared": 0.303562992470968,
+        "shuffled_mean": 0.16177504229932752,
+        "ci_low": 0.13293476831346596,
+        "ci_high": 0.19634019453909846,
+        "n_valid_perms": 1000,
+        "n_total_perms": 1000,
+        "n_members": 805,
+        "n_clusters": 105
+      },
+      "bargaining": {
+        "real_eta_squared": 0.15611435136090515,
+        "shuffled_mean": 0.14607936461647228,
+        "ci_low": 0.08963180452456676,
+        "ci_high": 0.21600499293036393,
+        "n_valid_perms": 1000,
+        "n_total_perms": 1000,
+        "n_members": 234,
+        "n_clusters": 35
+      },
+      "negotiation": {
+        "real_eta_squared": 0.5183933006386489,
+        "shuffled_mean": 0.15425929009729092,
+        "ci_low": 0.09215850729213997,
+        "ci_high": 0.2254167159650443,
+        "n_valid_perms": 1000,
+        "n_total_perms": 1000,
+        "n_members": 221,
+        "n_clusters": 35
+      },
+      "persuasion": {
+        "real_eta_squared": 0.16554501408155717,
+        "shuffled_mean": 0.09845327562548942,
+        "ci_low": 0.060480343629268,
+        "ci_high": 0.14939648910015474,
+        "n_valid_perms": 1000,
+        "n_total_perms": 1000,
+        "n_members": 350,
+        "n_clusters": 35
+      }
+    },
+    "concession_handling": {
+      "overall": {
+        "real_eta_squared": 0.29285286955412376,
+        "shuffled_mean": 0.19512581307688004,
+        "ci_low": 0.14965775234477255,
+        "ci_high": 0.24137392275076577,
+        "n_valid_perms": 1000,
+        "n_total_perms": 1000,
+        "n_members": 415,
+        "n_clusters": 66
+      },
+      "bargaining": {
+        "real_eta_squared": 0.2238790486004971,
+        "shuffled_mean": 0.1533795299715746,
+        "ci_low": 0.09232884007552555,
+        "ci_high": 0.2261444493626677,
+        "n_valid_perms": 1000,
+        "n_total_perms": 1000,
+        "n_members": 204,
+        "n_clusters": 32
+      },
+      "negotiation": {
+        "real_eta_squared": 0.29019338063502864,
+        "shuffled_mean": 0.15755774690421612,
+        "ci_low": 0.09809828620617202,
+        "ci_high": 0.23336333858830152,
+        "n_valid_perms": 1000,
+        "n_total_perms": 1000,
+        "n_members": 211,
+        "n_clusters": 34
+      },
+      "persuasion": {
+        "real_eta_squared": null,
+        "shuffled_mean": null,
+        "ci_low": null,
+        "ci_high": null,
+        "n_valid_perms": 0,
+        "n_total_perms": 1000,
+        "n_members": 0,
+        "n_clusters": 0
+      }
+    },
+    "outcome_consistency": {
+      "overall": {
+        "real_eta_squared": 0.29485912390426583,
+        "shuffled_mean": 0.25645194068440424,
+        "ci_low": 0.22189399851656894,
+        "ci_high": 0.299072408933187,
+        "n_valid_perms": 1000,
+        "n_total_perms": 1000,
+        "n_members": 805,
+        "n_clusters": 105
+      },
+      "bargaining": {
+        "real_eta_squared": 0.16237011755783118,
+        "shuffled_mean": 0.1483660725571993,
+        "ci_low": 0.08414580963215772,
+        "ci_high": 0.24413035646568074,
+        "n_valid_perms": 1000,
+        "n_total_perms": 1000,
+        "n_members": 234,
+        "n_clusters": 35
+      },
+      "negotiation": {
+        "real_eta_squared": 0.2380286457975951,
+        "shuffled_mean": 0.15556532898816985,
+        "ci_low": 0.09296881320631767,
+        "ci_high": 0.23125222927355615,
+        "n_valid_perms": 1000,
+        "n_total_perms": 1000,
+        "n_members": 221,
+        "n_clusters": 35
+      },
+      "persuasion": {
+        "real_eta_squared": 0.17010640249495465,
+        "shuffled_mean": 0.09668810768666332,
+        "ci_low": 0.05932684369840358,
+        "ci_high": 0.1484360667767376,
+        "n_valid_perms": 1000,
+        "n_total_perms": 1000,
+        "n_members": 350,
+        "n_clusters": 35
+      }
+    }
+  }
+}
