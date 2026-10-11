@@ -1,0 +1,1535 @@
+{
+  "seed": 20261002,
+  "n_resamples": 10000,
+  "n_cases": 20,
+  "by_family_n_cases": {
+    "bargaining": 7,
+    "negotiation": 7,
+    "persuasion": 6
+  },
+  "author_vs_targets": {
+    "valuation_reasoning": {
+      "overall": {
+        "GameTheoreticRigor": {
+          "n_cases": 20,
+          "spearman": {
+            "rho": 0.7101270833424176,
+            "p": 0.00045152869422187175,
+            "note": null,
+            "ci_low": 0.47446900790548724,
+            "ci_high": 0.874909955093737,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 0.45,
+            "within_1": 0.85
+          },
+          "offset": {
+            "mean_offset": -0.7,
+            "ci_low": -1.0,
+            "ci_high": -0.4,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        },
+        "LiteralGroundedness": {
+          "n_cases": 20,
+          "spearman": {
+            "rho": 0.3078175548114739,
+            "p": 0.18673690878300245,
+            "note": null,
+            "ci_low": 0.06577144670108427,
+            "ci_high": 0.5807843292563286,
+            "n_valid_reps": 9575,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 0.2,
+            "within_1": 0.65
+          },
+          "offset": {
+            "mean_offset": -1.25,
+            "ci_low": -1.65,
+            "ci_high": -0.9,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        },
+        "OpponentResponsiveness": {
+          "n_cases": 20,
+          "spearman": {
+            "rho": 0.6709953174631703,
+            "p": 0.0012010672530506183,
+            "note": null,
+            "ci_low": 0.3641341269324017,
+            "ci_high": 0.874358834440757,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 0.35,
+            "within_1": 0.9
+          },
+          "offset": {
+            "mean_offset": -0.65,
+            "ci_low": -0.95,
+            "ci_high": -0.35,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        },
+        "judge_mean": {
+          "n_cases": 20,
+          "spearman": {
+            "rho": 0.6846928181197921,
+            "p": 0.0008670068569283397,
+            "note": null,
+            "ci_low": 0.42956892768707194,
+            "ci_high": 0.8424399089430269,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 0.35,
+            "within_1": 0.8
+          },
+          "offset": {
+            "mean_offset": -0.8666666666666666,
+            "ci_low": -1.1666666666666667,
+            "ci_high": -0.5666666666666667,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        }
+      },
+      "bargaining": {
+        "GameTheoreticRigor": {
+          "n_cases": 7,
+          "spearman": {
+            "rho": 0.3333333333333333,
+            "p": 0.4650226382607572,
+            "note": null,
+            "ci_low": -0.75,
+            "ci_high": 0.9660917830792959,
+            "n_valid_reps": 9605,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 0.5714285714285714,
+            "within_1": 0.8571428571428571
+          },
+          "offset": {
+            "mean_offset": -0.5714285714285714,
+            "ci_low": -1.1428571428571428,
+            "ci_high": -0.14285714285714285,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        },
+        "LiteralGroundedness": {
+          "n_cases": 7,
+          "spearman": {
+            "rho": -0.17391639824998364,
+            "p": 0.7091952152924286,
+            "note": null,
+            "ci_low": -0.75,
+            "ci_high": 0.5291502622129182,
+            "n_valid_reps": 8822,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 0.2857142857142857,
+            "within_1": 0.42857142857142855
+          },
+          "offset": {
+            "mean_offset": -1.5714285714285714,
+            "ci_low": -2.4285714285714284,
+            "ci_high": -0.7142857142857143,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        },
+        "OpponentResponsiveness": {
+          "n_cases": 7,
+          "spearman": {
+            "rho": 0.24152294576982397,
+            "p": 0.6018315097994896,
+            "note": null,
+            "ci_low": -0.5477225575051662,
+            "ci_high": 0.8366600265340757,
+            "n_valid_reps": 9548,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 0.2857142857142857,
+            "within_1": 0.8571428571428571
+          },
+          "offset": {
+            "mean_offset": -0.5714285714285714,
+            "ci_low": -1.2857142857142858,
+            "ci_high": 0.14285714285714285,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        },
+        "judge_mean": {
+          "n_cases": 7,
+          "spearman": {
+            "rho": 0.2412090756622109,
+            "p": 0.6023184739901026,
+            "note": null,
+            "ci_low": -0.8126360553720012,
+            "ci_high": 0.9165151389911681,
+            "n_valid_reps": 9792,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 0.42857142857142855,
+            "within_1": 0.7142857142857143
+          },
+          "offset": {
+            "mean_offset": -0.9047619047619048,
+            "ci_low": -1.5714285714285712,
+            "ci_high": -0.2857142857142857,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        }
+      },
+      "negotiation": {
+        "GameTheoreticRigor": {
+          "n_cases": 7,
+          "spearman": {
+            "rho": null,
+            "p": null,
+            "note": "undefined (constant)",
+            "ci_low": null,
+            "ci_high": null,
+            "n_valid_reps": 0,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 0.2857142857142857,
+            "within_1": 0.8571428571428571
+          },
+          "offset": {
+            "mean_offset": -0.8571428571428571,
+            "ci_low": -1.2857142857142858,
+            "ci_high": -0.42857142857142855,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        },
+        "LiteralGroundedness": {
+          "n_cases": 7,
+          "spearman": {
+            "rho": null,
+            "p": null,
+            "note": "undefined (constant)",
+            "ci_low": null,
+            "ci_high": null,
+            "n_valid_reps": 0,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 0.2857142857142857,
+            "within_1": 0.8571428571428571
+          },
+          "offset": {
+            "mean_offset": -0.8571428571428571,
+            "ci_low": -1.2857142857142858,
+            "ci_high": -0.42857142857142855,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        },
+        "OpponentResponsiveness": {
+          "n_cases": 7,
+          "spearman": {
+            "rho": 0.6831300510639731,
+            "p": 0.09070960218611425,
+            "note": null,
+            "ci_low": 0.6614378277661476,
+            "ci_high": 1.0,
+            "n_valid_reps": 6591,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 0.2857142857142857,
+            "within_1": 1.0
+          },
+          "offset": {
+            "mean_offset": -0.7142857142857143,
+            "ci_low": -1.0,
+            "ci_high": -0.42857142857142855,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        },
+        "judge_mean": {
+          "n_cases": 7,
+          "spearman": {
+            "rho": 0.6831300510639731,
+            "p": 0.09070960218611425,
+            "note": null,
+            "ci_low": 0.6614378277661476,
+            "ci_high": 1.0,
+            "n_valid_reps": 6547,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 0.2857142857142857,
+            "within_1": 0.8571428571428571
+          },
+          "offset": {
+            "mean_offset": -0.8095238095238095,
+            "ci_low": -1.1904761904761905,
+            "ci_high": -0.42857142857142855,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        }
+      },
+      "persuasion": {
+        "GameTheoreticRigor": {
+          "n_cases": 6,
+          "spearman": {
+            "rho": 0.5270462766947299,
+            "p": 0.28263145672106205,
+            "note": null,
+            "ci_low": -0.447213595499958,
+            "ci_high": 1.0,
+            "n_valid_reps": 9543,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 0.5,
+            "within_1": 0.8333333333333334
+          },
+          "offset": {
+            "mean_offset": -0.6666666666666666,
+            "ci_low": -1.3333333333333333,
+            "ci_high": -0.16666666666666666,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        },
+        "LiteralGroundedness": {
+          "n_cases": 6,
+          "spearman": {
+            "rho": 0.447213595499958,
+            "p": 0.3739009663000589,
+            "note": null,
+            "ci_low": 0.20000000000000007,
+            "ci_high": 1.0,
+            "n_valid_reps": 6531,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 0.0,
+            "within_1": 0.6666666666666666
+          },
+          "offset": {
+            "mean_offset": -1.3333333333333333,
+            "ci_low": -1.6666666666666667,
+            "ci_high": -1.0,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        },
+        "OpponentResponsiveness": {
+          "n_cases": 6,
+          "spearman": {
+            "rho": 0.5270462766947299,
+            "p": 0.28263145672106205,
+            "note": null,
+            "ci_low": -0.447213595499958,
+            "ci_high": 1.0,
+            "n_valid_reps": 9535,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 0.5,
+            "within_1": 0.8333333333333334
+          },
+          "offset": {
+            "mean_offset": -0.6666666666666666,
+            "ci_low": -1.3333333333333333,
+            "ci_high": -0.16666666666666666,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        },
+        "judge_mean": {
+          "n_cases": 6,
+          "spearman": {
+            "rho": 0.5184758473652126,
+            "p": 0.29197384284535477,
+            "note": null,
+            "ci_low": -0.447213595499958,
+            "ci_high": 1.0,
+            "n_valid_reps": 9560,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 0.3333333333333333,
+            "within_1": 0.8333333333333334
+          },
+          "offset": {
+            "mean_offset": -0.8888888888888887,
+            "ci_low": -1.3888888888888886,
+            "ci_high": -0.49999999999999983,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        }
+      }
+    },
+    "horizon_strategy_planning": {
+      "overall": {
+        "GameTheoreticRigor": {
+          "n_cases": 20,
+          "spearman": {
+            "rho": 0.09526737479979364,
+            "p": 0.6895053452883277,
+            "note": null,
+            "ci_low": -0.3375888359993559,
+            "ci_high": 0.5014135277203287,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 0.35,
+            "within_1": 0.75
+          },
+          "offset": {
+            "mean_offset": -0.6,
+            "ci_low": -1.0,
+            "ci_high": -0.15,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        },
+        "LiteralGroundedness": {
+          "n_cases": 20,
+          "spearman": {
+            "rho": 0.32209767707986803,
+            "p": 0.16606652519147394,
+            "note": null,
+            "ci_low": -0.23077460123917992,
+            "ci_high": 0.7544225842737088,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 0.05,
+            "within_1": 0.45
+          },
+          "offset": {
+            "mean_offset": -1.45,
+            "ci_low": -1.8,
+            "ci_high": -1.05,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        },
+        "OpponentResponsiveness": {
+          "n_cases": 20,
+          "spearman": {
+            "rho": 0.3901048810022994,
+            "p": 0.08905522463033563,
+            "note": null,
+            "ci_low": -0.01004359536676014,
+            "ci_high": 0.6960584713133781,
+            "n_valid_reps": 9999,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 0.35,
+            "within_1": 0.85
+          },
+          "offset": {
+            "mean_offset": -0.5,
+            "ci_low": -0.9,
+            "ci_high": -0.1,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        },
+        "judge_mean": {
+          "n_cases": 20,
+          "spearman": {
+            "rho": 0.28622036714594123,
+            "p": 0.2211811568698608,
+            "note": null,
+            "ci_low": -0.19658867869192703,
+            "ci_high": 0.6794332767945443,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 0.25,
+            "within_1": 0.8
+          },
+          "offset": {
+            "mean_offset": -0.8499999999999999,
+            "ci_low": -1.2166666666666666,
+            "ci_high": -0.45,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        }
+      },
+      "bargaining": {
+        "GameTheoreticRigor": {
+          "n_cases": 7,
+          "spearman": {
+            "rho": 0.0,
+            "p": 1.0,
+            "note": null,
+            "ci_low": -0.5477225575051661,
+            "ci_high": 0.5477225575051662,
+            "n_valid_reps": 6691,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 0.2857142857142857,
+            "within_1": 0.8571428571428571
+          },
+          "offset": {
+            "mean_offset": 0.0,
+            "ci_low": -0.7142857142857143,
+            "ci_high": 0.8571428571428571,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        },
+        "LiteralGroundedness": {
+          "n_cases": 7,
+          "spearman": {
+            "rho": 0.140028008402801,
+            "p": 0.7646047767887927,
+            "note": null,
+            "ci_low": -0.9354143466934853,
+            "ci_high": 0.9660917830792959,
+            "n_valid_reps": 9045,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 0.14285714285714285,
+            "within_1": 0.7142857142857143
+          },
+          "offset": {
+            "mean_offset": -0.8571428571428571,
+            "ci_low": -1.5714285714285714,
+            "ci_high": -0.14285714285714285,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        },
+        "OpponentResponsiveness": {
+          "n_cases": 7,
+          "spearman": {
+            "rho": 0.0,
+            "p": 1.0,
+            "note": null,
+            "ci_low": -0.7302967433402214,
+            "ci_high": 0.75,
+            "n_valid_reps": 9013,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 0.14285714285714285,
+            "within_1": 0.8571428571428571
+          },
+          "offset": {
+            "mean_offset": -0.14285714285714285,
+            "ci_low": -0.8571428571428571,
+            "ci_high": 0.7142857142857143,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        },
+        "judge_mean": {
+          "n_cases": 7,
+          "spearman": {
+            "rho": 0.1372549019607843,
+            "p": 0.7691774631491413,
+            "note": null,
+            "ci_low": -0.8126360553720012,
+            "ci_high": 0.9354143466934853,
+            "n_valid_reps": 9938,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 0.14285714285714285,
+            "within_1": 1.0
+          },
+          "offset": {
+            "mean_offset": -0.33333333333333337,
+            "ci_low": -1.0000000000000002,
+            "ci_high": 0.42857142857142866,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        }
+      },
+      "negotiation": {
+        "GameTheoreticRigor": {
+          "n_cases": 7,
+          "spearman": {
+            "rho": 0.4583333333333333,
+            "p": 0.3009917566539343,
+            "note": null,
+            "ci_low": -0.24152294576982397,
+            "ci_high": 0.9354143466934853,
+            "n_valid_reps": 9898,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 0.2857142857142857,
+            "within_1": 0.7142857142857143
+          },
+          "offset": {
+            "mean_offset": -1.0,
+            "ci_low": -1.5714285714285714,
+            "ci_high": -0.42857142857142855,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        },
+        "LiteralGroundedness": {
+          "n_cases": 7,
+          "spearman": {
+            "rho": 0.46770717334674267,
+            "p": 0.2899108743161179,
+            "note": null,
+            "ci_low": -0.34156502553198653,
+            "ci_high": 0.9860132971832694,
+            "n_valid_reps": 9743,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 0.0,
+            "within_1": 0.2857142857142857
+          },
+          "offset": {
+            "mean_offset": -1.8571428571428572,
+            "ci_low": -2.2857142857142856,
+            "ci_high": -1.4285714285714286,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        },
+        "OpponentResponsiveness": {
+          "n_cases": 7,
+          "spearman": {
+            "rho": 0.710046946804693,
+            "p": 0.07383310558583024,
+            "note": null,
+            "ci_low": 0.23358051173943684,
+            "ci_high": 1.0,
+            "n_valid_reps": 9778,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 0.2857142857142857,
+            "within_1": 0.8571428571428571
+          },
+          "offset": {
+            "mean_offset": -0.8571428571428571,
+            "ci_low": -1.2857142857142858,
+            "ci_high": -0.42857142857142855,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        },
+        "judge_mean": {
+          "n_cases": 7,
+          "spearman": {
+            "rho": 0.6063390625908325,
+            "p": 0.14891654042869673,
+            "note": null,
+            "ci_low": -0.16666666666666663,
+            "ci_high": 0.9354143466934853,
+            "n_valid_reps": 9922,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 0.2857142857142857,
+            "within_1": 0.7142857142857143
+          },
+          "offset": {
+            "mean_offset": -1.2380952380952377,
+            "ci_low": -1.7142857142857142,
+            "ci_high": -0.7619047619047618,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        }
+      },
+      "persuasion": {
+        "GameTheoreticRigor": {
+          "n_cases": 6,
+          "spearman": {
+            "rho": -0.223606797749979,
+            "p": 0.670179973318781,
+            "note": null,
+            "ci_low": -1.0,
+            "ci_high": 0.7071067811865475,
+            "n_valid_reps": 9002,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 0.5,
+            "within_1": 0.6666666666666666
+          },
+          "offset": {
+            "mean_offset": -0.8333333333333334,
+            "ci_low": -1.5,
+            "ci_high": -0.16666666666666666,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        },
+        "LiteralGroundedness": {
+          "n_cases": 6,
+          "spearman": {
+            "rho": 0.6123724356957945,
+            "p": 0.19626117814926977,
+            "note": null,
+            "ci_low": 0.20000000000000007,
+            "ci_high": 1.0,
+            "n_valid_reps": 8404,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 0.0,
+            "within_1": 0.3333333333333333
+          },
+          "offset": {
+            "mean_offset": -1.6666666666666667,
+            "ci_low": -2.0,
+            "ci_high": -1.3333333333333333,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        },
+        "OpponentResponsiveness": {
+          "n_cases": 6,
+          "spearman": {
+            "rho": 0.223606797749979,
+            "p": 0.670179973318781,
+            "note": null,
+            "ci_low": -0.7071067811865475,
+            "ci_high": 1.0,
+            "n_valid_reps": 8925,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 0.6666666666666666,
+            "within_1": 0.8333333333333334
+          },
+          "offset": {
+            "mean_offset": -0.5,
+            "ci_low": -1.1666666666666667,
+            "ci_high": 0.0,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        },
+        "judge_mean": {
+          "n_cases": 6,
+          "spearman": {
+            "rho": 0.10502100630210075,
+            "p": 0.8430476505080737,
+            "note": null,
+            "ci_low": -0.8164965809277261,
+            "ci_high": 0.9045340337332908,
+            "n_valid_reps": 9058,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 0.3333333333333333,
+            "within_1": 0.6666666666666666
+          },
+          "offset": {
+            "mean_offset": -1.0,
+            "ci_low": -1.5,
+            "ci_high": -0.5000000000000001,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        }
+      }
+    },
+    "outcome_consistency": {
+      "overall": {
+        "GameTheoreticRigor": {
+          "n_cases": 20,
+          "spearman": {
+            "rho": null,
+            "p": null,
+            "note": "undefined (constant)",
+            "ci_low": null,
+            "ci_high": null,
+            "n_valid_reps": 0,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 0.6,
+            "within_1": 1.0
+          },
+          "offset": {
+            "mean_offset": 0.4,
+            "ci_low": 0.2,
+            "ci_high": 0.6,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        },
+        "LiteralGroundedness": {
+          "n_cases": 20,
+          "spearman": {
+            "rho": null,
+            "p": null,
+            "note": "undefined (constant)",
+            "ci_low": null,
+            "ci_high": null,
+            "n_valid_reps": 0,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 1.0,
+            "within_1": 1.0
+          },
+          "offset": {
+            "mean_offset": 0.0,
+            "ci_low": 0.0,
+            "ci_high": 0.0,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        },
+        "OpponentResponsiveness": {
+          "n_cases": 20,
+          "spearman": {
+            "rho": null,
+            "p": null,
+            "note": "undefined (constant)",
+            "ci_low": null,
+            "ci_high": null,
+            "n_valid_reps": 0,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 0.65,
+            "within_1": 0.95
+          },
+          "offset": {
+            "mean_offset": 0.4,
+            "ci_low": 0.15,
+            "ci_high": 0.65,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        },
+        "judge_mean": {
+          "n_cases": 20,
+          "spearman": {
+            "rho": null,
+            "p": null,
+            "note": "undefined (constant)",
+            "ci_low": null,
+            "ci_high": null,
+            "n_valid_reps": 0,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 0.65,
+            "within_1": 1.0
+          },
+          "offset": {
+            "mean_offset": 0.2666666666666667,
+            "ci_low": 0.1166666666666667,
+            "ci_high": 0.4166666666666668,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        }
+      },
+      "bargaining": {
+        "GameTheoreticRigor": {
+          "n_cases": 7,
+          "spearman": {
+            "rho": null,
+            "p": null,
+            "note": "undefined (constant)",
+            "ci_low": null,
+            "ci_high": null,
+            "n_valid_reps": 0,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 0.2857142857142857,
+            "within_1": 1.0
+          },
+          "offset": {
+            "mean_offset": 0.7142857142857143,
+            "ci_low": 0.2857142857142857,
+            "ci_high": 1.0,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        },
+        "LiteralGroundedness": {
+          "n_cases": 7,
+          "spearman": {
+            "rho": null,
+            "p": null,
+            "note": "undefined (constant)",
+            "ci_low": null,
+            "ci_high": null,
+            "n_valid_reps": 0,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 1.0,
+            "within_1": 1.0
+          },
+          "offset": {
+            "mean_offset": 0.0,
+            "ci_low": 0.0,
+            "ci_high": 0.0,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        },
+        "OpponentResponsiveness": {
+          "n_cases": 7,
+          "spearman": {
+            "rho": null,
+            "p": null,
+            "note": "undefined (constant)",
+            "ci_low": null,
+            "ci_high": null,
+            "n_valid_reps": 0,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 0.42857142857142855,
+            "within_1": 1.0
+          },
+          "offset": {
+            "mean_offset": 0.5714285714285714,
+            "ci_low": 0.2857142857142857,
+            "ci_high": 0.8571428571428571,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        },
+        "judge_mean": {
+          "n_cases": 7,
+          "spearman": {
+            "rho": null,
+            "p": null,
+            "note": "undefined (constant)",
+            "ci_low": null,
+            "ci_high": null,
+            "n_valid_reps": 0,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 0.42857142857142855,
+            "within_1": 1.0
+          },
+          "offset": {
+            "mean_offset": 0.4285714285714287,
+            "ci_low": 0.19047619047619055,
+            "ci_high": 0.6190476190476193,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        }
+      },
+      "negotiation": {
+        "GameTheoreticRigor": {
+          "n_cases": 7,
+          "spearman": {
+            "rho": null,
+            "p": null,
+            "note": "undefined (constant)",
+            "ci_low": null,
+            "ci_high": null,
+            "n_valid_reps": 0,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 0.8571428571428571,
+            "within_1": 1.0
+          },
+          "offset": {
+            "mean_offset": 0.14285714285714285,
+            "ci_low": 0.0,
+            "ci_high": 0.42857142857142855,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        },
+        "LiteralGroundedness": {
+          "n_cases": 7,
+          "spearman": {
+            "rho": null,
+            "p": null,
+            "note": "undefined (constant)",
+            "ci_low": null,
+            "ci_high": null,
+            "n_valid_reps": 0,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 1.0,
+            "within_1": 1.0
+          },
+          "offset": {
+            "mean_offset": 0.0,
+            "ci_low": 0.0,
+            "ci_high": 0.0,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        },
+        "OpponentResponsiveness": {
+          "n_cases": 7,
+          "spearman": {
+            "rho": null,
+            "p": null,
+            "note": "undefined (constant)",
+            "ci_low": null,
+            "ci_high": null,
+            "n_valid_reps": 0,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 0.8571428571428571,
+            "within_1": 0.8571428571428571
+          },
+          "offset": {
+            "mean_offset": 0.2857142857142857,
+            "ci_low": 0.0,
+            "ci_high": 0.8571428571428571,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        },
+        "judge_mean": {
+          "n_cases": 7,
+          "spearman": {
+            "rho": null,
+            "p": null,
+            "note": "undefined (constant)",
+            "ci_low": null,
+            "ci_high": null,
+            "n_valid_reps": 0,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 0.8571428571428571,
+            "within_1": 1.0
+          },
+          "offset": {
+            "mean_offset": 0.14285714285714285,
+            "ci_low": 0.0,
+            "ci_high": 0.42857142857142855,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        }
+      },
+      "persuasion": {
+        "GameTheoreticRigor": {
+          "n_cases": 6,
+          "spearman": {
+            "rho": null,
+            "p": null,
+            "note": "undefined (constant)",
+            "ci_low": null,
+            "ci_high": null,
+            "n_valid_reps": 0,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 0.6666666666666666,
+            "within_1": 1.0
+          },
+          "offset": {
+            "mean_offset": 0.3333333333333333,
+            "ci_low": 0.0,
+            "ci_high": 0.6666666666666666,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        },
+        "LiteralGroundedness": {
+          "n_cases": 6,
+          "spearman": {
+            "rho": null,
+            "p": null,
+            "note": "undefined (constant)",
+            "ci_low": null,
+            "ci_high": null,
+            "n_valid_reps": 0,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 1.0,
+            "within_1": 1.0
+          },
+          "offset": {
+            "mean_offset": 0.0,
+            "ci_low": 0.0,
+            "ci_high": 0.0,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        },
+        "OpponentResponsiveness": {
+          "n_cases": 6,
+          "spearman": {
+            "rho": null,
+            "p": null,
+            "note": "undefined (constant)",
+            "ci_low": null,
+            "ci_high": null,
+            "n_valid_reps": 0,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 0.6666666666666666,
+            "within_1": 1.0
+          },
+          "offset": {
+            "mean_offset": 0.3333333333333333,
+            "ci_low": 0.0,
+            "ci_high": 0.6666666666666666,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        },
+        "judge_mean": {
+          "n_cases": 6,
+          "spearman": {
+            "rho": null,
+            "p": null,
+            "note": "undefined (constant)",
+            "ci_low": null,
+            "ci_high": null,
+            "n_valid_reps": 0,
+            "n_total_reps": 10000
+          },
+          "agreement": {
+            "exact": 0.6666666666666666,
+            "within_1": 1.0
+          },
+          "offset": {
+            "mean_offset": 0.22222222222222232,
+            "ci_low": 0.0,
+            "ci_high": 0.44444444444444464,
+            "n_valid_reps": 10000,
+            "n_total_reps": 10000
+          }
+        }
+      }
+    }
+  },
+  "judge_pairwise": {
+    "valuation_reasoning": {
+      "overall": {
+        "GameTheoreticRigor|LiteralGroundedness": {
+          "n_cases": 20,
+          "spearman": {
+            "rho": 0.5666251831271545,
+            "p": 0.00919021179265047,
+            "note": null
+          },
+          "mean_offset": -0.55
+        },
+        "GameTheoreticRigor|OpponentResponsiveness": {
+          "n_cases": 20,
+          "spearman": {
+            "rho": 0.8923696431059416,
+            "p": 1.238207977097034e-07,
+            "note": null
+          },
+          "mean_offset": 0.05
+        },
+        "LiteralGroundedness|OpponentResponsiveness": {
+          "n_cases": 20,
+          "spearman": {
+            "rho": 0.5846054221936677,
+            "p": 0.006786665374369564,
+            "note": null
+          },
+          "mean_offset": 0.6
+        }
+      },
+      "bargaining": {
+        "GameTheoreticRigor|LiteralGroundedness": {
+          "n_cases": 7,
+          "spearman": {
+            "rho": 0.521749194749951,
+            "p": 0.22971461265007728,
+            "note": null
+          },
+          "mean_offset": -1.0
+        },
+        "GameTheoreticRigor|OpponentResponsiveness": {
+          "n_cases": 7,
+          "spearman": {
+            "rho": 0.724568837309472,
+            "p": 0.06549406281375661,
+            "note": null
+          },
+          "mean_offset": 0.0
+        },
+        "LiteralGroundedness|OpponentResponsiveness": {
+          "n_cases": 7,
+          "spearman": {
+            "rho": 0.7200822998230956,
+            "p": 0.0680131144747934,
+            "note": null
+          },
+          "mean_offset": 1.0
+        }
+      },
+      "negotiation": {
+        "GameTheoreticRigor|LiteralGroundedness": {
+          "n_cases": 7,
+          "spearman": {
+            "rho": null,
+            "p": null,
+            "note": "undefined (constant)"
+          },
+          "mean_offset": 0.0
+        },
+        "GameTheoreticRigor|OpponentResponsiveness": {
+          "n_cases": 7,
+          "spearman": {
+            "rho": null,
+            "p": null,
+            "note": "undefined (constant)"
+          },
+          "mean_offset": 0.14285714285714285
+        },
+        "LiteralGroundedness|OpponentResponsiveness": {
+          "n_cases": 7,
+          "spearman": {
+            "rho": null,
+            "p": null,
+            "note": "undefined (constant)"
+          },
+          "mean_offset": 0.14285714285714285
+        }
+      },
+      "persuasion": {
+        "GameTheoreticRigor|LiteralGroundedness": {
+          "n_cases": 6,
+          "spearman": {
+            "rho": 0.5656854249492381,
+            "p": 0.24198153056802085,
+            "note": null
+          },
+          "mean_offset": -0.6666666666666666
+        },
+        "GameTheoreticRigor|OpponentResponsiveness": {
+          "n_cases": 6,
+          "spearman": {
+            "rho": 1.0,
+            "p": 0.0,
+            "note": null
+          },
+          "mean_offset": 0.0
+        },
+        "LiteralGroundedness|OpponentResponsiveness": {
+          "n_cases": 6,
+          "spearman": {
+            "rho": 0.5656854249492381,
+            "p": 0.24198153056802085,
+            "note": null
+          },
+          "mean_offset": 0.6666666666666666
+        }
+      }
+    },
+    "horizon_strategy_planning": {
+      "overall": {
+        "GameTheoreticRigor|LiteralGroundedness": {
+          "n_cases": 20,
+          "spearman": {
+            "rho": 0.5572633307593641,
+            "p": 0.010692215796437022,
+            "note": null
+          },
+          "mean_offset": -0.85
+        },
+        "GameTheoreticRigor|OpponentResponsiveness": {
+          "n_cases": 20,
+          "spearman": {
+            "rho": 0.7386986351557566,
+            "p": 0.0001992817932612709,
+            "note": null
+          },
+          "mean_offset": 0.1
+        },
+        "LiteralGroundedness|OpponentResponsiveness": {
+          "n_cases": 20,
+          "spearman": {
+            "rho": 0.4441283117868107,
+            "p": 0.049789583273971746,
+            "note": null
+          },
+          "mean_offset": 0.95
+        }
+      },
+      "bargaining": {
+        "GameTheoreticRigor|LiteralGroundedness": {
+          "n_cases": 7,
+          "spearman": {
+            "rho": 0.0,
+            "p": 1.0,
+            "note": null
+          },
+          "mean_offset": -0.8571428571428571
+        },
+        "GameTheoreticRigor|OpponentResponsiveness": {
+          "n_cases": 7,
+          "spearman": {
+            "rho": 0.6454972243679028,
+            "p": 0.11738679514629333,
+            "note": null
+          },
+          "mean_offset": -0.14285714285714285
+        },
+        "LiteralGroundedness|OpponentResponsiveness": {
+          "n_cases": 7,
+          "spearman": {
+            "rho": 0.0,
+            "p": 1.0,
+            "note": null
+          },
+          "mean_offset": 0.7142857142857143
+        }
+      },
+      "negotiation": {
+        "GameTheoreticRigor|LiteralGroundedness": {
+          "n_cases": 7,
+          "spearman": {
+            "rho": 0.9354143466934853,
+            "p": 0.001966073182561675,
+            "note": null
+          },
+          "mean_offset": -0.8571428571428571
+        },
+        "GameTheoreticRigor|OpponentResponsiveness": {
+          "n_cases": 7,
+          "spearman": {
+            "rho": 0.8391463916782737,
+            "p": 0.01824074999610075,
+            "note": null
+          },
+          "mean_offset": 0.14285714285714285
+        },
+        "LiteralGroundedness|OpponentResponsiveness": {
+          "n_cases": 7,
+          "spearman": {
+            "rho": 0.724568837309472,
+            "p": 0.06549406281375661,
+            "note": null
+          },
+          "mean_offset": 1.0
+        }
+      },
+      "persuasion": {
+        "GameTheoreticRigor|LiteralGroundedness": {
+          "n_cases": 6,
+          "spearman": {
+            "rho": 0.36514837167011077,
+            "p": 0.4766206672728411,
+            "note": null
+          },
+          "mean_offset": -0.8333333333333334
+        },
+        "GameTheoreticRigor|OpponentResponsiveness": {
+          "n_cases": 6,
+          "spearman": {
+            "rho": 0.7666666666666669,
+            "p": 0.07531481481481465,
+            "note": null
+          },
+          "mean_offset": 0.3333333333333333
+        },
+        "LiteralGroundedness|OpponentResponsiveness": {
+          "n_cases": 6,
+          "spearman": {
+            "rho": 0.45643546458763845,
+            "p": 0.362892164013088,
+            "note": null
+          },
+          "mean_offset": 1.1666666666666667
+        }
+      }
+    },
+    "outcome_consistency": {
+      "overall": {
+        "GameTheoreticRigor|LiteralGroundedness": {
+          "n_cases": 20,
+          "spearman": {
+            "rho": null,
+            "p": null,
+            "note": "undefined (constant)"
+          },
+          "mean_offset": -0.4
+        },
+        "GameTheoreticRigor|OpponentResponsiveness": {
+          "n_cases": 20,
+          "spearman": {
+            "rho": 0.8885233166386386,
+            "p": 1.673926817267889e-07,
+            "note": null
+          },
+          "mean_offset": 0.0
+        },
+        "LiteralGroundedness|OpponentResponsiveness": {
+          "n_cases": 20,
+          "spearman": {
+            "rho": null,
+            "p": null,
+            "note": "undefined (constant)"
+          },
+          "mean_offset": 0.4
+        }
+      },
+      "bargaining": {
+        "GameTheoreticRigor|LiteralGroundedness": {
+          "n_cases": 7,
+          "spearman": {
+            "rho": null,
+            "p": null,
+            "note": "undefined (constant)"
+          },
+          "mean_offset": -0.7142857142857143
+        },
+        "GameTheoreticRigor|OpponentResponsiveness": {
+          "n_cases": 7,
+          "spearman": {
+            "rho": 0.7302967433402214,
+            "p": 0.062352416002150406,
+            "note": null
+          },
+          "mean_offset": -0.14285714285714285
+        },
+        "LiteralGroundedness|OpponentResponsiveness": {
+          "n_cases": 7,
+          "spearman": {
+            "rho": null,
+            "p": null,
+            "note": "undefined (constant)"
+          },
+          "mean_offset": 0.5714285714285714
+        }
+      },
+      "negotiation": {
+        "GameTheoreticRigor|LiteralGroundedness": {
+          "n_cases": 7,
+          "spearman": {
+            "rho": null,
+            "p": null,
+            "note": "undefined (constant)"
+          },
+          "mean_offset": -0.14285714285714285
+        },
+        "GameTheoreticRigor|OpponentResponsiveness": {
+          "n_cases": 7,
+          "spearman": {
+            "rho": 0.9999999999999998,
+            "p": 1.4110889914610805e-39,
+            "note": null
+          },
+          "mean_offset": 0.14285714285714285
+        },
+        "LiteralGroundedness|OpponentResponsiveness": {
+          "n_cases": 7,
+          "spearman": {
+            "rho": null,
+            "p": null,
+            "note": "undefined (constant)"
+          },
+          "mean_offset": 0.2857142857142857
+        }
+      },
+      "persuasion": {
+        "GameTheoreticRigor|LiteralGroundedness": {
+          "n_cases": 6,
+          "spearman": {
+            "rho": null,
+            "p": null,
+            "note": "undefined (constant)"
+          },
+          "mean_offset": -0.3333333333333333
+        },
+        "GameTheoreticRigor|OpponentResponsiveness": {
+          "n_cases": 6,
+          "spearman": {
+            "rho": 1.0,
+            "p": 0.0,
+            "note": null
+          },
+          "mean_offset": 0.0
+        },
+        "LiteralGroundedness|OpponentResponsiveness": {
+          "n_cases": 6,
+          "spearman": {
+            "rho": null,
+            "p": null,
+            "note": "undefined (constant)"
+          },
+          "mean_offset": 0.3333333333333333
+        }
+      }
+    }
+  },
+  "outcome_consistency_distributions": {
+    "n_cases": 20,
+    "author": {
+      "1": 0,
+      "2": 0,
+      "3": 0,
+      "4": 0,
+      "5": 20
+    },
+    "judges": {
+      "GameTheoreticRigor": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 8,
+        "5": 12
+      },
+      "LiteralGroundedness": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 20
+      },
+      "OpponentResponsiveness": {
+        "1": 0,
+        "2": 0,
+        "3": 1,
+        "4": 6,
+        "5": 13
+      }
+    }
+  }
+}
