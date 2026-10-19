@@ -1,0 +1,160 @@
+\documentclass{article}
+\usepackage[preprint]{neurips_2026}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue}
+\usepackage{enumitem}
+\setlist{noitemsep, topsep=2pt, partopsep=0pt}
+\setlength{\textfloatsep}{6pt plus 2pt minus 2pt}
+\setlength{\intextsep}{6pt plus 2pt minus 2pt}
+
+\newcommand{\kap}{\kappa}
+
+\title{Does Judge-Panel Agreement Measure Path Invariance? A Measurement-Validity Study of a Claude Agent in Language-Based Economic Games}
+
+\author{
+  Shailendra Bade \\
+  Groundtruth Labs LLC \\
+  \texttt{groundtruthlabs.net}
+}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Outcome metrics in language-based economic games cannot separate consistent strategic reasoning from lucky payoffs. Path-Invariant Agreement (PIA) proposes to fill that gap with Fleiss' $\kappa$ among LLM judges scoring an agent's reasoning at ``equivalent'' decision points. We instrument a Claude Sonnet~4.6 GLEE agent to log its reasoning at every decision and ask whether PIA's number measures what it claims. On 105 stratified clusters (805 judged steps, three judge personas) overall $\kappa$ is $0.007$ (game-level 95\% CI $[-0.043, 0.079]$). It is below the $\kappa$ of randomly shuffled clusters in 13 of 14 family--dimension cells, and it is driven by judge calibration offsets and ceiling effects: dropping one lenient judge raises $\kappa$ from $0.04$ to $0.30$, and offset-robust agreement is moderate (ICC $0.28$--$0.70$). Observational clusters are also too coarse to define equivalent states: within-cluster bargaining action spread ($0.103$) is $3.5\times$ the spread measured by re-querying the agent at identical states ($0.030$; 360 calls). A 20-step check by the author as a human rater agrees with the judge mean on valuation reasoning (Spearman $0.68$) but only weakly on horizon/strategy ($0.29$), and finds the judges more lenient by about $0.9$ points. We conclude that cluster-level judge $\kappa$ is not a valid path-invariance measure here and that same-state replay is the cheaper, sounder consistency probe. We report these negative results together with a corrected account of our earlier submission.
+\end{abstract}
+
+\section{Agent, Motivation, and Scope of This Revision}
+
+Evaluation of agents in bargaining, negotiation, and persuasion is almost always outcome-based: payoff, win rate, rating. Two agents can reach the same payoff through principled reasoning or through inconsistent reasoning that happened to pay. We built a Claude Sonnet~4.6 agent (GLEE Agent ID \texttt{116dce702116}, ``PIA-Agent'') whose reasoning is logged at every decision, so that a second question can be asked: \emph{is its reasoning consistent across decision points that should be treated alike?}
+
+Path-Invariant Agreement (PIA) answers this by having several LLM judges score reasoning at ``equivalent'' decision points and reporting Fleiss' $\kappa$ \citep{fleiss1971}. Our first submission reported $\kappa=0.0458$ and read it as low path invariance. Reviewers asked whether that number measures path invariance at all. This revision treats that as the research question: we (i) separate three constructs that were conflated, (ii) test the number against within-GLEE baselines, uncertainty estimates, and a small rater check, and (iii) report where it fails. The contribution is a diagnosis of a measurement procedure on a real agent, with data and code released, not a new metric.
+
+\section{Agent Design and Development}
+
+\textbf{Design.} A \texttt{strategy(game)} dispatcher routes to per-family handlers sharing one execution core, a choice made under a fixed budget and not because the families are strategically alike. Each call asks Claude for 2--4 sentences of reasoning under \texttt{REASONING:} and a JSON action under \texttt{ACTION:}; the prompt holds the game text, full machine-readable state, legal-action schema, and round history. Sampling used the API-default temperature, with a two-attempt parse retry and a guaranteed-legal fallback action.
+
+\textbf{Development.} Three failures shaped the data. (1)~\emph{Duplicate dispatch}: repeated calls at identical states, first blamed on a polling race, were traced to the agent echoing the schema description instead of a flat action, causing server rejection and re-queueing; fixed with a worked example and a parser unwrap. (2)~\emph{Credit exhaustion}: an unattended run entered a multi-hour retry loop; fixed with a circuit breaker and real usage logging. (3)~\emph{Prompt caching} gave a 0\% hit rate and a 4.7\% cost increase and was reverted. Failure (2) makes 69.7\% of the first quarter of the log fallback actions (Section~\ref{sec:results}).
+
+\section{Measurement Protocol}
+\label{sec:protocol}
+
+\textbf{Three constructs.} For a decision input $x$ (state, legal actions, full history):
+\emph{same-state repeatability} (SSR) is the spread of actions under repeated sampling from the policy at one fixed $x$;
+\emph{path invariance} (PI) requires that policies at inputs $x,x'$ with the same signature $\sigma$ agree even when their histories differ in features declared irrelevant;
+\emph{strategic adaptation} is a legitimate difference when the differing history features should update beliefs about the opponent.
+Observational clustering treats $\sigma(x)=\sigma(x')$ as ``equivalent'' and assumes the remaining differences are irrelevant. This assumption is untested, and the agent \emph{does} condition on history, so some within-cluster variation is adaptation by design.
+
+\textbf{Observational protocol.} Steps are grouped within a family by a coarse signature: bargaining by round position, pot, and offer/pot ratio; negotiation by round position, role, and price/value ratio; persuasion by round position and bucketed $p,v,u$. We drew 35 clusters per family (quantile bins over cluster size, at most 10 judged steps per cluster; seed 20261002 and a frozen manifest), giving 805 judged steps. Fallback steps are never judged. Three judge personas (GameTheoreticRigor, LiteralGroundedness, OpponentResponsiveness) score each step on four 1--5 dimensions: valuation reasoning, horizon/strategy, concession handling (not applicable without a prior rejection, hence absent in persuasion), and outcome consistency. The personas share an identical rubric and output schema and differ only in their opening framing. Judge and agent are the same model (Claude Sonnet~4.6) at default temperature.
+
+\textbf{Statistic.} Per cluster, items are judged steps and raters are the three personas; $\kappa$ is Fleiss' with five categories. The \emph{primary aggregate} is the unweighted mean over clusters; member-weighted and pooled values are sensitivity checks. If all ratings in a cluster are identical, the implementation sets $\kappa=1$ (denominator $\approx 0$). This fires in 12 cluster--dimension entries, all uniform scores of 5, and the primary aggregate excludes them. Clusters sharing a game are not independent (94\% of bargaining and 100\% of negotiation clusters do), so uncertainty comes from a 10{,}000-sample bootstrap over \emph{connected components} of the cluster--game graph: 7, 5 and 29 independent units for bargaining, negotiation and persuasion.
+
+\section{Results}
+\label{sec:results}
+
+\textbf{The headline number is indistinguishable from zero.} Table~\ref{tab:headline} gives the re-computed values. Our first submission's $0.0458$ came from a run whose raw judge scores were not persisted; the number here comes from a frozen, reproducible re-run on the same logged trajectories and is the one we stand behind. Negotiation and bargaining intervals include zero. Persuasion is the only family with an interval above zero, yet it sits at the shuffled floor.
+
+\begin{table}[t]
+\footnotesize
+\centering
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lccccc}
+\toprule
+ & $\kappa$ all & $\kappa$ excl.\ degen. & Game-level 95\% CI & Shuffled mean & Shuffled 95\% \\
+\midrule
+Bargaining  & $-0.013$ & $-0.023$ & $[-0.118,\,0.105]$ & $0.032$ & $[-0.003,\,0.072]$ \\
+Negotiation & $-0.029$ & $-0.067$ & $[-0.149,\,0.054]$ & $0.018$ & $[-0.020,\,0.060]$ \\
+Persuasion  & $0.170$ & $0.112$ & $[0.070,\,0.154]$ & $0.179$ & $[0.156,\,0.204]$ \\
+Overall     & $0.043$ & $0.007$ & $[-0.043,\,0.079]$ & -- & -- \\
+\bottomrule
+\end{tabular}
+\caption{Unweighted mean per-cluster Fleiss' $\kappa$ (35 clusters/family). ``Shuffled'' reassigns judged steps to random clusters of the same sizes within a family (1{,}000 permutations; all-clusters version, same forced-$\kappa$ rule).}
+\label{tab:headline}
+\end{table}
+
+\textbf{Clustering adds nothing to the number.} Real $\kappa$ is below the shuffled mean in 13 of 14 family--dimension cells and above the shuffled 95\% interval in none, so arbitrary groups give about the same $\kappa$ and it cannot be evidence about equivalent states.
+
+\textbf{What $\kappa$ measures: judge calibration.} LiteralGroundedness is systematically lenient, scoring $0.6$--$1.4$ points above the other two judges on horizon and concession handling and up to $0.8$ above on bargaining valuation. Several judge pairs have high rank agreement but near-zero $\kappa$ (negotiation horizon: Spearman $0.71$, Cohen's $\kappa=-0.14$). Three checks follow. (i)~Per-judge-centered ICC(3,1) is $0.28$--$0.70$ and ordinal Krippendorff's $\alpha$ is $0.13$--$0.63$ ($-0.04$ for saturated persuasion outcome consistency). (ii)~Removing LiteralGroundedness raises overall $\kappa$ from $0.04$ to $0.30$ ($0.007$ to $0.25$ excluding degenerate entries), yet two-rater $\kappa$ is still below its shuffled mean in all 14 cells. (iii)~Outcome consistency is saturated: 59\% of bargaining and 90\% of persuasion scores are 5. Judges do track state: cluster membership explains more judge-score variance than shuffled groups in 6 of 11 cells (negotiation horizon $\eta^2=0.52$ vs.\ $0.15$), but $\kappa$ pooled within clusters does not isolate it. A negative $\kappa$ means judges disagree beyond chance given their marginals, not that the agent's reasoning is worse than chance. Fleiss' $\kappa$ is also depressed when items are homogeneous or prevalence is skewed \citep{feinstein1990}: negotiation clusters are nearly identical in round and phase (modal share $0.99$) and give the lowest $\kappa$, while persuasion clusters mix rounds (modal round share $0.43$) and give the highest. A path-invariance metric should not rise as the compared states become less alike.
+
+\textbf{Within-GLEE baselines.} \emph{Action-only} (within-cluster spread of normalized offers, or $1-$modal share for categorical actions) is no lower than shuffled clusters in bargaining ($0.103$ vs.\ $0.122$, shuffled 95\% $[0.092,0.157]$) and negotiation ($0.060$ vs.\ $0.066$, $[0.048,0.088]$) and lower only in persuasion ($0.349$ vs.\ $0.467$). Judge-score spread tracks action spread only in persuasion (Spearman $0.51$, $p=0.002$; bargaining $0.04$, negotiation $-0.01$), so in two of three families the judges' score variation carries no information about the agent's behavior variation. We therefore cannot claim that PIA reveals failures that action disagreement misses. We did not run a deterministic heuristic agent or a family-tuned agent.
+
+\textbf{Same-state replay (SSR).} We re-queried the agent on the 18 states in which duplicate dispatch had given identical inputs (16 from iterations before the schema fix), 10 samples each at the API default temperature and at $T=0$ (360 calls, \$2.32). Table~\ref{tab:replay} gives normalized action spread. In bargaining, the observational within-cluster spread ($0.103$) is $3.5\times$ the same-state spread ($0.030$ excluding one state in which 12 of 20 samples reached the 600-token output cap and failed to parse); in negotiation the two are consistent ($0.060$ vs.\ $0.090$, wide intervals, 8 states). Persuasion is not measurable with our action extractor. Exact action equality fails in 15 of 18 states at \emph{both} settings, but at $T=0$ the magnitudes are small ($0.024$--$0.028$). Together with the baselines above, bargaining clusters therefore mix genuinely different states, which no choice of judge can repair.
+
+\begin{table}[t]
+\footnotesize
+\centering
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lccccc}
+\toprule
+ & Obs.\ within-cluster & \multicolumn{2}{c}{Replay, default $T$} & Replay, $T{=}0$ & States \\
+\cmidrule(lr){3-4}
+ &  & all states & excl.\ capped state &  &  \\
+\midrule
+Bargaining  & $0.103$ & $0.085$ [0.023, 0.197] & $0.030$ [0.021, 0.039] & $0.024$ / $0.030$ & 5 / 4 \\
+Negotiation & $0.060$ & $0.090$ [0.013, 0.191] & -- & $0.028$ [0, 0.067] & 8 \\
+Persuasion  & $0.349$ & n/a & n/a & n/a & 5 \\
+\bottomrule
+\end{tabular}
+\caption{Mean action spread (SD of offer share, or $1-$modal share). Replay intervals are bootstrap over states. Replay prompts omit the game's rules paragraph (never logged) and reconstruct the action schema.}
+\label{tab:replay}
+\end{table}
+
+\textbf{Human rater check ($n=20$).} The first author rated 20 randomly chosen judged steps (7/7/6 by family; sheet showed no judge scores) on three dimensions. Rank correlation with the judge mean is $0.68$ [0.43, 0.84] for valuation reasoning but $0.29$ [$-0.20$, $0.68$] for horizon/strategy, and the judges are more lenient than the rater by $0.87$ and $0.85$ points. Several low horizon ratings concern games whose horizon is unknown, a case our rubric does not address. With one rater who knew the study's hypothesis and $n=20$, this is a sanity check on the judges, not validation, and no human--human agreement was measured.
+
+\textbf{Fallback rate.}\label{sec:fallback} Of 5{,}870 steps in the sampled clusters, 883 (15.0\%) were fallback actions (bargaining 10.8\%, negotiation 4.5\%, persuasion 21.5\%); none of the 805 judged steps is a fallback. Over the whole 26{,}319-step log the rate is 20.8\%, almost entirely from the credit-exhaustion episode (69.7\% in the first quartile of the log, 0.2\% in the third, none in the last).
+
+\section{Agent Behavior Analysis}
+\label{sec:aba}
+
+\textbf{Design intent and verification.} The agent was designed to compute reservation values and equilibrium benchmarks, model the opponent from history, and act consistently with that reasoning. We verified this against logged reasoning and actions, not against win rate. The evidence is mixed. Judges rate outcome consistency high (though the scale is saturated), but the step from stated reasoning to concrete action is unstable. At a \$1M, 12-round bargaining state ($\delta_1=0.9$), 8 of 10 default-temperature replay samples cite the same equilibrium share ($1/(1+\delta)\approx 52.6\%$, assuming Bob's $\delta$ equals the agent's) yet propose $52.6\%$ to $65\%$ for themselves, justified as ``a strong opening offer''; at $T=0$, 8 of 10 cite it and offer $52.6\%$ to $60\%$. The variation is introduced by a heuristic anchoring step, not by the equilibrium computation or by rounding. The archived pre-fix calls at a $\delta=0.95$ state showed a related pattern but with divergent reasoning: of four calls, one derived $1/(1+\delta)=51.3\%$ and the others reasoned heuristically (offers of 55\% twice and 60\% twice). We withdraw our earlier statement that all four derived the same solution.
+
+\textbf{Faithfulness.} PIA scores the consistency of \emph{reported} rationales; these may be post-hoc explanations \citep{turpin2023,lanham2023} and do not establish consistency of the underlying computation. The outcome-consistency dimension checks only that the action follows from the stated reasoning.
+
+\section{Limitations and Reproducibility}
+
+\textbf{Equivalence is untested.} We did not sweep signature strictness; shuffled clusters (loosest) and near-identical negotiation clusters (strictest) bracket it. Persuasion clusters mix rounds and histories, so they are the weakest claim to equivalence. \textbf{Judges.} All three share one base model with the agent, so self-preference \citep{zheng2023,panickssery2024} may contribute to leniency; judges were sampled once, so judge test--retest reliability is unknown. \textbf{Scale.} The replay has 5--8 states per family, and per-family intervals are wide. \textbf{Prompt reconstruction.} Replay prompts omit the rules paragraph, and parse failures concentrate in one state. \textbf{Withdrawn comparison.} Earlier versions compared GLEE $\kappa$ with a wearable-domain $\kappa$ of $0.743$. That comparison was invalid because $\kappa$ depends on prevalence and cluster construction, and the underlying figures came from scripted dry-run scores, not from live raters; we withdraw them. \textbf{Novelty.} PIA's comparison mechanism comes from the author's prior work \citep{agenttrace}; this paper's contribution is domain transfer and its diagnosis.
+
+\textbf{Reproducibility.} Code, the frozen manifest (input hash 85ff4578\ldots), raw per-judge scores, replay samples, ratings and all analysis outputs are at \url{https://github.com/finaspirant/llm-wearable-agentic-eval-pipeline} (\texttt{src/glee/}, \texttt{src/rsi\_bench/}, \texttt{data/rsi\_bench/}). Analyses use seed 20261002 and make no API calls. The scoring run made 2{,}415 judge calls (about \$17.5). Our earlier submission's driver script was not in the repository at submission time; the scripts released now regenerate every number in this paper.
+
+\section*{Use of Large Language Models}
+The submitted agent and the judges are LLM-based (Claude Sonnet~4.6) and are the objects of study. Implementation and analysis code were developed with an AI coding assistant (Claude Code) and this manuscript was drafted with AI assistance, under the author's supervision; the author reviewed the experiments and takes responsibility for all claims. Every number was recomputed from the released analysis files.
+
+\bibliographystyle{plainnat}
+\begin{thebibliography}{9}
+\bibitem[Shapira et~al.(2024)]{glee}
+Shapira, E., Madmon, O., Reichart, R., and Tennenholtz, M. GLEE: A unified framework and benchmark for language-based economic environments. arXiv:2410.05254, 2024.
+
+\bibitem[Fleiss(1971)]{fleiss1971}
+Fleiss, J. L. Measuring nominal scale agreement among many raters. \emph{Psychological Bulletin}, 76(5):378--382, 1971.
+
+\bibitem[Feinstein and Cicchetti(1990)]{feinstein1990}
+Feinstein, A. R. and Cicchetti, D. V. High agreement but low kappa: I. The problems of two paradoxes. \emph{Journal of Clinical Epidemiology}, 43(6):543--549, 1990.
+
+\bibitem[Turpin et~al.(2023)]{turpin2023}
+Turpin, M., Michael, J., Perez, E., and Bowman, S. R. Language models don't always say what they think: Unfaithful explanations in chain-of-thought prompting. \emph{NeurIPS}, 2023.
+
+\bibitem[Lanham et~al.(2023)]{lanham2023}
+Lanham, T. et~al. Measuring faithfulness in chain-of-thought reasoning. arXiv:2307.13702, 2023.
+
+\bibitem[Zheng et~al.(2023)]{zheng2023}
+Zheng, L. et~al. Judging LLM-as-a-judge with MT-Bench and Chatbot Arena. \emph{NeurIPS Datasets and Benchmarks}, 2023.
+
+\bibitem[Panickssery et~al.(2024)]{panickssery2024}
+Panickssery, A., Bowman, S. R., and Feng, S. LLM evaluators recognize and favor their own generations. arXiv:2404.13076, 2024.
+
+\bibitem[Bade(2026)]{agenttrace}
+Bade, S. AgentTrace: Trajectory-level evaluation of non-deterministic agents (code repository), 2026. \url{https://github.com/finaspirant/llm-wearable-agentic-eval-pipeline}
+\end{thebibliography}
+
+\end{document}
