@@ -46,7 +46,6 @@ from pathlib import Path
 from typing import Any
 
 from anthropic import Anthropic
-from glee_sdk import GleeClient
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s %(message)s")
 logger = logging.getLogger("claude_glee_agent")
@@ -538,6 +537,13 @@ def strategy(game: dict[str, Any]) -> dict[str, Any]:
 
 
 if __name__ == "__main__":
+    # Imported here, not at module level: glee_sdk is only needed for live
+    # competition play via this CLI entry point, not for importing this
+    # module's prompt-building helpers (SYSTEM_PROMPT, build_user_prompt,
+    # parse_response) -- which src.rsi_bench.run_intrastate_replay and this
+    # module's own test suite both do without ever touching GleeClient.
+    from glee_sdk import GleeClient
+
     api_key = os.environ.get("GLEE_API_KEY", "")
     if not api_key:
         print(
