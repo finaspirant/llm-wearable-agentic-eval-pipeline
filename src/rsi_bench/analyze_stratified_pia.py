@@ -73,9 +73,10 @@ import json
 import logging
 import random
 from collections import Counter
+from collections.abc import Sequence
 from itertools import combinations
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 import numpy as np
 import typer
@@ -154,7 +155,8 @@ def load_manifest(path: Path) -> dict[str, Any]:
     """
     if not path.exists():
         raise FileNotFoundError(f"Manifest file not found: {path}")
-    return json.loads(path.read_text())
+    data: dict[str, Any] = json.loads(path.read_text())
+    return data
 
 
 # ---------------------------------------------------------------------------
@@ -402,7 +404,7 @@ def find_degenerate_entries(
 # ---------------------------------------------------------------------------
 
 
-def _mean(values: list[float]) -> float | None:
+def _mean(values: Sequence[float]) -> float | None:
     """Arithmetic mean, or ``None`` for an empty list."""
     return sum(values) / len(values) if values else None
 
@@ -594,7 +596,7 @@ def build_aggregates(
 # ---------------------------------------------------------------------------
 
 
-def _percentile_ci(values: list[float]) -> dict[str, Any]:
+def _percentile_ci(values: list[float | None]) -> dict[str, Any]:
     """95% percentile CI (2.5th/97.5th) over non-``None`` bootstrap values.
 
     Args:
@@ -622,7 +624,7 @@ def _percentile_ci(values: list[float]) -> dict[str, Any]:
     }
 
 
-def _fraction_positive(values: list[float]) -> float | None:
+def _fraction_positive(values: list[float | None]) -> float | None:
     """Fraction of non-``None`` bootstrap values that are strictly > 0."""
     valid = [v for v in values if v is not None]
     if not valid:
@@ -818,15 +820,17 @@ def judge_agreement_report(
 
             per_judge_mean: dict[str, float | None] = {}
             for judge in judges:
-                judge_scores = [m[judge] for m in members if m.get(judge) is not None]
+                judge_scores = [
+                    score for m in members if (score := m.get(judge)) is not None
+                ]
                 per_judge_mean[judge] = _mean(judge_scores)
 
             pairwise: dict[str, dict[str, Any]] = {}
             for j1, j2 in combinations(judges, 2):
                 paired = [
-                    (m[j1], m[j2])
+                    (v1, v2)
                     for m in members
-                    if m.get(j1) is not None and m.get(j2) is not None
+                    if (v1 := m.get(j1)) is not None and (v2 := m.get(j2)) is not None
                 ]
                 key = f"{j1}|{j2}"
                 if len(paired) < 2:
@@ -843,12 +847,15 @@ def judge_agreement_report(
                 b = [p[1] for p in paired]
                 exact = sum(1 for x, y in paired if x == y) / len(paired)
                 within_1 = sum(1 for x, y in paired if abs(x - y) <= 1) / len(paired)
+                rho: float | None
+                p_value: float | None
                 if len(set(a)) > 1 and len(set(b)) > 1:
                     rho, p_value = spearmanr(a, b)
                     rho = float(rho)
                     p_value = float(p_value)
                 else:
                     rho, p_value = None, None
+                kappa: float | None
                 try:
                     kappa_result = IRRCalculator().cohens_kappa(a, b)
                     kappa = float(kappa_result["kappa"])  # type: ignore[arg-type]
@@ -919,9 +926,9 @@ def _chunk_kappa(
     score_map: dict[tuple[str, str], int] = {}
     for mi, member in enumerate(chunk):
         present = {
-            j: member[j][dimension]
+            j: score
             for j in judges
-            if j in member and member[j].get(dimension) is not None
+            if j in member and (score := member[j].get(dimension)) is not None
         }
         if len(present) == len(judges):
             item_id = str(mi)
@@ -1415,7 +1422,7 @@ def _icc_3_1(matrix: np.ndarray) -> float:
     denom = bms + (k - 1) * ems
     if denom == 0:
         return 0.0
-    return (bms - ems) / denom
+    return float((bms - ems) / denom)
 
 
 def offset_robust_agreement_report(
@@ -1453,7 +1460,7 @@ def offset_robust_agreement_report(
 
             per_judge_mean: dict[str, float | None] = {}
             for judge in judges:
-                scores = [m[judge] for m in members if m.get(judge) is not None]
+                scores = [score for m in members if (score := m.get(judge)) is not None]
                 per_judge_mean[judge] = _mean(scores)
 
             complete = [m for m in members if all(m.get(j) is not None for j in judges)]
@@ -1466,8 +1473,14 @@ def offset_robust_agreement_report(
                 }
                 continue
 
+            # Every judge's mean and every complete member's per-judge score is
+            # guaranteed non-None by the guard above -- cast() tells mypy what
+            # that guard already enforces at runtime, without changing it.
+            judge_means: dict[str, float] = {
+                j: cast(float, per_judge_mean[j]) for j in judges
+            }
             centered = np.array(
-                [[m[j] - per_judge_mean[j] for j in judges] for m in complete]
+                [[cast(float, m[j]) - judge_means[j] for j in judges] for m in complete]
             )
             icc = _icc_3_1(centered)
             alpha_data = centered.T.tolist()  # rater-major for krippendorffs_alpha
@@ -1585,9 +1598,9 @@ def _judge_mean_score(
 ) -> float | None:
     """Mean of whatever non-null judge scores a member has for ``dimension``."""
     scores = [
-        member[j][dimension]
+        score
         for j in judges
-        if j in member and member[j].get(dimension) is not None
+        if j in member and (score := member[j].get(dimension)) is not None
     ]
     return sum(scores) / len(scores) if scores else None
 

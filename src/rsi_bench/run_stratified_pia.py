@@ -1047,7 +1047,7 @@ def score_selected_clusters(
 
             if accumulator is not None:
                 cluster_calls = accumulator.slice_since(usage_start)
-                usage_block = {
+                usage_block: dict[str, Any] = {
                     "n_score_member_calls": len(raw_scores),
                     "input_tokens": sum(c["input_tokens"] for c in cluster_calls),
                     "output_tokens": sum(c["output_tokens"] for c in cluster_calls),

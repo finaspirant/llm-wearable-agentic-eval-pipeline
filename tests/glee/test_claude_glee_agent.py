@@ -54,7 +54,9 @@ class TestExampleValueForField:
         assert _example_value_for_field(desc) == "yes"
 
     def test_unrecognised_description_falls_back_to_example(self) -> None:
-        assert _example_value_for_field("some unusual free-form description") == "example"
+        assert (
+            _example_value_for_field("some unusual free-form description") == "example"
+        )
 
     def test_case_insensitive_number(self) -> None:
         assert _example_value_for_field("NUMBER (a value)") == 0
@@ -79,7 +81,10 @@ class TestBuildExampleAction:
         assert example == {"alice_gain": 0, "bob_gain": 0, "message": "example"}
 
     def test_no_wrapper_keys_in_output(self) -> None:
-        valid_actions = {"type": "offer", "fields": {"product_price": "number (a price)"}}
+        valid_actions = {
+            "type": "offer",
+            "fields": {"product_price": "number (a price)"},
+        }
         example = _build_example_action(valid_actions)
         assert "type" not in example
         assert "fields" not in example
@@ -180,7 +185,9 @@ class TestParseResponseUnwrapsRealCapturedMalformedOutputs:
         text = _reasoning_action_text("x", malformed)
         with caplog.at_level(logging.WARNING, logger="claude_glee_agent"):
             parse_response(text)
-        assert any("unwrapping schema-echoed action" in r.message for r in caplog.records)
+        assert any(
+            "unwrapping schema-echoed action" in r.message for r in caplog.records
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -224,7 +231,9 @@ class TestParseResponseFlatActionsPassThroughUnchanged:
         text = _reasoning_action_text("x", flat)
         with caplog.at_level(logging.WARNING, logger="claude_glee_agent"):
             parse_response(text)
-        assert not any("unwrapping schema-echoed action" in r.message for r in caplog.records)
+        assert not any(
+            "unwrapping schema-echoed action" in r.message for r in caplog.records
+        )
 
     def test_fields_key_present_but_not_a_dict_is_not_unwrapped(self) -> None:
         # Edge case: "fields" as a non-dict value is not the schema-echo

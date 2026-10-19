@@ -43,6 +43,7 @@ import time
 import uuid
 from concurrent.futures import Future
 from pathlib import Path
+from typing import Any
 
 from anthropic import Anthropic
 from glee_sdk import GleeClient
@@ -61,10 +62,10 @@ anthropic_client = Anthropic()  # reads ANTHROPIC_API_KEY from env
 # Opponent-history tracking (in-memory; keyed by game_id)
 # ---------------------------------------------------------------------------
 
-_game_histories: dict[str, list[dict]] = {}
+_game_histories: dict[str, list[dict[str, Any]]] = {}
 
 
-def _record_state(game: dict) -> list[dict]:
+def _record_state(game: dict[str, Any]) -> list[dict[str, Any]]:
     """Append this call's state snapshot to the game's running history and
     return the full history so the prompt can show concession patterns."""
     hist = _game_histories.setdefault(game["game_id"], [])
@@ -82,25 +83,26 @@ def _record_state(game: dict) -> list[dict]:
 # Prompting
 # ---------------------------------------------------------------------------
 
-SYSTEM_PROMPT = """You are a strategic player in a language-based economic game (part of \
-the GLEE benchmark: bargaining, negotiation, or persuasion). You will be shown the game's \
-own rules/situation as prose, the full machine-readable state visible to you (including \
-round history), and the exact legal action format for this turn.
-
-Think about this like a careful game theorist, not just a pattern-matcher:
-1. Identify what family of game this is and what phase you're in.
-2. Work out your reservation value / walk-away point from the state given (e.g. money_to_divide, \
-your own valuation, expected value from p/v/u for persuasion).
-3. Model the opponent from the history: are they conceding, anchoring, stalling? Is there a \
-round cap or inflation pressure that changes the value of waiting?
-4. Decide the action that maximizes YOUR OWN payoff over the whole game (not fairness, not \
-speed), subject to the rules of the current phase.
-
-First write 2-4 sentences of reasoning under a "REASONING:" heading. Then, on a new line, \
-write "ACTION:" followed by ONLY the JSON action object -- no markdown fences, no trailing \
-commentary. The reasoning and the action must be consistent with each other: don't reason \
-your way to accepting an offer and then reject it.
-"""
+SYSTEM_PROMPT = (
+    "You are a strategic player in a language-based economic game (part of the GLEE "
+    "benchmark: bargaining, negotiation, or persuasion). You will be shown the game's "
+    "own rules/situation as prose, the full machine-readable state visible to you "
+    "(including round history), and the exact legal action format for this turn.\n"
+    "\n"
+    "Think about this like a careful game theorist, not just a pattern-matcher:\n"
+    "1. Identify what family of game this is and what phase you're in.\n"
+    "2. Work out your reservation value / walk-away point from the state given (e.g. "
+    "money_to_divide, your own valuation, expected value from p/v/u for persuasion).\n"
+    "3. Model the opponent from the history: are they conceding, anchoring, stalling? "
+    "Is there a round cap or inflation pressure that changes the value of waiting?\n"
+    "4. Decide the action that maximizes YOUR OWN payoff over the whole game (not "
+    "fairness, not speed), subject to the rules of the current phase.\n"
+    "\n"
+    'First write 2-4 sentences of reasoning under a "REASONING:" heading. Then, on a '
+    'new line, write "ACTION:" followed by ONLY the JSON action object -- no markdown '
+    "fences, no trailing commentary. The reasoning and the action must be consistent "
+    "with each other: don't reason your way to accepting an offer and then reject it.\n"
+)
 
 
 def _example_value_for_field(description: str) -> object:
@@ -127,7 +129,7 @@ def _example_value_for_field(description: str) -> object:
     return "example"
 
 
-def _build_example_action(valid_actions: dict) -> dict:
+def _build_example_action(valid_actions: dict[str, Any]) -> dict[str, Any]:
     """Build a flat example action from a valid_actions schema at runtime.
 
     Generated fresh per call rather than hardcoded, since the field set
@@ -147,7 +149,7 @@ def _build_example_action(valid_actions: dict) -> dict:
     return {name: _example_value_for_field(str(desc)) for name, desc in fields.items()}
 
 
-def _format_history_block(history: list[dict]) -> str:
+def _format_history_block(history: list[dict[str, Any]]) -> str:
     """Render prior-round snapshots as an append-only, byte-stable block.
 
     One complete JSON object per line, rather than a single
@@ -185,7 +187,7 @@ _HISTORY_HEADER = (
 )
 
 
-def build_user_prompt(game: dict, history: list[dict]) -> str:
+def build_user_prompt(game: dict[str, Any], history: list[dict[str, Any]]) -> str:
     """Build the full user-turn prompt for this round.
 
     Prompt caching (cache_control) was tried and reverted here after two
@@ -230,14 +232,17 @@ def build_user_prompt(game: dict, history: list[dict]) -> str:
         f"Your action must conform to this schema:\n"
         f"{json.dumps(game['valid_actions'], indent=2, sort_keys=True)}\n"
         f"{example_note}\n"
-        'Respond with "REASONING:" then your reasoning, then "ACTION:" then the JSON object only.'
+        'Respond with "REASONING:" then your reasoning, then "ACTION:" then the JSON '
+        "object only."
     )
 
 
-def parse_response(text: str) -> tuple[str, dict]:
+def parse_response(text: str) -> tuple[str, dict[str, Any]]:
     """Split a REASONING:/ACTION: reply into (reasoning, action_dict)."""
     action_split = re.split(r"ACTION:\s*", text, maxsplit=1)
-    reasoning = re.sub(r"^REASONING:\s*", "", action_split[0].strip()) if action_split else ""
+    reasoning = (
+        re.sub(r"^REASONING:\s*", "", action_split[0].strip()) if action_split else ""
+    )
     action_text = action_split[1] if len(action_split) > 1 else text
     action_text = re.sub(r"^```(?:json)?\s*|\s*```$", "", action_text.strip())
     try:
@@ -267,7 +272,7 @@ def parse_response(text: str) -> tuple[str, dict]:
     return reasoning, action
 
 
-def safe_action(game: dict) -> dict:
+def safe_action(game: dict[str, Any]) -> dict[str, Any]:
     """Guaranteed-legal conservative fallback -- same role as in the SDK's own
     llm_agent.py example: cheap insurance against a bad API call or bad JSON."""
     family = game["game_family"]
@@ -297,9 +302,9 @@ def safe_action(game: dict) -> dict:
 
 
 def log_trajectory_step(
-    game: dict,
+    game: dict[str, Any],
     reasoning: str,
-    action: dict,
+    action: dict[str, Any],
     fallback_used: bool,
     usage: dict[str, int] | None = None,
 ) -> None:
@@ -346,7 +351,7 @@ def log_trajectory_step(
 # before the first one has registered its move server-side -- wait for and
 # reuse that call's result instead of burning a second real API call.
 _inflight_lock = threading.Lock()
-_inflight_calls: dict[str, "Future[tuple[str, dict, dict[str, int]]]"] = {}
+_inflight_calls: dict[str, "Future[tuple[str, dict[str, Any], dict[str, int]]]"] = {}
 
 # Circuit breaker: stops the process after too many consecutive Claude
 # failures in a row (e.g. exhausted credits), rather than spinning for
@@ -377,15 +382,17 @@ def _note_api_failure() -> int:
         return consecutive_failures
 
 
-def ask_claude(game: dict, history: list[dict]) -> tuple[str, dict, dict[str, int]]:
+def ask_claude(
+    game: dict[str, Any], history: list[dict[str, Any]]
+) -> tuple[str, dict[str, Any], dict[str, int]]:
     game_id = game["game_id"]
-    future: Future[tuple[str, dict, dict[str, int]]] = Future()
+    future: Future[tuple[str, dict[str, Any], dict[str, int]]] = Future()
     with _inflight_lock:
         _inflight_calls[game_id] = future
     try:
         # No cache_control -- see build_user_prompt's docstring for why
         # (reverted after two live runs both produced zero net benefit).
-        messages: list[dict] = [
+        messages: list[dict[str, Any]] = [
             {"role": "user", "content": build_user_prompt(game, history)}
         ]
         last_text = ""
@@ -395,7 +402,7 @@ def ask_claude(game: dict, history: list[dict]) -> tuple[str, dict, dict[str, in
                     model=MODEL,
                     max_tokens=600,
                     system=SYSTEM_PROMPT,
-                    messages=messages,
+                    messages=messages,  # type: ignore[arg-type]
                     timeout=60,
                 )
                 _note_api_success()
@@ -435,11 +442,14 @@ def ask_claude(game: dict, history: list[dict]) -> tuple[str, dict, dict[str, in
                         "role": "user",
                         "content": (
                             f"That reply didn't parse ({e}). Reply again with "
-                            '"REASONING:" then "ACTION:" then ONLY the corrected JSON object.'
+                            '"REASONING:" then "ACTION:" then ONLY the corrected JSON '
+                            "object."
                         ),
                     }
                 )
-        error = RuntimeError("Claude failed to produce a parseable action after retries")
+        error = RuntimeError(
+            "Claude failed to produce a parseable action after retries"
+        )
         future.set_exception(error)
         raise error
     finally:
@@ -452,7 +462,7 @@ def ask_claude(game: dict, history: list[dict]) -> tuple[str, dict, dict[str, in
 # ---------------------------------------------------------------------------
 
 
-def _play(game: dict) -> dict:
+def _play(game: dict[str, Any]) -> dict[str, Any]:
     history = _record_state(game)
     game_id = game["game_id"]
 
@@ -504,15 +514,15 @@ def _play(game: dict) -> dict:
         return action
 
 
-def bargaining_strategy(game: dict) -> dict:
+def bargaining_strategy(game: dict[str, Any]) -> dict[str, Any]:
     return _play(game)
 
 
-def negotiation_strategy(game: dict) -> dict:
+def negotiation_strategy(game: dict[str, Any]) -> dict[str, Any]:
     return _play(game)
 
 
-def persuasion_strategy(game: dict) -> dict:
+def persuasion_strategy(game: dict[str, Any]) -> dict[str, Any]:
     return _play(game)
 
 
@@ -523,21 +533,28 @@ STRATEGIES = {
 }
 
 
-def strategy(game: dict) -> dict:
+def strategy(game: dict[str, Any]) -> dict[str, Any]:
     return STRATEGIES[game["game_family"]](game)
 
 
 if __name__ == "__main__":
     api_key = os.environ.get("GLEE_API_KEY", "")
     if not api_key:
-        print("Set GLEE_API_KEY environment variable (get it from your glee-competition.com dashboard)")
+        print(
+            "Set GLEE_API_KEY environment variable (get it from your "
+            "glee-competition.com dashboard)"
+        )
         raise SystemExit(1)
     if not os.environ.get("ANTHROPIC_API_KEY"):
         print("Set ANTHROPIC_API_KEY environment variable")
         raise SystemExit(1)
 
     base_url = os.environ.get("GLEE_API_URL")
-    client = GleeClient(api_key=api_key, base_url=base_url) if base_url else GleeClient(api_key=api_key)
+    client = (
+        GleeClient(api_key=api_key, base_url=base_url)
+        if base_url
+        else GleeClient(api_key=api_key)
+    )
 
     print(f"Agent stats: {client.stats()}")
     print(f"Logging trajectories to: {TRAJECTORY_LOG.resolve()}")

@@ -120,7 +120,8 @@ def load_author_ratings(path: Path = _DEFAULT_CSV_INPUT) -> list[dict[str, Any]]
 
 def load_rating_key(path: Path = _DEFAULT_KEY_INPUT) -> dict[str, Any]:
     """Load ``human_rating_key.json``."""
-    return json.loads(Path(path).read_text())
+    data: dict[str, Any] = json.loads(Path(path).read_text())
+    return data
 
 
 def join_records(
@@ -169,8 +170,8 @@ def _scopes(
 def _target_value(record: dict[str, Any], dim: str, target: str) -> float:
     """One record's score for a comparison target (a judge name, or judge_mean)."""
     if target == _JUDGE_MEAN_KEY:
-        return record["judge_mean"][dim]
-    return record["judges"][target][dim]
+        return float(record["judge_mean"][dim])
+    return float(record["judges"][target][dim])
 
 
 # ---------------------------------------------------------------------------
@@ -466,7 +467,7 @@ def _fmt(value: float | None, digits: int = 4) -> str:
 
 def _fmt_spearman(cell: dict[str, Any]) -> str:
     if cell.get("note"):
-        return cell["note"]
+        return str(cell["note"])
     return _fmt(cell["rho"])
 
 

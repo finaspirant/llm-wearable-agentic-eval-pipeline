@@ -22,12 +22,12 @@ from src.eval.trajectory_scorer import (
     IntentScore,
     OutcomeScore,
     PlanningScore,
-    QuantizationRisk,
     QuantizationRiskAnnotator,
     RecoveryScore,
     ToolCallScore,
     TrajectoryScore,
 )
+
 # ---------------------------------------------------------------------------
 # Fixtures
 # ---------------------------------------------------------------------------
@@ -542,9 +542,24 @@ class TestEvaluateWithTrajectoryScore:
     def test_layer_recovery_float_for_escalation(
         self, evaluator: AgenticEvaluator
     ) -> None:
-        log = _make_wearable_log(final_action=AgentAction.ESCALATE_TO_EMERGENCY)
+        # score_recovery only looks at NON-terminal steps (steps[:-1]) --
+        # a terminal escalation is deliberately excluded so it can't be
+        # claimed by both the recovery and outcome layers (see that
+        # method's docstring in src/eval/trajectory_scorer.py). So the
+        # escalation here must be placed mid-trajectory, with a separate
+        # final action, to actually exercise this layer.
+        log = _make_wearable_log(final_action=AgentAction.SEND_ALERT)
+        log.trajectory = [
+            TrajectoryStep(0, "sense", "obs", "reason", "", 0.9),
+            TrajectoryStep(
+                1, "act", "obs", "reason", AgentAction.ESCALATE_TO_EMERGENCY, 0.9
+            ),
+            TrajectoryStep(2, "act", "obs", "reason", AgentAction.SEND_ALERT, 0.9),
+        ]
         result = evaluator.evaluate_with_trajectory_score(log)
-        assert result["layer_recovery"] == pytest.approx(0.70)
+        # non_terminal = [step0, step1], n=2, escalation_idx=1 (last of
+        # non_terminal) -> 0.70 + 0.30 * (1 - 1/2) = 0.85
+        assert result["layer_recovery"] == pytest.approx(0.85)
 
 
 class TestBatchEvaluateWithTrajectoryScore:
@@ -605,18 +620,27 @@ class TestComputeBatchNondeterminism:
         result = evaluator.compute_batch_nondeterminism(groups)
         assert result["same"]["score_std"] == pytest.approx(0.0, abs=1e-9)
 
+
 # --- QuantizationRiskAnnotator tests (QE-001 motivated) ---
+
 
 class TestQuantizationRiskAnnotator:
     """Tests for QuantizationRiskAnnotator — thresholds derived from QE-001."""
 
-    def _make_trajectory_score(self, error_recovery: float, planning_quality: float, goal_alignment: float) -> TrajectoryScore:
-        """Helper: build a minimal TrajectoryScore with specified PIA dimension values."""
+    def _make_trajectory_score(
+        self, error_recovery: float, planning_quality: float, goal_alignment: float
+    ) -> TrajectoryScore:
+        """Helper: build a minimal TrajectoryScore with specified PIA dimension
+        values."""
         ts = TrajectoryScore(
             trajectory_id="test-traj",
             intent=IntentScore(score=0.75, reasoning="", matched_goal=True),
-            planning=PlanningScore(score=planning_quality, reasoning="", step_efficiency=1.0),
-            tool_calls=ToolCallScore(score=1.0, reasoning="", precision=1.0, false_positives=0),
+            planning=PlanningScore(
+                score=planning_quality, reasoning="", step_efficiency=1.0
+            ),
+            tool_calls=ToolCallScore(
+                score=1.0, reasoning="", precision=1.0, false_positives=0
+            ),
             recovery=RecoveryScore(score=error_recovery, reasoning="", had_error=True),
             outcome=OutcomeScore(score=1.0, reasoning="", goal_achieved=True),
             weighted_total=0.9,
@@ -628,7 +652,7 @@ class TestQuantizationRiskAnnotator:
         }
         return ts
 
-    def test_no_risks_when_scores_above_threshold(self):
+    def test_no_risks_when_scores_above_threshold(self) -> None:
         """Scores above threshold produce no quantization risk warnings."""
         annotator = QuantizationRiskAnnotator()
         score = self._make_trajectory_score(
@@ -639,12 +663,12 @@ class TestQuantizationRiskAnnotator:
         risks = annotator.annotate(score)
         assert risks == []
 
-    def test_risks_emitted_when_scores_below_threshold(self):
+    def test_risks_emitted_when_scores_below_threshold(self) -> None:
         """Scores below threshold on sensitive dimensions emit warnings."""
         annotator = QuantizationRiskAnnotator()
         score = self._make_trajectory_score(
-            error_recovery=0.80,   # below 0.85 threshold
-            planning_quality=0.80, # below 0.85 threshold
+            error_recovery=0.80,  # below 0.85 threshold
+            planning_quality=0.80,  # below 0.85 threshold
             goal_alignment=1.0,
         )
         risks = annotator.annotate(score)
@@ -653,8 +677,9 @@ class TestQuantizationRiskAnnotator:
         assert "planning_quality" in dimensions
         assert len(risks) == 2
 
-    def test_goal_alignment_never_annotated(self):
-        """goal_alignment is excluded from annotation regardless of score — QE-001 showed it is robust to INT4."""
+    def test_goal_alignment_never_annotated(self) -> None:
+        """goal_alignment is excluded regardless of score -- QE-001 showed it is
+        robust to INT4."""
         annotator = QuantizationRiskAnnotator()
         score = self._make_trajectory_score(
             error_recovery=0.95,

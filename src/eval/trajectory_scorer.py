@@ -462,7 +462,10 @@ class TrajectoryScorer:
         if n == 0:
             return RecoveryScore(
                 score=None,
-                reasoning="No mid-trajectory escalation detected — recovery layer not applicable.",
+                reasoning=(
+                    "No mid-trajectory escalation detected "
+                    "— recovery layer not applicable."
+                ),
                 had_error=False,
             )
 
@@ -484,7 +487,9 @@ class TrajectoryScorer:
         logger.debug("recovery score=None had_error=False")
         return RecoveryScore(
             score=None,
-            reasoning="No mid-trajectory escalation detected — recovery layer not applicable.",
+            reasoning=(
+                "No mid-trajectory escalation detected — recovery layer not applicable."
+            ),
             had_error=False,
         )
 
